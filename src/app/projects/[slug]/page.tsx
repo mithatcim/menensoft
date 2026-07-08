@@ -52,9 +52,41 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {project.oneLiner}
             </p>
-            <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 font-mono text-xs text-muted-foreground">
-              {projectStatusLabel[project.status]}
-            </p>
+
+            <div className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
+              <dl className="grid gap-px sm:grid-cols-3">
+                <div className="bg-card p-5">
+                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                    Status
+                  </dt>
+                  <dd className="mt-3 flex items-center gap-2 text-sm">
+                    <span
+                      aria-hidden
+                      className="size-1.5 rounded-full bg-amber-400/90"
+                    />
+                    {projectStatusLabel[project.status]}
+                  </dd>
+                </div>
+                <div className="bg-card p-5">
+                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                    Stack
+                  </dt>
+                  <dd className="mt-3 flex flex-wrap gap-2">
+                    {project.stack.map((tech) => (
+                      <TechTag key={tech}>{tech}</TechTag>
+                    ))}
+                  </dd>
+                </div>
+                <div className="bg-card p-5">
+                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                    Case study
+                  </dt>
+                  <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Draft — details get added as the build matures.
+                  </dd>
+                </div>
+              </dl>
+            </div>
 
             <div className="mt-14 space-y-12">
               <div>
@@ -70,35 +102,38 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <h2 className="text-xl font-semibold tracking-tight">
                   What I built
                 </h2>
-                <ul className="mt-3 space-y-2">
-                  {project.built.map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-3 leading-relaxed text-muted-foreground"
-                    >
-                      <span
-                        aria-hidden
-                        className="mt-2.5 size-1 shrink-0 rounded-full bg-foreground/40"
-                      />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold tracking-tight">Stack</h2>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {project.stack.map((tech) => (
-                    <TechTag key={tech}>{tech}</TechTag>
-                  ))}
+                <div className="mt-4 overflow-hidden rounded-xl border border-border">
+                  <ul className="divide-y divide-border/60">
+                    {project.built.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center gap-3 bg-card px-5 py-3.5 text-sm leading-relaxed text-muted-foreground"
+                      >
+                        <span
+                          aria-hidden
+                          className="size-1.5 shrink-0 bg-amber-400/80"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              <p className="rounded-xl border border-border bg-card p-4 font-mono text-xs leading-relaxed text-muted-foreground">
-                Draft case study — screenshots, architecture notes, and
-                outcomes will be added as this project matures.
-              </p>
+              <div className="rounded-xl border border-border bg-card p-6">
+                <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                  <span
+                    aria-hidden
+                    className="size-1.5 rounded-full bg-amber-400/90"
+                  />
+                  Current status &amp; scope
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {projectStatusLabel[project.status]}. Screenshots,
+                  architecture notes, and outcomes will be added as this
+                  project matures.
+                </p>
+              </div>
             </div>
           </article>
         </Container>

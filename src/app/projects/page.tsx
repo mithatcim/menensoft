@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
-import { ProjectCard } from "@/components/shared/project-card";
+import { ProjectCard, ProjectCardLead } from "@/components/shared/project-card";
+import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { projects } from "@/content/projects";
 
@@ -13,21 +14,28 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  const [lead, ...rest] = projects;
+
   return (
     <>
       <section className="py-16 md:py-24">
         <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Projects"
-            title="Selected work"
-            description="Systems I've designed and built end to end. Case studies are drafts while the projects evolve — details get added as each one matures."
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {projects.map((project) => (
+          <Reveal>
+            <SectionHeading
+              as="h1"
+              eyebrow="Projects"
+              title="Selected work"
+              description="Systems I've designed and built end to end. Case studies are drafts while the projects evolve — details get added as each one matures."
+            />
+          </Reveal>
+          <Reveal className="mt-12">
+            <ProjectCardLead project={lead} />
+          </Reveal>
+          <Reveal delay={0.08} className="mt-6 grid gap-6 md:grid-cols-2">
+            {rest.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
-          </div>
+          </Reveal>
         </Container>
       </section>
       <ContactCTA />
