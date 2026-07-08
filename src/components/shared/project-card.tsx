@@ -1,8 +1,11 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { Fragment } from "react";
 
+import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { projectStatusLabel, type Project } from "@/content/projects";
+import { cn } from "@/lib/utils";
 
 function StatusBadge({ project }: { project: Project }) {
   return (
@@ -21,17 +24,32 @@ function HoverArrow({ className }: { className?: string }) {
   );
 }
 
+const LIFT =
+  "transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-muted/20 hover:shadow-[0_24px_48px_-24px_rgba(0,0,0,0.8)]";
+
 export function ProjectCard({ project }: { project: Project }) {
+  // Prototype/archived work reads intentionally quieter than shipped work.
+  const quiet = project.status === "prototype" || project.status === "archived";
+
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/20 hover:bg-muted/20"
+      className={cn(
+        "group flex h-full flex-col rounded-xl border bg-card p-6",
+        quiet ? "border-dashed border-border" : "border-border",
+        LIFT,
+      )}
     >
       <div className="flex items-start justify-between gap-4">
         <StatusBadge project={project} />
         <HoverArrow className="mt-0.5" />
       </div>
-      <h3 className="mt-4 text-lg font-semibold tracking-tight text-balance">
+      <h3
+        className={cn(
+          "mt-4 text-lg font-semibold tracking-tight text-balance",
+          quiet && "text-foreground/85",
+        )}
+      >
         {project.name}
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -49,14 +67,17 @@ export function ProjectCard({ project }: { project: Project }) {
 }
 
 /**
- * Full-width lead treatment for the first (flagship) project on the
- * projects page — resolves the 5-card grid into an intentional 1 + 4 layout.
+ * Full-width flagship treatment for the first project on the projects page:
+ * content on the left, browser-frame placeholder and system flow on the right.
  */
 export function ProjectCardLead({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="group grid gap-8 rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/20 hover:bg-muted/20 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] md:p-8"
+      className={cn(
+        "group grid gap-8 rounded-xl border border-border bg-card p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,380px)] md:p-8",
+        LIFT,
+      )}
     >
       <div className="flex flex-col">
         <div className="flex items-start justify-between gap-4">
@@ -80,27 +101,27 @@ export function ProjectCardLead({ project }: { project: Project }) {
           </div>
         </div>
       </div>
-      <div className="hidden rounded-lg border border-border/60 bg-background/40 p-5 md:flex md:flex-col">
-        <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-          In this build
-        </p>
-        <ul className="mt-4 space-y-2.5">
-          {project.built.map((item) => (
-            <li
-              key={item}
-              className="flex gap-3 text-sm leading-relaxed text-muted-foreground"
-            >
-              <span
-                aria-hidden
-                className="mt-2 size-1 shrink-0 bg-amber-400/80"
-              />
-              {item}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-auto flex justify-end pt-6">
-          <HoverArrow />
-        </div>
+      <div className="hidden md:block">
+        <BrowserFrame title={`/${project.slug}`}>
+          <ScreenshotSlot label="Interface capture to be added" />
+        </BrowserFrame>
+        {project.flow && (
+          <div className="mt-4 flex flex-wrap items-center gap-1.5 px-1">
+            {project.flow.map((node, index) => (
+              <Fragment key={node}>
+                {index > 0 && (
+                  <ArrowRight
+                    aria-hidden
+                    className="size-3 shrink-0 text-muted-foreground/50"
+                  />
+                )}
+                <span className="font-mono text-xs text-muted-foreground">
+                  {node}
+                </span>
+              </Fragment>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

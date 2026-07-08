@@ -12,23 +12,31 @@ export function ContactCTA() {
     <section className="pt-4 pb-20 md:pt-6 md:pb-28">
       <Container>
         <Reveal>
-          <div className="relative overflow-hidden rounded-xl border border-border bg-card px-6 py-14 text-center md:px-12 md:py-20">
+          <div className="relative overflow-hidden rounded-xl border border-border bg-card px-6 py-16 text-center ring-1 ring-white/5 md:px-12 md:py-24">
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(255,214,170,0.06),transparent)]"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(255,214,170,0.07),transparent)]"
             />
+            <div aria-hidden className="bg-noise absolute inset-0 opacity-[0.04]" />
             <div className="relative">
-              <h2 className="text-3xl font-semibold tracking-tight text-balance md:text-4xl">
+              <p className="inline-flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                <span aria-hidden className="size-1.5 rounded-full bg-amber-400" />
+                {site.availability}
+              </p>
+              <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance md:text-5xl">
                 Have a product to build?
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 Tell me what you&apos;re trying to ship. I&apos;ll reply with an
                 honest take on scope and approach.
               </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <a
                   href={`mailto:${site.email}`}
-                  className={cn(buttonVariants(), "h-11 px-6")}
+                  className={cn(
+                    buttonVariants(),
+                    "h-12 px-7 text-base shadow-[0_12px_32px_-12px_rgba(255,255,255,0.3)]",
+                  )}
                 >
                   <Mail className="size-4" />
                   Email me
@@ -37,7 +45,7 @@ export function ContactCTA() {
                   href="/contact"
                   className={cn(
                     buttonVariants({ variant: "outline" }),
-                    "h-11 px-6",
+                    "h-12 px-7 text-base",
                   )}
                 >
                   Contact details

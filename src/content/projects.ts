@@ -40,6 +40,8 @@ export interface Project {
   role?: string;
   /** One honest sentence about where the project stands right now. */
   statusNote?: string;
+  /** Abstract system flow, derived strictly from what was built. */
+  flow?: string[];
   /** A verifiable result — only when one actually exists. */
   outcome?: string;
   liveUrl?: string;
@@ -66,6 +68,7 @@ export const projects: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "In active development as the flagship product build. The admin, storefront, and visual page-building already work together; screenshots and architecture notes will be added as the product matures.",
+    flow: ["Admin & CMS", "Visual page builder", "Storefront"],
   },
   {
     slug: "restaurant-qr-system",
@@ -86,6 +89,7 @@ export const projects: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Built as a full-stack operations system where orders move from QR menu to waiter, kitchen, and cashier screens.",
+    flow: ["QR menu", "Waiter screen", "Kitchen display", "Cashier"],
   },
   {
     slug: "orva-psychology",
@@ -104,6 +108,7 @@ export const projects: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Built as a website and admin panel for a psychology practice, with content management and appointment request flows.",
+    flow: ["Admin panel", "Content management", "Public website"],
   },
   {
     slug: "log-management-platform",
@@ -122,6 +127,7 @@ export const projects: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "An early internal prototype focused on log collection, storage, and review. Hardening, retention policy, and compliance work are out of scope at this stage.",
+    flow: ["Log collection", "Storage", "Search & review"],
   },
   {
     slug: "cendovar",
@@ -140,6 +146,7 @@ export const projects: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "An archived prototype. The membership, access, and publishing mechanics were built and working before the project was set aside.",
+    flow: ["Membership & access", "Publishing", "Member delivery"],
   },
 ];
 

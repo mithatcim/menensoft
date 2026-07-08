@@ -4,7 +4,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
+import {
+  BrowserFrame,
+  ScreenshotSlot,
+} from "@/components/shared/browser-frame";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { FlowPanel } from "@/components/shared/flow-panel";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
 import { getProject, projects, projectStatusLabel } from "@/content/projects";
@@ -102,6 +107,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </dd>
                 </div>
               </dl>
+            </div>
+
+            <div className="mt-8">
+              <BrowserFrame title={`/${project.slug}`}>
+                <ScreenshotSlot />
+              </BrowserFrame>
+              {project.flow && (
+                <FlowPanel
+                  label="System flow"
+                  nodes={project.flow}
+                  className="mt-6"
+                />
+              )}
             </div>
 
             <div className="mt-14 space-y-12">

@@ -11,6 +11,8 @@ export interface Service {
   summary: string;
   includes: string[];
   stack: string[];
+  /** The concrete thing handed over at the end. */
+  deliverable: string;
 }
 
 export interface WorkflowStep {
@@ -32,6 +34,8 @@ export const services: Service[] = [
       "Clean forms with proper validation",
     ],
     stack: ["Next.js", "TypeScript", "Tailwind CSS", "SQL databases"],
+    deliverable:
+      "A working admin panel your team can sign into and run the day on.",
   },
   {
     id: "ecommerce",
@@ -45,6 +49,8 @@ export const services: Service[] = [
       "Order and inventory screens",
     ],
     stack: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+    deliverable:
+      "A storefront plus the management layer behind it, editable without code.",
   },
   {
     id: "full-stack-apps",
@@ -58,6 +64,8 @@ export const services: Service[] = [
       "Deployment-ready project setup",
     ],
     stack: ["Next.js", "TypeScript", "Node.js", "SQL databases"],
+    deliverable:
+      "One coherent codebase: data model, backend, and interface, ready to deploy.",
   },
   {
     id: "automation-tools",
@@ -71,6 +79,8 @@ export const services: Service[] = [
       "Documentation your team can follow",
     ],
     stack: ["TypeScript", "Node.js", "Next.js"],
+    deliverable:
+      "A tool that replaces the manual workflow it was scoped around, with documentation.",
   },
 ];
 
