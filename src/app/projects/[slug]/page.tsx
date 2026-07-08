@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,7 +6,9 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { TechTag } from "@/components/shared/tech-tag";
+import { buttonVariants } from "@/components/ui/button";
 import { getProject, projects, projectStatusLabel } from "@/content/projects";
+import { cn } from "@/lib/utils";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -65,8 +67,30 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       className="size-1.5 rounded-full bg-amber-400/90"
                     />
                     {projectStatusLabel[project.status]}
+                    {project.year && (
+                      <span className="text-muted-foreground">
+                        {project.year}
+                      </span>
+                    )}
                   </dd>
                 </div>
+                {project.role ? (
+                  <div className="bg-card p-5">
+                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                      Role
+                    </dt>
+                    <dd className="mt-3 text-sm">{project.role}</dd>
+                  </div>
+                ) : (
+                  <div className="bg-card p-5">
+                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                      Case study
+                    </dt>
+                    <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      Draft; details get added as the build matures.
+                    </dd>
+                  </div>
+                )}
                 <div className="bg-card p-5">
                   <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                     Stack
@@ -75,14 +99,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.stack.map((tech) => (
                       <TechTag key={tech}>{tech}</TechTag>
                     ))}
-                  </dd>
-                </div>
-                <div className="bg-card p-5">
-                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                    Case study
-                  </dt>
-                  <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Draft — details get added as the build matures.
                   </dd>
                 </div>
               </dl>
@@ -129,10 +145,40 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   Current status &amp; scope
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {projectStatusLabel[project.status]}. Screenshots,
-                  architecture notes, and outcomes will be added as this
-                  project matures.
+                  {project.statusNote ??
+                    `${projectStatusLabel[project.status]}. Details get added as the project matures.`}
                 </p>
+                {project.outcome && (
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {project.outcome}
+                  </p>
+                )}
+                {(project.liveUrl || project.repoUrl) && (
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cn(buttonVariants({ variant: "outline" }))}
+                      >
+                        Visit live site
+                        <ArrowUpRight className="size-4" />
+                      </a>
+                    )}
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cn(buttonVariants({ variant: "outline" }))}
+                      >
+                        View repository
+                        <ArrowUpRight className="size-4" />
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </article>

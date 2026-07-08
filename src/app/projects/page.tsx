@@ -25,7 +25,7 @@ export default function ProjectsPage() {
               as="h1"
               eyebrow="Projects"
               title="Selected work"
-              description="Systems I've designed and built end to end. Case studies are drafts while the projects evolve — details get added as each one matures."
+              description="Systems I design and build end to end, from active product builds to completed systems and internal prototypes. Case studies are still growing; each project page lists what exists today."
             />
           </Reveal>
           <Reveal className="mt-12">

@@ -21,7 +21,7 @@ export default function ServicesPage() {
             as="h1"
             eyebrow="Services"
             title="What I can build for you"
-            description="Focused engagements that end with working software — not a deck, not a prototype that gets thrown away."
+            description="Project-based work that ends with working software: not a deck, not a throwaway prototype. You work directly with me, and scope is agreed before anything gets built."
           />
 
           <div className="mt-12 grid gap-6">

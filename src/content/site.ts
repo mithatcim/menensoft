@@ -1,8 +1,10 @@
 /**
  * Global site identity and shared copy.
  *
- * DRAFT CONTENT — written from known facts only. Anything marked TODO
- * must be confirmed or replaced by the site owner before publishing.
+ * Positioning confirmed by the site owner on 2026-07-08: systems-focused,
+ * "Full Stack Developer — building complete web systems". Copy states only
+ * known facts; skills list only technologies used in the projects on this
+ * site.
  */
 
 export interface SkillGroup {
@@ -20,15 +22,15 @@ export interface Capability {
 
 export const site = {
   name: "Mithat Yılmaz",
-  role: "Full Stack Developer & Digital Product Builder",
+  role: "Full Stack Developer",
+  positioning: "Full Stack Developer — building complete web systems",
 
   // Hero
-  headline: "I design and build digital products end to end.",
+  headline: "I build complete web systems.",
   subheadline:
-    "Admin panels, e-commerce systems, ordering platforms, and internal tools — complete, working software from the database to the interface.",
+    "Admin panels, dashboards, storefronts, and operations tools: working software built end to end, from the database to the interface.",
 
-  // TODO: confirm this availability statement is accurate before publishing.
-  availability: "Open to new projects",
+  availability: "Available for selected projects",
 
   email: "mitopasa42@gmail.com",
 
@@ -39,7 +41,7 @@ export const capabilities: Capability[] = [
   {
     title: "Admin panels & dashboards",
     description:
-      "The screens a business actually runs on — managing products, orders, content, and users.",
+      "The screens a business runs on: managing products, orders, content, and users.",
     icon: "dashboard",
   },
   {
@@ -57,20 +59,19 @@ export const capabilities: Capability[] = [
   {
     title: "Automation & internal tools",
     description:
-      "Purpose-built tools that replace manual workflows — like routing orders between staff roles.",
+      "Purpose-built tools that replace manual workflows, like routing orders between staff roles.",
     icon: "automation",
   },
 ];
 
 export const about = {
-  // DRAFT — short professional narrative. TODO: owner should review and
-  // personalize; nothing here should stay if it isn't accurate.
+  // Reviewed in the Phase 3 content pass (2026-07-08). Nothing here should
+  // stay if it isn't accurate.
   intro: [
-    "I'm Mithat, a full-stack developer. I build web products end to end — the data model, the backend, and the interface people actually use.",
-    "Most of my recent work is product-shaped: an e-commerce CMS with a visual site builder, a restaurant ordering system with waiter, kitchen, and cashier screens, a security log management platform, and a membership platform. I like owning the whole build, not a slice of it.",
+    "I'm Mithat, a full-stack developer. I build complete web systems: the data model, the backend, and the interface people actually use.",
+    "Most of my recent work is systems with an operational back side: a restaurant ordering system with waiter, kitchen, and cashier screens, a psychology practice website with its own admin panel, and the flagship build in progress, an e-commerce CMS with a visual site builder. The work ranges from active product builds to completed full-stack systems and internal prototypes. I like owning the whole build, not a slice of it.",
     "I keep scope honest, ship in small steps, and prefer reliable, well-understood technology over whatever is trending.",
   ],
-  // TODO: confirm the backend/tooling lists match real experience.
   skills: [
     {
       title: "Frontend",

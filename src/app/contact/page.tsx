@@ -52,7 +52,7 @@ export default function ContactPage() {
             <ul className="mt-4 space-y-2">
               {[
                 "What you're building, in a sentence or two",
-                "Where it stands — an idea, a design, or existing code",
+                "Where it stands: an idea, a design, or existing code",
                 "Any rough timeline you have in mind",
               ].map((item) => (
                 <li

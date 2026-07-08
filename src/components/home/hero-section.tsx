@@ -61,7 +61,7 @@ function BuildStatusCard() {
         ))}
       </ul>
       <p className="border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground">
-        {`${projects.length} systems — designed & built end to end`}
+        {`${projects.length} systems, designed and built end to end`}
       </p>
     </div>
   );

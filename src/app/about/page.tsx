@@ -19,7 +19,7 @@ export default function AboutPage() {
             as="h1"
             eyebrow="About"
             title={site.name}
-            description={site.role}
+            description={site.positioning}
           />
 
           <div className="mt-10 max-w-3xl space-y-5">

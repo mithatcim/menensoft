@@ -37,10 +37,10 @@ export const services: Service[] = [
     id: "ecommerce",
     title: "E-commerce systems",
     summary:
-      "A storefront and the management layer behind it — products, categories, and content, all editable without code.",
+      "A storefront and the management layer behind it: products, categories, and content, all editable without code.",
     includes: [
       "Product catalog and category structure",
-      "Storefront pages built for conversion, not clutter",
+      "Clean, fast storefront product and category pages",
       "Content management for non-technical editors",
       "Order and inventory screens",
     ],
@@ -50,7 +50,7 @@ export const services: Service[] = [
     id: "full-stack-apps",
     title: "Full-stack web applications",
     summary:
-      "SaaS-style products built end to end — data model, backend logic, and the interface, shipped as one coherent system.",
+      "SaaS-style products built end to end: data model, backend logic, and interface, shipped as one coherent system.",
     includes: [
       "Data modeling and API design",
       "Authentication and role handling",
@@ -63,7 +63,7 @@ export const services: Service[] = [
     id: "automation-tools",
     title: "Automation & internal tools",
     summary:
-      "Purpose-built software that replaces a manual workflow — order routing, content pipelines, repetitive back-office work.",
+      "Purpose-built software that replaces a manual workflow: order routing, content pipelines, repetitive back-office work.",
     includes: [
       "Mapping the current manual process honestly",
       "A tool scoped to the workflow, not a platform fantasy",

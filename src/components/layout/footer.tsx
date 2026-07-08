@@ -11,7 +11,9 @@ export function Footer() {
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-start">
           <div>
             <p className="text-sm font-semibold tracking-tight">{site.name}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{site.role}</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {site.positioning}
+            </p>
           </div>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-6 gap-y-2">

@@ -14,7 +14,7 @@ export function ServicesPreviewSection() {
           <SectionHeading
             eyebrow="Services"
             title="How I can help"
-            description="Focused engagements with a concrete deliverable at the end."
+            description="Project-based work that ends with software you can actually run."
           />
         </Reveal>
         <Reveal delay={0.08} className="mt-12">

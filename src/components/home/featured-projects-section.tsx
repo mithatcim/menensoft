@@ -16,7 +16,7 @@ export function FeaturedProjectsSection() {
             <SectionHeading
               eyebrow="Selected work"
               title="Projects"
-              description="A selection of the systems I'm building — e-commerce, operations, and platform work."
+              description="A selection of the systems I build: e-commerce, operations, and platform work."
             />
             <Link
               href="/projects"
