@@ -46,6 +46,22 @@ export interface Project {
   outcome?: string;
   liveUrl?: string;
   repoUrl?: string;
+  /**
+   * Path to a real interface screenshot under /public (e.g.
+   * "/projects/ecommerce-cms/builder.png"). Omit until a real capture exists;
+   * the UI falls back to an honest "capture to be added" slot.
+   */
+  image?: string;
+  imageAlt?: string;
+}
+
+/** Frame image for a project, or undefined when no real capture exists yet. */
+export function projectImage(project: Project) {
+  if (!project.image) return undefined;
+  return {
+    src: project.image,
+    alt: project.imageAlt ?? `${project.name} interface`,
+  };
 }
 
 export const projects: Project[] = [

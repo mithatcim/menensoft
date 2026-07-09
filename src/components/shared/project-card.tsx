@@ -4,7 +4,11 @@ import { Fragment } from "react";
 
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
-import { projectStatusLabel, type Project } from "@/content/projects";
+import {
+  projectImage,
+  projectStatusLabel,
+  type Project,
+} from "@/content/projects";
 import { cn } from "@/lib/utils";
 
 function StatusBadge({ project }: { project: Project }) {
@@ -102,7 +106,7 @@ export function ProjectCardLead({ project }: { project: Project }) {
         </div>
       </div>
       <div className="hidden md:block">
-        <BrowserFrame title={`/${project.slug}`}>
+        <BrowserFrame title={`/${project.slug}`} image={projectImage(project)}>
           <ScreenshotSlot label="Interface capture to be added" />
         </BrowserFrame>
         {project.flow && (

@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { ProjectCard, ProjectCardLead } from "@/components/shared/project-card";
@@ -10,12 +8,14 @@ import {
   projectStatusLabel,
   type ProjectStatus,
 } from "@/content/projects";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Projects",
   description:
     "Systems I've designed and built end to end — e-commerce, operations, and platform work.",
-};
+  path: "/projects",
+});
 
 function StatusRail() {
   const counts = new Map<ProjectStatus, number>();

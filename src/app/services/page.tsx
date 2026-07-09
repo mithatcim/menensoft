@@ -5,20 +5,20 @@ import {
   Workflow,
   type LucideIcon,
 } from "lucide-react";
-import type { Metadata } from "next";
-
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { TechTag } from "@/components/shared/tech-tag";
 import { services, workflow } from "@/content/services";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Services",
   description:
     "Admin panels, e-commerce systems, full-stack web applications, and automation tools — built end to end.",
-};
+  path: "/services",
+});
 
 const serviceIcons: Record<string, LucideIcon> = {
   "admin-panels": LayoutDashboard,

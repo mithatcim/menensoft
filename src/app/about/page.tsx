@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
@@ -8,11 +6,13 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { TechTag } from "@/components/shared/tech-tag";
 import { workflow } from "@/content/services";
 import { about, site } from "@/content/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "About",
   description: `${site.name} — ${site.role}. Background, skills, and how I work.`,
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

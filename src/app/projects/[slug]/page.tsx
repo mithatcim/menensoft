@@ -12,7 +12,13 @@ import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
-import { getProject, projects, projectStatusLabel } from "@/content/projects";
+import {
+  getProject,
+  projectImage,
+  projects,
+  projectStatusLabel,
+} from "@/content/projects";
+import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 interface ProjectPageProps {
@@ -29,10 +35,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  return {
+  return pageMeta({
     title: project.name,
     description: project.oneLiner,
-  };
+    path: `/projects/${project.slug}`,
+  });
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
@@ -110,7 +117,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             <div className="mt-8">
-              <BrowserFrame title={`/${project.slug}`}>
+              <BrowserFrame
+                title={`/${project.slug}`}
+                image={projectImage(project)}
+              >
                 <ScreenshotSlot />
               </BrowserFrame>
               {project.flow && (

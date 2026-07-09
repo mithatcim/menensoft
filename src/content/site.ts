@@ -20,7 +20,47 @@ export interface Capability {
   icon: CapabilityIcon;
 }
 
-export const site = {
+export interface SiteConfig {
+  name: string;
+  role: string;
+  positioning: string;
+  headline: string;
+  subheadline: string;
+  availability: string;
+  /** Absolute site origin (no trailing slash). Used for metadata/OG/sitemap. */
+  siteUrl: string;
+  coreStack: string[];
+
+  // Contact channels — a channel only renders when its value is present here.
+  // Do NOT add a value that isn't real; a missing value means "no link", not
+  // a placeholder.
+  email?: string;
+  whatsappUrl?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+
+  // Optional credibility details — render only when present.
+  location?: string;
+  timezone?: string;
+}
+
+/**
+ * Absolute deploy origin used for metadataBase, canonical URLs, Open Graph
+ * image URLs, sitemap, and robots.
+ *
+ * PRODUCTION MUST set NEXT_PUBLIC_SITE_URL to the real domain at build time —
+ * without it, absolute URLs (canonical/OG/sitemap) point at the fallback and
+ * social/search tooling will be wrong.
+ *
+ * The fallback is only a generic local-dev default. It is intentionally the
+ * conventional Next port 3000, not this machine's current 3001 (which is only
+ * a fallback because another app occupies 3000). No real domain is invented.
+ */
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
+  "http://localhost:3000";
+
+export const site: SiteConfig = {
   name: "Mithat Yılmaz",
   role: "Full Stack Developer",
   positioning: "Full Stack Developer — building complete web systems",
@@ -32,10 +72,15 @@ export const site = {
 
   availability: "Available for selected projects",
 
-  email: "mitopasa42@gmail.com",
+  siteUrl,
 
   coreStack: ["TypeScript", "React", "Next.js", "Node.js", "Tailwind CSS"],
-} as const;
+
+  // Real, known contact value:
+  email: "mitopasa42@gmail.com",
+  // whatsappUrl, githubUrl, linkedinUrl, location, timezone are intentionally
+  // omitted until real values are provided — the UI renders nothing for them.
+};
 
 export const capabilities: Capability[] = [
   {

@@ -1,13 +1,27 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
-/** Browser-chrome mockup frame for interface previews and reserved slots. */
+export interface FrameImage {
+  src: string;
+  alt: string;
+}
+
+/**
+ * Browser-chrome mockup frame. When a real `image` is provided it renders as
+ * a 16:10 capture; otherwise the honest placeholder `children` (a
+ * ScreenshotSlot) is shown. No image path should be passed until a real
+ * screenshot file exists.
+ */
 export function BrowserFrame({
   title,
+  image,
   children,
   className,
 }: {
   title: string;
-  children: React.ReactNode;
+  image?: FrameImage;
+  children?: React.ReactNode;
   className?: string;
 }) {
   return (
@@ -27,7 +41,19 @@ export function BrowserFrame({
           {title}
         </span>
       </div>
-      {children}
+      {image ? (
+        <div className="relative aspect-[16/10]">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover object-top"
+          />
+        </div>
+      ) : (
+        children
+      )}
     </figure>
   );
 }
