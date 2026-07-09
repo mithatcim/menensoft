@@ -9,6 +9,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { capabilities, type Capability, type CapabilityIcon } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -74,8 +75,15 @@ function Cell({
 }) {
   const Icon = icons[capability.icon];
   return (
-    <div className={cn("flex flex-col bg-card p-6 md:p-7", className)}>
-      <Icon className="size-5 text-muted-foreground" />
+    <SpotlightCard
+      className={cn(
+        "flex flex-col bg-card p-6 transition-colors duration-300 hover:bg-muted/20 md:p-7",
+        className,
+      )}
+    >
+      <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-background/50">
+        <Icon className="size-5 text-amber-400/80" />
+      </div>
       <h3 className="mt-5 text-lg font-semibold tracking-tight">
         {capability.title}
       </h3>
@@ -83,7 +91,7 @@ function Cell({
         {capability.description}
       </p>
       {children && <div className="mt-auto">{children}</div>}
-    </div>
+    </SpotlightCard>
   );
 }
 

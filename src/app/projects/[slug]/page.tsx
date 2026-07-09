@@ -10,6 +10,7 @@ import {
 } from "@/components/shared/browser-frame";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
+import { Reveal } from "@/components/shared/reveal";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -67,7 +68,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.oneLiner}
             </p>
 
-            <div className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
+            <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
               <dl className="grid gap-px sm:grid-cols-3">
                 <div className="bg-card p-5">
                   <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
@@ -114,9 +115,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </dd>
                 </div>
               </dl>
-            </div>
+            </Reveal>
 
-            <div className="mt-8">
+            <Reveal className="mt-8" delay={0.05}>
               <BrowserFrame
                 title={`/${project.slug}`}
                 image={projectImage(project)}
@@ -130,19 +131,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   className="mt-6"
                 />
               )}
-            </div>
+            </Reveal>
 
             <div className="mt-14 space-y-12">
-              <div>
+              <Reveal>
                 <h2 className="text-xl font-semibold tracking-tight">
                   The problem it handles
                 </h2>
                 <p className="mt-3 leading-relaxed text-muted-foreground">
                   {project.problem}
                 </p>
-              </div>
+              </Reveal>
 
-              <div>
+              <Reveal delay={0.05}>
                 <h2 className="text-xl font-semibold tracking-tight">
                   What I built
                 </h2>
@@ -162,9 +163,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     ))}
                   </ul>
                 </div>
-              </div>
+              </Reveal>
 
-              <div className="rounded-xl border border-border bg-card p-6">
+              <Reveal
+                delay={0.1}
+                className="rounded-xl border border-border bg-card p-6"
+              >
                 <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                   <span
                     aria-hidden
@@ -207,7 +211,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     )}
                   </div>
                 )}
-              </div>
+              </Reveal>
             </div>
           </article>
         </Container>

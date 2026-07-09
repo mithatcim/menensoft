@@ -3,6 +3,7 @@ import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
 import { workflow } from "@/content/services";
 import { about, site } from "@/content/site";
@@ -72,7 +73,10 @@ export default function AboutPage() {
               <div className="overflow-hidden rounded-xl border border-border bg-border">
                 <div className="grid gap-px sm:grid-cols-3">
                   {about.skills.map((group) => (
-                    <div key={group.title} className="bg-card p-6">
+                    <SpotlightCard
+                      key={group.title}
+                      className="bg-card p-6 transition-colors duration-300 hover:bg-muted/20"
+                    >
                       <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         {group.title}
                       </h3>
@@ -83,7 +87,7 @@ export default function AboutPage() {
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </SpotlightCard>
                   ))}
                 </div>
               </div>
@@ -103,21 +107,20 @@ export default function AboutPage() {
               <div className="overflow-hidden rounded-xl border border-border bg-border">
                 <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
                   {workflow.map((step) => (
-                    <div key={step.step} className="bg-card p-6">
-                      <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                        <span
-                          aria-hidden
-                          className="size-1.5 rounded-full bg-amber-400/80"
-                        />
+                    <SpotlightCard
+                      key={step.step}
+                      className="bg-card p-6 transition-colors duration-300 hover:bg-muted/20"
+                    >
+                      <div className="flex size-8 items-center justify-center rounded-md border border-amber-400/30 bg-amber-400/5 font-mono text-xs text-amber-400/90">
                         {step.step}
-                      </p>
-                      <h3 className="mt-3 font-semibold tracking-tight">
+                      </div>
+                      <h3 className="mt-4 font-semibold tracking-tight">
                         {step.title}
                       </h3>
                       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                         {step.description}
                       </p>
-                    </div>
+                    </SpotlightCard>
                   ))}
                 </div>
               </div>

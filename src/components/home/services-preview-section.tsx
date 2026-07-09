@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { services } from "@/content/services";
 
 export function ServicesPreviewSection() {
@@ -21,10 +21,10 @@ export function ServicesPreviewSection() {
           <div className="overflow-hidden rounded-xl border border-border bg-border">
             <div className="grid gap-px md:grid-cols-2">
               {services.map((service) => (
-                <Link
+                <SpotlightCard
                   key={service.id}
                   href={`/services#${service.id}`}
-                  className="group flex items-center justify-between gap-6 bg-card p-6 transition-colors hover:bg-muted/40"
+                  className="flex items-center justify-between gap-6 bg-card p-6 transition-colors hover:bg-muted/40"
                 >
                   <div>
                     <h3 className="text-lg font-semibold tracking-tight">
@@ -35,7 +35,7 @@ export function ServicesPreviewSection() {
                     </p>
                   </div>
                   <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-foreground" />
-                </Link>
+                </SpotlightCard>
               ))}
             </div>
           </div>

@@ -138,4 +138,157 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 160px 160px;
   }
+
+  /* Fine technical grid. Pair with .mask-radial-faded to feather the edges. */
+  .bg-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 56px 56px;
+  }
+
+  .mask-radial-faded {
+    -webkit-mask-image: radial-gradient(
+      ellipse 75% 60% at 50% 30%,
+      black,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      ellipse 75% 60% at 50% 30%,
+      black,
+      transparent 78%
+    );
+  }
+
+  /* Mouse-follow spotlight fill. The parent element sets --spot-x/--spot-y. */
+  .spotlight-layer {
+    background: radial-gradient(
+      280px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      rgba(255, 213, 168, 0.1),
+      transparent 72%
+    );
+  }
+
+  /* Faint CRT-style scan lines for reserved interface frames. */
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.022) 0px,
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  }
+
+  /* Vertical fade from full foreground to a dimmer tint — editorial headings. */
+  .text-gradient {
+    background: linear-gradient(
+      180deg,
+      var(--foreground) 32%,
+      color-mix(in oklch, var(--foreground) 58%, transparent)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .animate-drift-a {
+    animation: ambient-drift-a 22s ease-in-out infinite;
+  }
+  .animate-drift-b {
+    animation: ambient-drift-b 28s ease-in-out infinite;
+  }
+  .animate-scan {
+    animation: scan-move 7s linear infinite;
+  }
+  /* Pulse travelling along a horizontal connector; parent must be relative. */
+  .animate-flow-x {
+    animation: flow-x 2.8s ease-in-out infinite;
+  }
+  /* Route-enter transition. template.tsx re-mounts this on each navigation. */
+  .page-enter {
+    animation: page-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes ambient-drift-a {
+  0%,
+  100% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0) scale(1.18);
+    opacity: 1;
+  }
+}
+
+@keyframes ambient-drift-b {
+  0%,
+  100% {
+    transform: translate3d(4%, 3%, 0) scale(1.12);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate3d(-5%, -3%, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scan-move {
+  from {
+    transform: translateY(-120%);
+  }
+  to {
+    transform: translateY(420%);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes flow-x {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift-a,
+  .animate-drift-b,
+  .animate-scan,
+  .animate-flow-x,
+  .page-enter {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
 }

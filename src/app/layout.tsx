@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { AmbientBackground } from "@/components/shared/ambient-background";
+import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { site } from "@/content/site";
 
 const geistSans = Geist({
@@ -53,10 +55,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} dark h-full scroll-smooth antialiased`}
       style={{ colorScheme: "dark" }}
     >
-      <body className="flex min-h-full flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-full">
+        <AmbientBackground />
+        <ScrollProgress />
+        <div className="relative z-10 flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

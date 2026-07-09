@@ -3,6 +3,7 @@ import { GitBranch, Mail, MessageCircle } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
@@ -52,7 +53,7 @@ export default function ContactPage() {
         <div className="mt-12 max-w-3xl">
           {site.email && (
             <Reveal>
-              <div className="relative overflow-hidden rounded-xl border border-border bg-card p-6 ring-1 ring-white/5 md:p-8">
+              <SpotlightCard className="rounded-xl border border-border bg-card p-6 ring-1 ring-white/5 md:p-8">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_20%_0%,rgba(255,214,170,0.05),transparent)]"
@@ -90,7 +91,7 @@ export default function ContactPage() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </SpotlightCard>
             </Reveal>
           )}
 
@@ -100,12 +101,11 @@ export default function ContactPage() {
                 {secondaryChannels.map((channel) => {
                   const Icon = channel.icon;
                   return (
-                    <a
+                    <SpotlightCard
                       key={channel.key}
                       href={channel.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group flex items-center justify-between gap-4 bg-card p-6 transition-colors hover:bg-muted/40"
+                      external
+                      className="flex items-center justify-between gap-4 bg-card p-6 transition-colors hover:bg-muted/40"
                     >
                       <span className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         <span
@@ -115,7 +115,7 @@ export default function ContactPage() {
                         {channel.label}
                       </span>
                       <Icon className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
-                    </a>
+                    </SpotlightCard>
                   );
                 })}
               </div>

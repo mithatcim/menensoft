@@ -9,6 +9,7 @@ import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
 import { services, workflow } from "@/content/services";
 import { pageMeta } from "@/lib/seo";
@@ -46,9 +47,9 @@ export default function ServicesPage() {
               const Icon = serviceIcons[service.id] ?? AppWindow;
               return (
                 <Reveal key={service.id}>
-                  <div
+                  <SpotlightCard
                     id={service.id}
-                    className="scroll-mt-24 overflow-hidden rounded-xl border border-border bg-card ring-1 ring-white/5"
+                    className="scroll-mt-24 rounded-xl border border-border bg-card/70 ring-1 ring-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-foreground/15"
                   >
                     <div className="p-6 md:p-8">
                       <div className="flex items-start justify-between gap-6">
@@ -61,7 +62,7 @@ export default function ServicesPage() {
                           </p>
                         </div>
                         <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background/50">
-                          <Icon className="size-5 text-muted-foreground" />
+                          <Icon className="size-5 text-amber-400/80" />
                         </div>
                       </div>
                       <div className="mt-8 grid gap-8 md:grid-cols-2">
@@ -110,7 +111,7 @@ export default function ServicesPage() {
                         </span>
                       </p>
                     </div>
-                  </div>
+                  </SpotlightCard>
                 </Reveal>
               );
             })}
@@ -132,24 +133,20 @@ export default function ServicesPage() {
                 />
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {workflow.map((step) => (
-                    <div
+                    <SpotlightCard
                       key={step.step}
-                      className="relative rounded-xl border border-border bg-card p-6"
+                      className="rounded-xl border border-border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-foreground/15"
                     >
-                      <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                        <span
-                          aria-hidden
-                          className="size-1.5 rounded-full bg-amber-400/80"
-                        />
+                      <div className="flex size-9 items-center justify-center rounded-lg border border-amber-400/30 bg-amber-400/5 font-mono text-sm text-amber-400/90">
                         {step.step}
-                      </p>
-                      <h3 className="mt-3 text-lg font-semibold tracking-tight">
+                      </div>
+                      <h3 className="mt-4 text-lg font-semibold tracking-tight">
                         {step.title}
                       </h3>
                       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                         {step.description}
                       </p>
-                    </div>
+                    </SpotlightCard>
                   ))}
                 </div>
               </div>
