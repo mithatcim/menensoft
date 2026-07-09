@@ -34,12 +34,24 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.name}
           </p>
-          <a
-            href={`mailto:${site.email}`}
-            className="font-mono transition-colors hover:text-foreground"
-          >
-            {site.email}
-          </a>
+          <div className="flex flex-col gap-2 font-mono sm:flex-row sm:items-center sm:gap-6">
+            {site.githubUrl && (
+              <a
+                href={site.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="transition-colors hover:text-foreground"
+              >
+                GitHub
+              </a>
+            )}
+            <a
+              href={`mailto:${site.email}`}
+              className="transition-colors hover:text-foreground"
+            >
+              {site.email}
+            </a>
+          </div>
         </div>
       </Container>
     </footer>

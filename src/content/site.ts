@@ -76,10 +76,11 @@ export const site: SiteConfig = {
 
   coreStack: ["TypeScript", "React", "Next.js", "Node.js", "Tailwind CSS"],
 
-  // Real, known contact value:
+  // Real, known contact values:
   email: "mitopasa42@gmail.com",
-  // whatsappUrl, githubUrl, linkedinUrl, location, timezone are intentionally
-  // omitted until real values are provided — the UI renders nothing for them.
+  githubUrl: "https://github.com/mithatcim",
+  whatsappUrl: "https://wa.me/905303115870",
+  // linkedinUrl, location, timezone remain omitted until real values exist.
 };
 
 export const capabilities: Capability[] = [
