@@ -29,7 +29,7 @@ export function MobileNav() {
         type="button"
         aria-expanded={open}
         aria-controls="mobile-nav"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
         onClick={() => setOpen((v) => !v)}
         className="-mr-2 inline-flex size-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
       >

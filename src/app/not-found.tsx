@@ -12,10 +12,10 @@ export default function NotFound() {
           404
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
-          Page not found
+          Sayfa bulunamadı
         </h1>
         <p className="mt-4 max-w-md text-muted-foreground">
-          This page doesn&apos;t exist — or it moved somewhere else.
+          Bu sayfa mevcut değil — ya da başka bir yere taşındı.
         </p>
         <Link
           href="/"
@@ -24,7 +24,7 @@ export default function NotFound() {
             "mt-8 h-11 px-6",
           )}
         >
-          Back to home
+          Ana sayfaya dön
         </Link>
       </Container>
     </section>

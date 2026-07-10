@@ -81,7 +81,7 @@ function BuildStatusCard() {
             <span className="size-2.5 rounded-full border border-border bg-muted/60" />
           </span>
           <p className="flex-1 truncate font-mono text-xs text-muted-foreground">
-            ~/projects — build status
+            ~/projeler — sistem durumu
           </p>
           <span
             aria-hidden
@@ -108,7 +108,7 @@ function BuildStatusCard() {
           ))}
         </ul>
         <p className="relative border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground">
-          {`${projects.length} systems, designed and built end to end`}
+          {`${projects.length} sistem — uçtan uca tasarlandı ve geliştirildi`}
         </p>
       </div>
     </div>
@@ -150,29 +150,29 @@ export function HeroSection() {
           <Entrance delay={0.18}>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
-                href="/projects"
+                href="/contact"
                 className={cn(
                   buttonVariants({ variant: "cta" }),
                   "h-12 px-7 text-base",
                 )}
               >
-                View projects
+                Proje görüşmesi başlat
                 <ArrowRight className="size-4 transition-transform group-hover/button:translate-x-0.5" />
               </Link>
               <Link
-                href="/contact"
+                href="/projects"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
                   "h-12 px-7 text-base backdrop-blur",
                 )}
               >
-                Get in touch
+                Projeleri incele
               </Link>
             </div>
           </Entrance>
           <Entrance delay={0.24}>
             <p className="mt-16 font-mono text-xs text-muted-foreground">
-              <span className="tracking-widest uppercase">Core stack</span>
+              <span className="tracking-widest uppercase">Teknoloji yığını</span>
               <span aria-hidden className="mx-2">
                 —
               </span>

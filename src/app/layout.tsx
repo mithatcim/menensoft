@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: `${site.name} — ${site.role}`,
     description: site.subheadline,
     url: "/",
-    locale: "en_US",
+    locale: "tr_TR",
   },
   twitter: {
     card: "summary_large_image",
@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="tr"
       className={`${geistSans.variable} ${geistMono.variable} dark h-full scroll-smooth antialiased`}
       style={{ colorScheme: "dark" }}
     >

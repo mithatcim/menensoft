@@ -14,6 +14,9 @@ export function Footer() {
             <p className="mt-1 text-sm text-muted-foreground">
               {site.positioning}
             </p>
+            <p className="mt-1 text-xs text-muted-foreground/70">
+              Kurucu &amp; geliştirici: {site.founder}
+            </p>
           </div>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-6 gap-y-2">

@@ -24,11 +24,11 @@ export function ContactCTA() {
                 {site.availability}
               </p>
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance md:text-5xl">
-                Have a product to build?
+                Kurulacak bir sisteminiz mi var?
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                Tell me what you&apos;re trying to ship. I&apos;ll reply with an
-                honest take on scope and approach.
+                İhtiyacınızı yazın; kapsam ve yaklaşım konusunda net, dürüst
+                bir dönüş alın.
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <a
@@ -39,7 +39,7 @@ export function ContactCTA() {
                   )}
                 >
                   <Mail className="size-4" />
-                  Email me
+                  E-posta gönder
                 </a>
                 <Link
                   href="/contact"
@@ -48,7 +48,7 @@ export function ContactCTA() {
                     "h-12 px-7 text-base",
                   )}
                 >
-                  Contact details
+                  İletişim bilgileri
                 </Link>
               </div>
             </div>

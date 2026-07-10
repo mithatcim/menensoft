@@ -1,10 +1,10 @@
 /**
  * Global site identity and shared copy.
  *
- * Positioning confirmed by the site owner on 2026-07-08: systems-focused,
- * "Full Stack Developer — building complete web systems". Copy states only
- * known facts; skills list only technologies used in the projects on this
- * site.
+ * Phase 9 (2026-07-10): rebranded as Menensoft with Turkish positioning at
+ * the site owner's direction. Mithat Yılmaz remains visible as the founder/
+ * builder behind the brand. Copy states only owner-confirmed facts; no
+ * clients, metrics, testimonials, or launch claims are invented.
  */
 
 export interface SkillGroup {
@@ -22,6 +22,7 @@ export interface Capability {
 
 export interface SiteConfig {
   name: string;
+  founder: string;
   role: string;
   positioning: string;
   headline: string;
@@ -32,14 +33,11 @@ export interface SiteConfig {
   coreStack: string[];
 
   // Contact channels — a channel only renders when its value is present here.
-  // Do NOT add a value that isn't real; a missing value means "no link", not
-  // a placeholder.
   email?: string;
   whatsappUrl?: string;
   githubUrl?: string;
   linkedinUrl?: string;
 
-  // Optional credibility details — render only when present.
   location?: string;
   timezone?: string;
 }
@@ -61,23 +59,24 @@ export const siteUrl =
   "http://localhost:3000";
 
 export const site: SiteConfig = {
-  name: "Mithat Yılmaz",
-  role: "Full Stack Developer",
-  positioning: "Full Stack Developer — building complete web systems",
+  name: "Menensoft",
+  founder: "Mithat Yılmaz",
+  role: "İşletmeler için çalışan web sistemleri",
+  positioning: "Menensoft — işletmeler için çalışan web sistemleri",
 
   // Hero
-  headline: "I build complete web systems.",
+  headline: "İşletmeniz için çalışan web sistemleri.",
   subheadline:
-    "Admin panels, dashboards, storefronts, and operations tools: working software built end to end, from the database to the interface.",
+    "E-ticaret altyapıları, yönetim panelleri, dashboard'lar ve operasyon sistemleri: veritabanından arayüze, çalışır teslim edilen özel yazılım.",
 
-  availability: "Available for selected projects",
+  availability: "Yeni projelere açık",
 
   siteUrl,
 
   coreStack: ["TypeScript", "React", "Next.js", "Node.js", "Tailwind CSS"],
 
   // Real, known contact values:
-  email: "mitopasa42@gmail.com",
+  email: "mithat.menen@gmail.com",
   githubUrl: "https://github.com/mithatcim",
   whatsappUrl: "https://wa.me/905303115870",
   // linkedinUrl, location, timezone remain omitted until real values exist.
@@ -85,39 +84,39 @@ export const site: SiteConfig = {
 
 export const capabilities: Capability[] = [
   {
-    title: "Admin panels & dashboards",
+    title: "Yönetim panelleri & dashboard'lar",
     description:
-      "The screens a business runs on: managing products, orders, content, and users.",
+      "İşletmenin üzerinde döndüğü ekranlar: ürün, sipariş, içerik ve kullanıcı yönetimi.",
     icon: "dashboard",
   },
   {
-    title: "E-commerce systems",
+    title: "E-ticaret sistemleri",
     description:
-      "Storefronts and the management layer behind them: products, categories, and page content.",
+      "Vitrin ve arkasındaki yönetim katmanı: ürünler, kategoriler ve sayfa içerikleri.",
     icon: "commerce",
   },
   {
-    title: "Full-stack web applications",
+    title: "Full-stack web uygulamaları",
     description:
-      "SaaS-style products with real data models, role-based screens, and a clean interface.",
+      "Gerçek veri modeli, rol bazlı ekranlar ve temiz arayüzle SaaS tarzı ürünler.",
     icon: "app",
   },
   {
-    title: "Automation & internal tools",
+    title: "Otomasyon & iç araçlar",
     description:
-      "Purpose-built tools that replace manual workflows, like routing orders between staff roles.",
+      "Manuel iş akışını devralan, amaca özel araçlar; örneğin siparişleri roller arasında yönlendirmek.",
     icon: "automation",
   },
 ];
 
 export const about = {
-  // Reviewed in the Phase 3 content pass (2026-07-08); principles, stack
-  // philosophy, build/avoid, and the tooling line added in Phase 8E
-  // (2026-07-10) — all restatements of published positioning, no new claims.
+  // Phase 9: Menensoft framing; principles/stack philosophy/build-avoid and
+  // the tooling line carry over from the owner-approved 8E content, now in
+  // Turkish. No biography or claims are invented.
   intro: [
-    "I'm Mithat, a full-stack developer. I build complete web systems: the data model, the backend, and the interface people actually use.",
-    "Most of my recent work is systems with an operational back side: a restaurant ordering system with waiter, kitchen, and cashier screens, a psychology practice website with its own admin panel, and the flagship build in progress, an e-commerce CMS with a visual site builder. The work ranges from active product builds to completed full-stack systems and internal prototypes. I like owning the whole build, not a slice of it.",
-    "I keep scope honest, ship in small steps, and prefer reliable, well-understood technology over whatever is trending.",
+    "Menensoft, işletmeler için çalışan web sistemleri geliştiren bir yazılım markasıdır. Markanın arkasında kurucu ve geliştirici olarak ben, Mithat Yılmaz varım: veri modelinden arayüze, sistemin her katmanını uçtan uca ben tasarlar ve geliştiririm.",
+    "Yakın dönem işlerin çoğu, operasyon tarafı olan sistemler: garson, mutfak ve kasa ekranlarıyla çalışan bir restoran sipariş sistemi; kendi yönetim paneline sahip bir psikoloji kliniği web sitesi; görsel sayfa kurucusuyla bir e-ticaret CMS altyapısı. Statik sayfa değil, çalışan sistem teslim etmeyi tercih ederim.",
+    "Kapsamı dürüst tutarım, küçük ve gözden geçirilebilir adımlarla ilerlerim, trend olan yerine güvenilir ve kanıtlanmış teknolojiyi seçerim.",
   ],
   skills: [
     {
@@ -126,44 +125,44 @@ export const about = {
     },
     {
       title: "Backend",
-      items: ["Node.js", "REST APIs", "Next.js server-side", "SQL databases"],
+      items: ["Node.js", "REST API'ler", "Next.js sunucu tarafı", "SQL veritabanları"],
     },
     {
-      title: "Tooling & practice",
+      title: "Araçlar & pratik",
       items: ["Git & GitHub", "pnpm", "ESLint", "Playwright"],
     },
   ] satisfies SkillGroup[],
 
   principles: [
-    "Build complete systems, not isolated screens.",
-    "Keep admin workflows practical.",
-    "Make data, interface, and operations fit together.",
-    "Prefer honest scope over inflated claims.",
-    "Ship in small, reviewable steps.",
-    "Design for maintainability and handoff.",
+    "Tek ekran değil, bütün sistemi kur.",
+    "Yönetim akışlarını pratik tut.",
+    "Veri, arayüz ve operasyonu birbirine oturt.",
+    "Şişirilmiş vaat yerine net kapsam.",
+    "Küçük, gözden geçirilebilir adımlarla teslim et.",
+    "Sürdürülebilirlik ve devir için tasarla.",
   ],
 
   stackPhilosophy:
-    "One practical stack, used deliberately: TypeScript end to end, Next.js for the interface and its server side, Node.js and SQL databases behind it, Tailwind for disciplined UI. Reliable, well-understood technology over whatever is trending — a system you can run beats a stack you can brag about.",
+    "Bilinçli seçilmiş tek pratik yığın: uçtan uca TypeScript, arayüz ve sunucu tarafı için Next.js, arkada Node.js ve SQL veritabanları, disiplinli arayüz için Tailwind. Trend olan yerine güvenilir, iyi anlaşılmış teknoloji — çünkü çalıştırabildiğiniz sistem, övünülen yığından daha değerlidir.",
 
   builds: [
-    "E-commerce systems",
-    "Admin panels & dashboards",
-    "Workflow & operational tools",
-    "Content-managed websites",
-    "Prototype-to-system builds",
+    "E-ticaret sistemleri",
+    "Yönetim panelleri & dashboard'lar",
+    "İş akışı & operasyon araçları",
+    "İçerik yönetimli kurumsal siteler",
+    "Prototipten ürüne sistem geliştirme",
   ],
 
   avoids: [
-    "Screens with no system behind them",
-    "Unclear scope",
-    "Invented metrics",
-    "Unnecessary complexity",
-    "Trend-chasing gimmicks",
-    "Animation that hurts usability",
+    "Arkasında sistem olmayan ekranlar",
+    "Belirsiz kapsam",
+    "Uydurma metrikler",
+    "Gereksiz karmaşıklık",
+    "Trend kovalayan gösteriş",
+    "Kullanılabilirliği bozan animasyon",
   ],
 
-  // One honest tooling line — a workflow enhancer, never an identity.
+  // Tek dürüst araç cümlesi — kimlik değil, iş akışı güçlendirici.
   tooling:
-    "Modern tooling, including AI-assisted development, speeds up planning, building, and review — applied with review discipline, never as a substitute for it.",
+    "Yapay zekâ destekli geliştirme dahil modern araçlar; planlama, geliştirme ve gözden geçirmeyi hızlandırır — her zaman gözden geçirme disipliniyle, asla onun yerine geçmeden.",
 };
