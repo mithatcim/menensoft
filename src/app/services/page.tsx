@@ -6,6 +6,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { ServicesPipeline } from "@/components/services/pipeline";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { GrowLine } from "@/components/shared/grow-line";
 import { Reveal } from "@/components/shared/reveal";
@@ -43,7 +44,9 @@ export default function ServicesPage() {
             />
           </Reveal>
 
-          <div className="mt-12 grid gap-6">
+          <ServicesPipeline />
+
+          <div className="mt-16 grid gap-6 md:mt-20">
             {services.map((service) => {
               const Icon = serviceIcons[service.id] ?? AppWindow;
               return (

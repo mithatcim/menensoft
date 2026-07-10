@@ -5,6 +5,10 @@ import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
 import {
+  TeardownRail,
+  type TeardownStage,
+} from "@/components/projects/teardown-rail";
+import {
   BrowserFrame,
   ScreenshotSlot,
 } from "@/components/shared/browser-frame";
@@ -43,6 +47,25 @@ export async function generateMetadata({
   });
 }
 
+/** Teardown progression — presentation labels only, content stays real. */
+const TEARDOWN_STAGES: TeardownStage[] = [
+  { id: "input", num: "01", label: "Input", sub: "The problem" },
+  { id: "architecture", num: "02", label: "Architecture", sub: "System flow" },
+  { id: "interface", num: "03", label: "Interface", sub: "What was built" },
+  { id: "scope", num: "04", label: "Scope", sub: "Current status" },
+];
+
+function StageChip({ num, label }: { num: string; label: string }) {
+  return (
+    <p className="flex items-center gap-2.5 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+      <span className="flex size-6 items-center justify-center rounded-md border border-accent/30 bg-accent/5 text-accent">
+        {num}
+      </span>
+      {label}
+    </p>
+  );
+}
+
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const project = getProject(slug);
@@ -52,7 +75,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <>
       <section className="py-16 md:py-24">
         <Container>
-          <article className="max-w-3xl">
+          <article className="max-w-3xl xl:max-w-[62rem]">
             <Link
               href="/projects"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -61,157 +84,198 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               All projects
             </Link>
 
-            <h1 className="mt-8 text-4xl font-semibold tracking-tight text-balance md:text-5xl">
-              {project.name}
-            </h1>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              {project.oneLiner}
-            </p>
+            <div className="max-w-3xl">
+              <h1 className="mt-8 text-4xl font-semibold tracking-tight text-balance md:text-5xl">
+                {project.name}
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+                {project.oneLiner}
+              </p>
 
-            <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
-              <dl className="grid gap-px sm:grid-cols-3">
-                <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                    Status
-                  </dt>
-                  <dd className="mt-3 flex items-center gap-2 text-sm">
-                    <span
-                      aria-hidden
-                      className="size-1.5 rounded-full bg-accent/90"
-                    />
-                    {projectStatusLabel[project.status]}
-                    {project.year && (
-                      <span className="text-muted-foreground">
-                        {project.year}
-                      </span>
-                    )}
-                  </dd>
-                </div>
-                {project.role ? (
+              <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
+                <dl className="grid gap-px sm:grid-cols-3">
                   <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                     <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Role
+                      Status
                     </dt>
-                    <dd className="mt-3 text-sm">{project.role}</dd>
-                  </div>
-                ) : (
-                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Case study
-                    </dt>
-                    <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                      Draft; details get added as the build matures.
+                    <dd className="mt-3 flex items-center gap-2 text-sm">
+                      <span
+                        aria-hidden
+                        className="size-1.5 rounded-full bg-accent/90"
+                      />
+                      {projectStatusLabel[project.status]}
+                      {project.year && (
+                        <span className="text-muted-foreground">
+                          {project.year}
+                        </span>
+                      )}
                     </dd>
                   </div>
-                )}
-                <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                  <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                    Stack
-                  </dt>
-                  <dd className="mt-3 flex flex-wrap gap-2">
-                    {project.stack.map((tech) => (
-                      <TechTag key={tech}>{tech}</TechTag>
-                    ))}
-                  </dd>
-                </div>
-              </dl>
-            </Reveal>
-
-            <Reveal className="mt-8" delay={0.05}>
-              <BrowserFrame
-                title={`/${project.slug}`}
-                image={projectImage(project)}
-              >
-                <ScreenshotSlot />
-              </BrowserFrame>
-              {project.flow && (
-                <FlowPanel
-                  label="System flow"
-                  nodes={project.flow}
-                  className="mt-6"
-                />
-              )}
-            </Reveal>
-
-            <div className="mt-14 space-y-12">
-              <Reveal>
-                <h2 className="text-xl font-semibold tracking-tight">
-                  The problem it handles
-                </h2>
-                <p className="mt-3 leading-relaxed text-muted-foreground">
-                  {project.problem}
-                </p>
+                  {project.role ? (
+                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
+                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                        Role
+                      </dt>
+                      <dd className="mt-3 text-sm">{project.role}</dd>
+                    </div>
+                  ) : (
+                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
+                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                        Case study
+                      </dt>
+                      <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                        Draft; details get added as the build matures.
+                      </dd>
+                    </div>
+                  )}
+                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
+                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                      Stack
+                    </dt>
+                    <dd className="mt-3 flex flex-wrap gap-2">
+                      {project.stack.map((tech) => (
+                        <TechTag key={tech}>{tech}</TechTag>
+                      ))}
+                    </dd>
+                  </div>
+                </dl>
               </Reveal>
+            </div>
 
-              <Reveal delay={0.05}>
-                <h2 className="text-xl font-semibold tracking-tight">
-                  What I built
-                </h2>
-                <div className="mt-4 overflow-hidden rounded-xl border border-border">
-                  <ul className="divide-y divide-border/60">
-                    {project.built.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-center gap-3 bg-card px-5 py-3.5 text-sm leading-relaxed text-muted-foreground"
+            {/* system teardown: sticky rail on xl, stage chips everywhere */}
+            <div className="mt-14 xl:grid xl:grid-cols-[180px_minmax(0,1fr)] xl:gap-12">
+              <div className="hidden xl:block">
+                <div className="sticky top-28">
+                  <TeardownRail stages={TEARDOWN_STAGES} />
+                </div>
+              </div>
+
+              <div className="max-w-3xl space-y-14">
+                <Reveal>
+                  <section
+                    id="teardown-input"
+                    data-teardown="input"
+                    className="scroll-mt-28"
+                  >
+                    <StageChip num="01" label="Input — the problem" />
+                    <h2 className="mt-4 text-xl font-semibold tracking-tight">
+                      The problem it handles
+                    </h2>
+                    <p className="mt-3 leading-relaxed text-muted-foreground">
+                      {project.problem}
+                    </p>
+                  </section>
+                </Reveal>
+
+                {project.flow && (
+                  <Reveal delay={0.04}>
+                    <section
+                      id="teardown-architecture"
+                      data-teardown="architecture"
+                      className="scroll-mt-28"
+                    >
+                      <StageChip num="02" label="Architecture — system flow" />
+                      <FlowPanel
+                        label="System flow"
+                        nodes={project.flow}
+                        className="mt-4"
+                      />
+                    </section>
+                  </Reveal>
+                )}
+
+                <Reveal delay={0.04}>
+                  <section
+                    id="teardown-interface"
+                    data-teardown="interface"
+                    className="scroll-mt-28"
+                  >
+                    <StageChip num="03" label="Interface — what I built" />
+                    <div className="mt-4">
+                      <BrowserFrame
+                        title={`/${project.slug}`}
+                        image={projectImage(project)}
                       >
+                        <ScreenshotSlot />
+                      </BrowserFrame>
+                    </div>
+                    <div className="mt-5 overflow-hidden rounded-xl border border-border">
+                      <ul className="divide-y divide-border/60">
+                        {project.built.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-center gap-3 bg-card px-5 py-3.5 text-sm leading-relaxed text-muted-foreground"
+                          >
+                            <span
+                              aria-hidden
+                              className="size-1.5 shrink-0 bg-accent/80"
+                            />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </section>
+                </Reveal>
+
+                <Reveal delay={0.04}>
+                  <section
+                    id="teardown-scope"
+                    data-teardown="scope"
+                    className="scroll-mt-28"
+                  >
+                    <StageChip num="04" label="Scope — current status" />
+                    <div className="mt-4 rounded-xl border border-border bg-card p-6">
+                      <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         <span
                           aria-hidden
-                          className="size-1.5 shrink-0 bg-accent/80"
+                          className="size-1.5 rounded-full bg-accent/90"
                         />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-
-              <Reveal
-                delay={0.1}
-                className="rounded-xl border border-border bg-card p-6"
-              >
-                <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                  <span
-                    aria-hidden
-                    className="size-1.5 rounded-full bg-accent/90"
-                  />
-                  Current status &amp; scope
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {project.statusNote ??
-                    `${projectStatusLabel[project.status]}. Details get added as the project matures.`}
-                </p>
-                {project.outcome && (
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {project.outcome}
-                  </p>
-                )}
-                {(project.liveUrl || project.repoUrl) && (
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={cn(buttonVariants({ variant: "outline" }))}
-                      >
-                        Visit live site
-                        <ArrowUpRight className="size-4" />
-                      </a>
-                    )}
-                    {project.repoUrl && (
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={cn(buttonVariants({ variant: "outline" }))}
-                      >
-                        View repository
-                        <ArrowUpRight className="size-4" />
-                      </a>
-                    )}
-                  </div>
-                )}
-              </Reveal>
+                        Current status &amp; scope
+                      </p>
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                        {project.statusNote ??
+                          `${projectStatusLabel[project.status]}. Details get added as the project matures.`}
+                      </p>
+                      {project.outcome && (
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          {project.outcome}
+                        </p>
+                      )}
+                      {(project.liveUrl || project.repoUrl) && (
+                        <div className="mt-5 flex flex-wrap gap-3">
+                          {project.liveUrl && (
+                            <a
+                              href={project.liveUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className={cn(
+                                buttonVariants({ variant: "outline" }),
+                              )}
+                            >
+                              Visit live site
+                              <ArrowUpRight className="size-4" />
+                            </a>
+                          )}
+                          {project.repoUrl && (
+                            <a
+                              href={project.repoUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className={cn(
+                                buttonVariants({ variant: "outline" }),
+                              )}
+                            >
+                              View repository
+                              <ArrowUpRight className="size-4" />
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                </Reveal>
+              </div>
             </div>
           </article>
         </Container>
