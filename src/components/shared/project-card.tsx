@@ -1,14 +1,9 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Fragment } from "react";
 
-import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
-import {
-  projectImage,
-  projectStatusLabel,
-  type Project,
-} from "@/content/projects";
+import { projectStatusLabel, type Project } from "@/content/projects";
 import { cn } from "@/lib/utils";
 
 function StatusBadge({ project }: { project: Project }) {
@@ -100,63 +95,6 @@ export function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-/**
- * Full-width flagship treatment for the first project on the projects page:
- * content on the left, browser-frame placeholder and system flow on the right.
- */
-export function ProjectCardLead({ project }: { project: Project }) {
-  return (
-    <SpotlightCard
-      href={`/projects/${project.slug}`}
-      className={cn(
-        "grid gap-8 rounded-xl border border-border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm md:grid-cols-[minmax(0,1fr)_minmax(0,380px)] md:p-8",
-        LIFT,
-      )}
-    >
-      <div className="relative flex flex-col">
-        <div className="flex items-start justify-between gap-4">
-          <StatusBadge project={project} />
-          <HoverArrow className="mt-0.5 md:hidden" />
-        </div>
-        <h2 className="mt-4 text-2xl font-semibold tracking-tight text-balance md:text-3xl">
-          {project.name}
-        </h2>
-        <p className="mt-3 leading-relaxed text-muted-foreground">
-          {project.oneLiner}
-        </p>
-        <p className="mt-3 hidden text-sm leading-relaxed text-muted-foreground/80 md:block">
-          {project.problem}
-        </p>
-        <div className="mt-auto pt-6">
-          <div className="flex flex-wrap gap-2 border-t border-border/60 pt-4">
-            {project.stack.map((tech) => (
-              <TechTag key={tech}>{tech}</TechTag>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="relative hidden md:block">
-        <BrowserFrame title={`/${project.slug}`} image={projectImage(project)}>
-          <ScreenshotSlot label="Interface capture to be added" />
-        </BrowserFrame>
-        {project.flow && (
-          <div className="mt-4 flex flex-wrap items-center gap-1.5 px-1">
-            {project.flow.map((node, index) => (
-              <Fragment key={node}>
-                {index > 0 && (
-                  <ArrowRight
-                    aria-hidden
-                    className="size-3 shrink-0 text-muted-foreground/50"
-                  />
-                )}
-                <span className="font-mono text-xs text-muted-foreground">
-                  {node}
-                </span>
-              </Fragment>
-            ))}
-          </div>
-        )}
-      </div>
-    </SpotlightCard>
-  );
-}
+// ProjectCardLead was retired when /projects moved to the command deck
+// (src/components/projects/command-deck.tsx); ProjectCard remains in use on
+// the home page's featured grid.

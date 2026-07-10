@@ -1,6 +1,6 @@
 import { Container } from "@/components/layout/container";
+import { ProjectCommandDeck } from "@/components/projects/command-deck";
 import { ContactCTA } from "@/components/shared/contact-cta";
-import { ProjectCard, ProjectCardLead } from "@/components/shared/project-card";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import {
@@ -38,8 +38,6 @@ function StatusRail() {
 }
 
 export default function ProjectsPage() {
-  const [lead, ...rest] = projects;
-
   return (
     <>
       <section className="py-16 md:py-24">
@@ -47,28 +45,15 @@ export default function ProjectsPage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              eyebrow="Projects"
+              eyebrow="Projects — command deck"
               title="Selected work"
-              description="Systems I design and build end to end, from active product builds to completed systems and internal prototypes. Case studies are still growing; each project page lists what exists today."
+              description="Systems I design and build end to end, from active product builds to completed systems and internal prototypes. Select a project to inspect it; each project page lists what exists today."
             />
           </Reveal>
           <Reveal delay={0.05}>
             <StatusRail />
           </Reveal>
-          <Reveal className="mt-10">
-            <ProjectCardLead project={lead} />
-          </Reveal>
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            {rest.map((project, index) => (
-              <Reveal
-                key={project.slug}
-                delay={index * 0.07}
-                className="h-full"
-              >
-                <ProjectCard project={project} />
-              </Reveal>
-            ))}
-          </div>
+          <ProjectCommandDeck projects={projects} />
         </Container>
       </section>
       <ContactCTA />
