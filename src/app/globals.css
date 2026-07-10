@@ -196,18 +196,6 @@
     );
   }
 
-  /* Vertical fade from full foreground to a dimmer tint — editorial headings. */
-  .text-gradient {
-    background: linear-gradient(
-      180deg,
-      var(--foreground) 32%,
-      color-mix(in oklch, var(--foreground) 58%, transparent)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
   .animate-drift-a {
     animation: ambient-drift-a 22s ease-in-out infinite;
   }

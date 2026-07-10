@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { DECOR_PULSES } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export interface FrameImage {
@@ -80,10 +81,12 @@ export function ScreenshotSlot({
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-background/30 p-6">
       <div aria-hidden className="bg-grid absolute inset-0 opacity-40" />
       <div aria-hidden className="scanlines absolute inset-0 opacity-70" />
-      <div
-        aria-hidden
-        className="animate-scan absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-accent/6 to-transparent"
-      />
+      {DECOR_PULSES && (
+        <div
+          aria-hidden
+          className="animate-scan absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-accent/6 to-transparent"
+        />
+      )}
 
       {/* HUD viewport corners */}
       <CornerBracket className="top-3 left-3 border-t border-l" />

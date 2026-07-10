@@ -7,13 +7,17 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
-  type Variants,
 } from "motion/react";
 import { useRef, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
-import { EASE_OUT } from "@/lib/motion";
+import {
+  EASE_OUT,
+  sceneFadeVariants as fadeVariants,
+  sceneItemVariants as itemVariants,
+  scenePanelVariants as panelVariants,
+} from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -79,45 +83,7 @@ const BEATS: Beat[] = [
   },
 ];
 
-/* ------------------------- shared assembly variants ---------------------- */
-
-const panelVariants: Variants = {
-  active: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      ease: EASE_OUT,
-      staggerChildren: 0.07,
-      delayChildren: 0.18,
-    },
-  },
-  past: {
-    opacity: 0,
-    y: -26,
-    scale: 0.97,
-    transition: { duration: 0.55, ease: EASE_OUT },
-  },
-  future: {
-    opacity: 0,
-    y: 26,
-    scale: 0.97,
-    transition: { duration: 0.55, ease: EASE_OUT },
-  },
-};
-
-const itemVariants: Variants = {
-  active: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_OUT } },
-  past: { opacity: 0, y: -8 },
-  future: { opacity: 0, y: 10 },
-};
-
-const fadeVariants: Variants = {
-  active: { opacity: 1, transition: { duration: 0.5, ease: EASE_OUT } },
-  past: { opacity: 0 },
-  future: { opacity: 0 },
-};
+/* Scene variants are shared with the home flagship story via lib/motion. */
 
 /* ------------------------------ beat visuals ----------------------------- */
 /* Abstract schematics only — no real data, no fake claims. */

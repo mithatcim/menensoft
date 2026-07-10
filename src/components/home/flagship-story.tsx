@@ -7,13 +7,18 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
-  type Variants,
 } from "motion/react";
 import { useRef, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
-import { EASE_OUT } from "@/lib/motion";
+import {
+  DECOR_PULSES,
+  EASE_OUT,
+  sceneFadeVariants as fadeVariants,
+  sceneItemVariants as itemVariants,
+  scenePanelVariants as panelVariants,
+} from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -65,45 +70,7 @@ const STAGES: Stage[] = [
   },
 ];
 
-/* ------------------------- shared assembly variants ---------------------- */
-
-const panelVariants: Variants = {
-  active: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      ease: EASE_OUT,
-      staggerChildren: 0.07,
-      delayChildren: 0.18,
-    },
-  },
-  past: {
-    opacity: 0,
-    y: -26,
-    scale: 0.97,
-    transition: { duration: 0.55, ease: EASE_OUT },
-  },
-  future: {
-    opacity: 0,
-    y: 26,
-    scale: 0.97,
-    transition: { duration: 0.55, ease: EASE_OUT },
-  },
-};
-
-const itemVariants: Variants = {
-  active: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_OUT } },
-  past: { opacity: 0, y: -8 },
-  future: { opacity: 0, y: 10 },
-};
-
-const fadeVariants: Variants = {
-  active: { opacity: 1, transition: { duration: 0.5, ease: EASE_OUT } },
-  past: { opacity: 0 },
-  future: { opacity: 0 },
-};
+/* Scene variants are shared with the services request scene via lib/motion. */
 
 /* ----------------------------- stage visuals ---------------------------- */
 /* Abstract, decorative skeletons only — never real data or captures. */
@@ -356,7 +323,9 @@ function HandoffConnector() {
   return (
     <div aria-hidden className="flex justify-center py-6">
       <div className="relative h-14 w-px bg-gradient-to-b from-border via-accent/40 to-border">
-        <span className="animate-flow-y absolute left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]" />
+        {DECOR_PULSES && (
+          <span className="animate-flow-y absolute left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]" />
+        )}
       </div>
     </div>
   );
