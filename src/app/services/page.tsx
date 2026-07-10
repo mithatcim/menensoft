@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { GrowLine } from "@/components/shared/grow-line";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
@@ -49,7 +50,7 @@ export default function ServicesPage() {
                 <Reveal key={service.id}>
                   <SpotlightCard
                     id={service.id}
-                    className="scroll-mt-24 rounded-xl border border-border bg-card/70 ring-1 ring-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-foreground/15"
+                    className="scroll-mt-24 rounded-xl border border-border bg-card/70 ring-1 ring-white/5 backdrop-blur-sm transition-all duration-300 hover:border-accent/25 hover:ring-accent/10"
                   >
                     <div className="p-6 md:p-8">
                       <div className="flex items-start justify-between gap-6">
@@ -127,10 +128,7 @@ export default function ServicesPage() {
             </Reveal>
             <Reveal delay={0.08}>
               <div className="relative mt-12">
-                <div
-                  aria-hidden
-                  className="absolute inset-x-8 top-9 hidden h-px bg-gradient-to-r from-border via-accent/30 to-border lg:block"
-                />
+                <GrowLine className="absolute inset-x-8 top-9 hidden lg:block" />
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {workflow.map((step) => (
                     <SpotlightCard

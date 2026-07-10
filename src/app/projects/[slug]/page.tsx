@@ -70,7 +70,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
             <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
               <dl className="grid gap-px sm:grid-cols-3">
-                <div className="bg-card p-5">
+                <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                   <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                     Status
                   </dt>
@@ -88,14 +88,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </dd>
                 </div>
                 {project.role ? (
-                  <div className="bg-card p-5">
+                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                     <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                       Role
                     </dt>
                     <dd className="mt-3 text-sm">{project.role}</dd>
                   </div>
                 ) : (
-                  <div className="bg-card p-5">
+                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                     <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                       Case study
                     </dt>
@@ -104,7 +104,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     </dd>
                   </div>
                 )}
-                <div className="bg-card p-5">
+                <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                   <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                     Stack
                   </dt>

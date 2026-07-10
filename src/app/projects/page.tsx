@@ -58,11 +58,17 @@ export default function ProjectsPage() {
           <Reveal className="mt-10">
             <ProjectCardLead project={lead} />
           </Reveal>
-          <Reveal delay={0.08} className="mt-6 grid gap-6 md:grid-cols-2">
-            {rest.map((project) => (
-              <ProjectCard key={project.slug} project={project} />
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {rest.map((project, index) => (
+              <Reveal
+                key={project.slug}
+                delay={index * 0.07}
+                className="h-full"
+              >
+                <ProjectCard project={project} />
+              </Reveal>
             ))}
-          </Reveal>
+          </div>
         </Container>
       </section>
       <ContactCTA />

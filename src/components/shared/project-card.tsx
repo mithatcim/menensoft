@@ -32,18 +32,44 @@ function HoverArrow({ className }: { className?: string }) {
 }
 
 const LIFT =
-  "transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-[0_28px_56px_-24px_rgba(0,0,0,0.85)]";
+  "transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_56px_-24px_rgba(0,0,0,0.85)]";
+
+/** Desktop hover overlay: the project's real system flow as a mini diagram. */
+function FlowOverlay({ flow }: { flow: string[] }) {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 bottom-0 hidden translate-y-2 border-t border-accent/25 bg-background/95 px-5 py-3.5 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 md:block"
+    >
+      <div className="flex flex-wrap items-center gap-1.5">
+        {flow.map((node, index) => (
+          <Fragment key={node}>
+            {index > 0 && (
+              <ArrowRight className="size-3 shrink-0 text-accent/60" />
+            )}
+            <span className="font-mono text-xs text-foreground/80">
+              {node}
+            </span>
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function ProjectCard({ project }: { project: Project }) {
-  // Prototype/archived work reads intentionally quieter than shipped work.
+  // Prototype/archived work reads intentionally quieter than shipped work;
+  // shipped work carries a faint accent edge and livelier hover.
   const quiet = project.status === "prototype" || project.status === "archived";
 
   return (
     <SpotlightCard
       href={`/projects/${project.slug}`}
       className={cn(
-        "flex h-full flex-col rounded-xl border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm",
-        quiet ? "border-dashed border-border" : "border-border",
+        "flex h-full flex-col rounded-xl border bg-card/70 p-6 backdrop-blur-sm",
+        quiet
+          ? "border-dashed border-border ring-1 ring-white/5 hover:border-foreground/20"
+          : "border-border ring-1 ring-accent/10 hover:border-accent/30 hover:ring-accent/20",
         LIFT,
       )}
     >
@@ -69,6 +95,7 @@ export function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
       </div>
+      {project.flow && <FlowOverlay flow={project.flow} />}
     </SpotlightCard>
   );
 }

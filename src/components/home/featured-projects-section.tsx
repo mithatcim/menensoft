@@ -27,11 +27,13 @@ export function FeaturedProjectsSection() {
             </Link>
           </div>
         </Reveal>
-        <Reveal delay={0.08} className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((project, index) => (
+            <Reveal key={project.slug} delay={index * 0.08} className="h-full">
+              <ProjectCard project={project} />
+            </Reveal>
           ))}
-        </Reveal>
+        </div>
         <div className="mt-8 md:hidden">
           <Link
             href="/projects"
