@@ -6,9 +6,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { ServicesPipeline } from "@/components/services/pipeline";
+import { RequestScene } from "@/components/services/request-scene";
 import { ContactCTA } from "@/components/shared/contact-cta";
-import { GrowLine } from "@/components/shared/grow-line";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
@@ -33,7 +32,7 @@ const serviceIcons: Record<string, LucideIcon> = {
 export default function ServicesPage() {
   return (
     <>
-      <section className="py-16 md:py-24">
+      <section className="pt-16 pb-6 md:pt-24 md:pb-8">
         <Container>
           <Reveal>
             <SectionHeading
@@ -43,10 +42,15 @@ export default function ServicesPage() {
               description="Project-based work that ends with working software: not a deck, not a throwaway prototype. You work directly with me, and scope is agreed before anything gets built."
             />
           </Reveal>
+        </Container>
+      </section>
 
-          <ServicesPipeline />
+      {/* the cinematic scene replaces the old pipeline band */}
+      <RequestScene />
 
-          <div className="mt-16 grid gap-6 md:mt-20">
+      <section className="py-16 md:py-24">
+        <Container>
+          <div className="grid gap-6">
             {services.map((service) => {
               const Icon = serviceIcons[service.id] ?? AppWindow;
               return (
@@ -121,33 +125,35 @@ export default function ServicesPage() {
             })}
           </div>
 
+          {/* quiet factual layer — the scene above carries the drama, so this
+              stays a compact matrix of the real engagement steps */}
           <div className="mt-20 md:mt-24">
             <Reveal>
               <SectionHeading
                 eyebrow="Process"
                 title="How I work"
-                description="A simple, honest workflow. No process theater."
+                description="The concrete engagement facts behind the scene above. No process theater."
               />
             </Reveal>
-            <Reveal delay={0.08}>
-              <div className="relative mt-12">
-                <GrowLine className="absolute inset-x-8 top-9 hidden lg:block" />
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Reveal delay={0.08} className="mt-10">
+              <div className="overflow-hidden rounded-xl border border-border bg-border">
+                <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
                   {workflow.map((step) => (
-                    <SpotlightCard
-                      key={step.step}
-                      className="rounded-xl border border-border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-foreground/15"
-                    >
-                      <div className="flex size-9 items-center justify-center rounded-lg border border-accent/30 bg-accent/5 font-mono text-sm text-accent/90">
+                    <div key={step.step} className="bg-card p-5">
+                      <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                        <span
+                          aria-hidden
+                          className="size-1.5 rounded-full bg-accent/80"
+                        />
                         {step.step}
-                      </div>
-                      <h3 className="mt-4 text-lg font-semibold tracking-tight">
+                      </p>
+                      <h3 className="mt-3 font-semibold tracking-tight">
                         {step.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                         {step.description}
                       </p>
-                    </SpotlightCard>
+                    </div>
                   ))}
                 </div>
               </div>
