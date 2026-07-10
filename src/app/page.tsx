@@ -1,20 +1,23 @@
-import { CapabilitiesSection } from "@/components/home/capabilities-section";
+import { CapabilityConsole } from "@/components/home/capability-console";
 import { FeaturedProjectsSection } from "@/components/home/featured-projects-section";
 import { FlagshipStory } from "@/components/home/flagship-story";
 import { HeroSection } from "@/components/home/hero-section";
 import { ServicesPreviewSection } from "@/components/home/services-preview-section";
+import { SystemLayers } from "@/components/home/system-layers";
 import { ContactCTA } from "@/components/shared/contact-cta";
-import { SectionDivider } from "@/components/shared/section-divider";
+import { TelemetryDivider } from "@/components/shared/telemetry-divider";
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <FlagshipStory />
+      <SystemLayers />
+      <TelemetryDivider code="SYS·02" label="capability console" />
+      <CapabilityConsole />
+      <TelemetryDivider code="SYS·03" label="selected work" />
       <FeaturedProjectsSection />
-      <SectionDivider />
-      <CapabilitiesSection />
-      <SectionDivider />
+      <TelemetryDivider code="SYS·04" label="services" />
       <ServicesPreviewSection />
       <ContactCTA />
     </>
