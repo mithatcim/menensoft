@@ -5,8 +5,15 @@ import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
+import { JsonLd } from "@/components/shared/json-ld";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { site } from "@/content/site";
+import {
+  graph,
+  organizationSchema,
+  personSchema,
+  websiteSchema,
+} from "@/lib/schema";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -26,7 +33,7 @@ export const metadata: Metadata = {
   },
   description: site.subheadline,
   applicationName: site.name,
-  authors: [{ name: site.name }],
+  authors: [{ name: site.founder }, { name: site.name }],
   creator: site.name,
   alternates: { canonical: "/" },
   openGraph: {
@@ -56,6 +63,9 @@ export default function RootLayout({
       style={{ colorScheme: "dark" }}
     >
       <body className="min-h-full">
+        <JsonLd
+          data={graph(organizationSchema(), personSchema(), websiteSchema())}
+        />
         <AmbientBackground />
         <ScrollProgress />
         <div className="relative z-10 flex min-h-screen flex-col">

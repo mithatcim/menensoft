@@ -21,10 +21,16 @@ import {
 } from "@/components/shared/browser-frame";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
+import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
 import { getProject, projectImage, projects } from "@/content/projects";
+import {
+  graph,
+  projectBreadcrumbSchema,
+  projectSchema,
+} from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -75,6 +81,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <>
+      <JsonLd
+        data={graph(projectBreadcrumbSchema(project), projectSchema(project))}
+      />
       <section className="py-16 md:py-24">
         <Container>
           <article className="max-w-3xl xl:max-w-[62rem]">

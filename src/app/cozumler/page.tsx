@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
@@ -15,6 +16,7 @@ import {
   solutions,
   triggers,
 } from "@/content/solutions";
+import { graph, servicesSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +38,7 @@ const CONVERSION_BLOCKS = [
 export default function SolutionsPage() {
   return (
     <>
+      <JsonLd data={graph(servicesSchema())} />
       <section className="pt-16 pb-10 md:pt-24 md:pb-12">
         <Container>
           <Reveal>

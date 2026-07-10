@@ -3,9 +3,11 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { faq } from "@/content/faq";
+import { faqSchema, graph } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -18,6 +20,8 @@ export const metadata = pageMeta({
 export default function FaqPage() {
   return (
     <>
+      {/* FAQPage şeması yalnızca burada — soruların tamamı sayfada görünür */}
+      <JsonLd data={graph(faqSchema())} />
       <section className="py-16 md:py-24">
         <Container>
           <Reveal>
