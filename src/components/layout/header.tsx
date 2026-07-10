@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { buttonVariants } from "@/components/ui/button";
-import { contactItem, mainNav } from "@/content/navigation";
+import { ctaItem, mainNav } from "@/content/navigation";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -44,10 +44,10 @@ export function Header() {
             );
           })}
           <Link
-            href={contactItem.href}
-            className={cn(buttonVariants({ variant: "outline" }), "ml-3")}
+            href={ctaItem.href}
+            className={cn(buttonVariants({ variant: "cta" }), "ml-3")}
           >
-            {contactItem.label}
+            {ctaItem.label}
           </Link>
         </nav>
 

@@ -13,7 +13,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata = pageMeta({
   title: "Hakkında",
   description: `${site.positioning}. Kurucu: ${site.founder}. Yaklaşım, yetkinlikler ve çalışma şekli.`,
-  path: "/about",
+  path: "/hakkimda",
 });
 
 export default function AboutPage() {

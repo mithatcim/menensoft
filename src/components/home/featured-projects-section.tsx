@@ -19,7 +19,7 @@ export function FeaturedProjectsSection() {
               description="Kurulan sistemlerden bir seçki: e-ticaret, operasyon ve platform çalışmaları."
             />
             <Link
-              href="/projects"
+              href="/projeler"
               className="hidden shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground md:inline-flex"
             >
               Tüm projeler
@@ -36,7 +36,7 @@ export function FeaturedProjectsSection() {
         </div>
         <div className="mt-8 md:hidden">
           <Link
-            href="/projects"
+            href="/projeler"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             Tüm projeler

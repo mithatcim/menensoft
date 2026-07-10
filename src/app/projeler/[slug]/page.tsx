@@ -45,7 +45,7 @@ export async function generateMetadata({
   return pageMeta({
     title: project.name,
     description: project.oneLiner,
-    path: `/projects/${project.slug}`,
+    path: `/projeler/${project.slug}`,
   });
 }
 
@@ -79,7 +79,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Container>
           <article className="max-w-3xl xl:max-w-[62rem]">
             <Link
-              href="/projects"
+              href="/projeler"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="size-4" />
@@ -259,6 +259,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           {project.outcome}
                         </p>
                       )}
+                      <p className="mt-4 border-t border-border/60 pt-4">
+                        <Link
+                          href="/teklif-al"
+                          className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
+                        >
+                          Benzer bir sistem için teklif al
+                          <ArrowUpRight className="size-4 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </Link>
+                      </p>
                       {(project.liveUrl || project.repoUrl) && (
                         <div className="mt-5 flex flex-wrap gap-3">
                           {project.liveUrl && (

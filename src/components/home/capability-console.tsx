@@ -164,7 +164,7 @@ function ChannelDetail({ channel }: { channel: Channel }) {
             {proven.map((project) => (
               <Link
                 key={project.slug}
-                href={`/projects/${project.slug}`}
+                href={`/projeler/${project.slug}`}
                 className="group flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-1.5 text-sm transition-colors hover:border-accent/40 hover:bg-card"
               >
                 <span

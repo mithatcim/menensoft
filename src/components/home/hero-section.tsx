@@ -150,7 +150,7 @@ export function HeroSection() {
           <Entrance delay={0.18}>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
-                href="/contact"
+                href="/teklif-al"
                 className={cn(
                   buttonVariants({ variant: "cta" }),
                   "h-12 px-7 text-base",
@@ -160,7 +160,7 @@ export function HeroSection() {
                 <ArrowRight className="size-4 transition-transform group-hover/button:translate-x-0.5" />
               </Link>
               <Link
-                href="/projects"
+                href="/projeler"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
                   "h-12 px-7 text-base backdrop-blur",

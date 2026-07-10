@@ -10,7 +10,7 @@ export const metadata = pageMeta({
   title: "Projeler",
   description:
     "Uçtan uca tasarlanıp geliştirilen sistemler — e-ticaret altyapısı, operasyon sistemleri ve kurumsal web çalışmaları.",
-  path: "/projects",
+  path: "/projeler",
 });
 
 const TIER_LABEL: Record<ProjectTier, string> = {

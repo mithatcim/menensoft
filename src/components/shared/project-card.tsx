@@ -59,7 +59,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <SpotlightCard
-      href={`/projects/${project.slug}`}
+      href={`/projeler/${project.slug}`}
       className={cn(
         "flex h-full flex-col rounded-xl border bg-card/70 p-6 backdrop-blur-sm",
         quiet

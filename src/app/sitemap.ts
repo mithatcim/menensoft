@@ -3,7 +3,17 @@ import type { MetadataRoute } from "next";
 import { projects } from "@/content/projects";
 import { siteUrl } from "@/content/site";
 
-const staticRoutes = ["", "/projects", "/services", "/about", "/contact"];
+// Yalnızca kanonik Türkçe rotalar; eski İngilizce rotalar 308 ile yönlenir.
+const staticRoutes = [
+  "",
+  "/projeler",
+  "/cozumler",
+  "/surec",
+  "/teklif-al",
+  "/sss",
+  "/hakkimda",
+  "/iletisim",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
@@ -13,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
-    url: `${siteUrl}/projects/${project.slug}`,
+    url: `${siteUrl}/projeler/${project.slug}`,
     changeFrequency: "monthly",
     priority: 0.6,
   }));

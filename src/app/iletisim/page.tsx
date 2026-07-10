@@ -1,4 +1,5 @@
-import { GitBranch, Mail, MessageCircle } from "lucide-react";
+import { ArrowRight, GitBranch, Mail, MessageCircle } from "lucide-react";
+import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
@@ -13,7 +14,7 @@ export const metadata = pageMeta({
   title: "İletişim",
   description:
     "Projeniz için iletişime geçin — e-posta en hızlı kanaldır. WhatsApp ile de ulaşabilirsiniz.",
-  path: "/contact",
+  path: "/iletisim",
 });
 
 export default function ContactPage() {
@@ -152,6 +153,22 @@ export default function ContactPage() {
                 Kapsam ve yaklaşım hakkında dürüst bir değerlendirmeyle yanıt
                 alırsınız.
               </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-accent/25 bg-accent/5 px-6 py-5">
+              <p className="text-sm leading-relaxed text-foreground/90">
+                Mesajınızı hazırlayan bir akış ister misiniz? Sistem türünü
+                seçin, şablon sizin için doldurulsun.
+              </p>
+              <Link
+                href="/teklif-al"
+                className={cn(buttonVariants({ variant: "cta" }), "h-10 px-5")}
+              >
+                Teklif al
+                <ArrowRight className="size-4" />
+              </Link>
             </div>
           </Reveal>
         </div>

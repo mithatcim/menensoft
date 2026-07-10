@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -31,26 +31,36 @@ export function ContactCTA() {
                 bir dönüş alın.
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/teklif-al"
+                  className={cn(
+                    buttonVariants({ variant: "cta" }),
+                    "h-12 px-7 text-base",
+                  )}
+                >
+                  Teklif al
+                  <ArrowRight className="size-4" />
+                </Link>
                 <a
                   href={`mailto:${site.email}`}
                   className={cn(
-                    buttonVariants({ variant: "cta" }),
+                    buttonVariants({ variant: "outline" }),
                     "h-12 px-7 text-base",
                   )}
                 >
                   <Mail className="size-4" />
                   E-posta gönder
                 </a>
-                <Link
-                  href="/contact"
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "h-12 px-7 text-base",
-                  )}
-                >
-                  İletişim bilgileri
-                </Link>
               </div>
+              <p className="mt-5 text-sm text-muted-foreground">
+                ya da{" "}
+                <Link
+                  href="/iletisim"
+                  className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                >
+                  iletişim bilgilerini görün
+                </Link>
+              </p>
             </div>
           </div>
         </Reveal>

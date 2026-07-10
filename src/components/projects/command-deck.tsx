@@ -120,7 +120,7 @@ function PreviewBody({ project }: { project: Project }) {
 
       <div className="mt-5 flex items-center justify-between gap-4">
         <Link
-          href={`/projects/${project.slug}`}
+          href={`/projeler/${project.slug}`}
           className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
         >
           Proje detayını aç
@@ -238,7 +238,7 @@ function DeckCard({
               {selected ? "seçili" : "seç"}
             </span>
             <Link
-              href={`/projects/${project.slug}`}
+              href={`/projeler/${project.slug}`}
               aria-label={`${project.name} proje detayını aç`}
               className="pointer-events-auto -m-1 p-1 text-muted-foreground transition-colors hover:text-foreground"
             >
