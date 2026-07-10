@@ -4,6 +4,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
+import { CapabilityMatrix } from "@/components/projects/system-map";
+import {
+  DossierConstraints,
+  DossierModules,
+  DossierSummary,
+  isCompactDossier,
+} from "@/components/projects/system-dossier";
 import {
   TeardownRail,
   type TeardownStage,
@@ -140,6 +147,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </div>
                 </dl>
               </Reveal>
+
+              <Reveal delay={0.05} className="mt-6">
+                <DossierSummary project={project} />
+              </Reveal>
             </div>
 
             {/* system teardown: sticky rail on xl, stage chips everywhere */}
@@ -164,6 +175,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     <p className="mt-3 leading-relaxed text-muted-foreground">
                       {project.problem}
                     </p>
+                    <DossierConstraints project={project} />
                   </section>
                 </Reveal>
 
@@ -199,22 +211,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         <ScreenshotSlot />
                       </BrowserFrame>
                     </div>
-                    <div className="mt-5 overflow-hidden rounded-xl border border-border">
-                      <ul className="divide-y divide-border/60">
-                        {project.built.map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-center gap-3 bg-card px-5 py-3.5 text-sm leading-relaxed text-muted-foreground"
-                          >
-                            <span
-                              aria-hidden
-                              className="size-1.5 shrink-0 bg-accent/80"
-                            />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {project.modules ? (
+                      <DossierModules project={project} />
+                    ) : (
+                      <div className="mt-5 overflow-hidden rounded-xl border border-border">
+                        <ul className="divide-y divide-border/60">
+                          {project.built.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-center gap-3 bg-card px-5 py-3.5 text-sm leading-relaxed text-muted-foreground"
+                            >
+                              <span
+                                aria-hidden
+                                className="size-1.5 shrink-0 bg-accent/80"
+                              />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </section>
                 </Reveal>
 
@@ -225,6 +241,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     className="scroll-mt-28"
                   >
                     <StageChip num="04" label="Scope — current status" />
+                    <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
+                      <CapabilityMatrix
+                        slug={project.slug}
+                        quiet={isCompactDossier(project)}
+                      />
+                    </div>
                     <div className="mt-4 rounded-xl border border-border bg-card p-6">
                       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         <span

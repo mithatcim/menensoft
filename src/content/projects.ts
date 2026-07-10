@@ -42,6 +42,14 @@ export interface Project {
   statusNote?: string;
   /** Abstract system flow, derived strictly from what was built. */
   flow?: string[];
+  /**
+   * System dossier content (Phase 8C). Approved by the site owner on
+   * 2026-07-10 — statements are restatements of the published problem/built
+   * content; nothing here introduces new factual claims.
+   */
+  dossierSummary?: string;
+  constraints?: string[];
+  modules?: { name: string; note: string }[];
   /** A verifiable result — only when one actually exists. */
   outcome?: string;
   liveUrl?: string;
@@ -85,6 +93,22 @@ export const projects: Project[] = [
     statusNote:
       "In active development as the flagship product build. The admin, storefront, and visual page-building already work together; screenshots and architecture notes will be added as the product matures.",
     flow: ["Admin & CMS", "Visual page builder", "Storefront"],
+    dossierSummary:
+      "The flagship build: one system where the admin that manages products also manages the pages that sell them. The admin, the visual page builder, and the storefront already work together; the case study grows as the product does.",
+    constraints: [
+      "One admin surface for both commerce and content",
+      "Store pages assembled visually, not hard-coded",
+      "Product data and page content stay consistent across admin and storefront",
+    ],
+    modules: [
+      { name: "Product & category management", note: "The commerce data core" },
+      { name: "Admin dashboard", note: "Where products get edited" },
+      {
+        name: "Visual page builder",
+        note: "Storefront pages assembled from managed content",
+      },
+      { name: "Storefront", note: "Public product and category pages" },
+    ],
   },
   {
     slug: "restaurant-qr-system",
@@ -106,6 +130,19 @@ export const projects: Project[] = [
     statusNote:
       "Built as a full-stack operations system where orders move from QR menu to waiter, kitchen, and cashier screens.",
     flow: ["QR menu", "Waiter screen", "Kitchen display", "Cashier"],
+    dossierSummary:
+      "A completed full-stack operations system: the order is captured once, at the table, and moves to every role that needs it — waiter, kitchen, cashier — instead of living in someone's memory.",
+    constraints: [
+      "One order captured at the source must reach three different roles",
+      "Each station needs its own screen for its own job",
+      "Guests order from their own phones via QR",
+    ],
+    modules: [
+      { name: "QR menu", note: "Guests open and order at the table" },
+      { name: "Waiter screen", note: "Managing table orders" },
+      { name: "Kitchen display", note: "Incoming orders for the kitchen" },
+      { name: "Cashier flow", note: "Settling bills" },
+    ],
   },
   {
     slug: "orva-psychology",
@@ -117,6 +154,7 @@ export const projects: Project[] = [
     built: [
       "Public-facing practice website",
       "Admin panel for managing site content",
+      "Appointment request flow",
     ],
     stack: ["Next.js", "TypeScript", "React"],
     status: "completed-website",
@@ -125,6 +163,21 @@ export const projects: Project[] = [
     statusNote:
       "Built as a website and admin panel for a psychology practice, with content management and appointment request flows.",
     flow: ["Admin panel", "Content management", "Public website"],
+    dossierSummary:
+      "A completed website and admin panel pair for a psychology practice: the public site presents the practice, and the panel lets the people running it manage content and appointment requests without touching code.",
+    constraints: [
+      "Non-technical staff must update the site themselves",
+      "Public site and its content managed from one panel",
+      "Appointment requests handled as a flow, not a mailbox",
+    ],
+    modules: [
+      { name: "Public practice website", note: "The practice's public surface" },
+      { name: "Admin panel", note: "Managing site content without code" },
+      {
+        name: "Appointment request flow",
+        note: "Requests captured and handled in the panel",
+      },
+    ],
   },
   {
     slug: "log-management-platform",
@@ -144,6 +197,21 @@ export const projects: Project[] = [
     statusNote:
       "An early internal prototype focused on log collection, storage, and review. Hardening, retention policy, and compliance work are out of scope at this stage.",
     flow: ["Log collection", "Storage", "Search & review"],
+    dossierSummary:
+      "An early internal prototype exploring centralized security log management: collection, storage, and a review interface in one place.",
+    constraints: [
+      "Make log retention and review a workflow instead of archaeology",
+    ],
+    modules: [
+      {
+        name: "Centralized collection & storage",
+        note: "Security event logs gathered in one place",
+      },
+      {
+        name: "Search & review interface",
+        note: "Finding and reading log records",
+      },
+    ],
   },
   {
     slug: "cendovar",
@@ -163,6 +231,21 @@ export const projects: Project[] = [
     statusNote:
       "An archived prototype. The membership, access, and publishing mechanics were built and working before the project was set aside.",
     flow: ["Membership & access", "Publishing", "Member delivery"],
+    dossierSummary:
+      "An archived prototype of a membership platform: accounts, gated access, and publishing notification-style signal records to subscribed members.",
+    constraints: [
+      "Real account, access, and publishing mechanics for gated member content",
+    ],
+    modules: [
+      {
+        name: "Membership accounts & subscriptions",
+        note: "Who can access what",
+      },
+      {
+        name: "Signal publishing",
+        note: "Notification-style records delivered to members",
+      },
+    ],
   },
 ];
 
