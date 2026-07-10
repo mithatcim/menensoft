@@ -56,14 +56,14 @@ export default function ContactPage() {
               <SpotlightCard className="rounded-xl border border-border bg-card p-6 ring-1 ring-white/5 md:p-8">
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_20%_0%,rgba(255,214,170,0.05),transparent)]"
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_20%_0%,rgba(139,140,248,0.05),transparent)]"
                 />
                 <div className="relative">
                   <div className="flex items-center justify-between gap-4">
                     <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                       <span
                         aria-hidden
-                        className="size-1.5 rounded-full bg-amber-400/90"
+                        className="size-1.5 rounded-full bg-accent/90"
                       />
                       Email
                     </h2>
@@ -110,7 +110,7 @@ export default function ContactPage() {
                       <span className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         <span
                           aria-hidden
-                          className="size-1.5 rounded-full bg-amber-400/90"
+                          className="size-1.5 rounded-full bg-accent/90"
                         />
                         {channel.label}
                       </span>
@@ -140,7 +140,7 @@ export default function ContactPage() {
                     >
                       <span
                         aria-hidden
-                        className="size-1.5 shrink-0 bg-amber-400/80"
+                        className="size-1.5 shrink-0 bg-accent/80"
                       />
                       {item}
                     </li>

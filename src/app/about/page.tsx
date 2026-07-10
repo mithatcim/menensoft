@@ -50,7 +50,7 @@ export default function AboutPage() {
                 />
                 <div className="rounded-xl border border-border bg-card p-5">
                   <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                    <span aria-hidden className="size-1.5 bg-amber-400/90" />
+                    <span aria-hidden className="size-1.5 bg-accent/90" />
                     Core stack
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -111,7 +111,7 @@ export default function AboutPage() {
                       key={step.step}
                       className="bg-card p-6 transition-colors duration-300 hover:bg-muted/20"
                     >
-                      <div className="flex size-8 items-center justify-center rounded-md border border-amber-400/30 bg-amber-400/5 font-mono text-xs text-amber-400/90">
+                      <div className="flex size-8 items-center justify-center rounded-md border border-accent/30 bg-accent/5 font-mono text-xs text-accent/90">
                         {step.step}
                       </div>
                       <h3 className="mt-4 font-semibold tracking-tight">

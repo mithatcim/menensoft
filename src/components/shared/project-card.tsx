@@ -16,7 +16,7 @@ function StatusBadge({ project }: { project: Project }) {
     <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
       <span
         aria-hidden
-        className="size-1.5 rounded-full bg-amber-400/90 shadow-[0_0_8px_1px_rgba(251,191,36,0.5)]"
+        className="size-1.5 rounded-full bg-accent/90 shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]"
       />
       {projectStatusLabel[project.status]}
     </p>

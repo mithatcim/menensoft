@@ -15,12 +15,12 @@ export function ContactCTA() {
           <div className="relative overflow-hidden rounded-xl border border-border bg-card px-6 py-16 text-center ring-1 ring-white/5 md:px-12 md:py-24">
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(255,214,170,0.07),transparent)]"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(139,140,248,0.07),transparent)]"
             />
             <div aria-hidden className="bg-noise absolute inset-0 opacity-[0.04]" />
             <div className="relative">
               <p className="inline-flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                <span aria-hidden className="size-1.5 rounded-full bg-amber-400" />
+                <span aria-hidden className="size-1.5 rounded-full bg-accent" />
                 {site.availability}
               </p>
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance md:text-5xl">

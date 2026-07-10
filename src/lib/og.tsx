@@ -5,11 +5,11 @@ import { site } from "@/content/site";
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
 
-const BG = "#0a0a0b";
+const BG = "#0a0a0f";
 const FG = "#fafafa";
 const MUTED = "#a1a1aa";
 const FAINT = "#71717a";
-const AMBER = "#fbbf24";
+const ACCENT = "#8b8cf8";
 
 /**
  * Render a social-preview image from plain text only. No screenshots, logos,
@@ -46,7 +46,7 @@ export function renderOgImage({
               width: 12,
               height: 12,
               borderRadius: 9999,
-              background: AMBER,
+              background: ACCENT,
             }}
           />
           <div
@@ -91,7 +91,7 @@ export function renderOgImage({
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ width: 40, height: 3, background: AMBER }} />
+          <div style={{ width: 40, height: 3, background: ACCENT }} />
           <div style={{ fontSize: 24, color: FAINT }}>{footer}</div>
         </div>
       </div>

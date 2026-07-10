@@ -66,7 +66,7 @@ function CornerBracket({ className }: { className?: string }) {
   return (
     <span
       aria-hidden
-      className={cn("absolute size-4 border-amber-400/40", className)}
+      className={cn("absolute size-4 border-accent/40", className)}
     />
   );
 }
@@ -92,7 +92,7 @@ export function ScreenshotSlot({
       </span>
       <span
         aria-hidden
-        className="absolute top-4 right-8 size-1.5 rounded-full bg-amber-400/70"
+        className="absolute top-4 right-8 size-1.5 rounded-full bg-accent/70"
       />
 
       <div className="relative rounded-md border border-dashed border-border bg-background/60 px-4 py-2.5 text-center backdrop-blur-sm">

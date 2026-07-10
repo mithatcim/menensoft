@@ -81,7 +81,7 @@ export function MobileNav() {
                         {active && (
                           <span
                             aria-hidden
-                            className="size-1.5 rounded-full bg-amber-400/90"
+                            className="size-1.5 rounded-full bg-accent/90"
                           />
                         )}
                       </Link>

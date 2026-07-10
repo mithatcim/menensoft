@@ -56,9 +56,9 @@ function AutomationMock() {
       className="mt-6 flex items-center gap-2 rounded-lg border border-border/60 bg-background/40 p-4"
     >
       <span className="size-6 shrink-0 rounded border border-border bg-muted/40" />
-      <span className="h-px flex-1 bg-gradient-to-r from-border to-amber-400/40" />
-      <span className="size-6 shrink-0 rounded border border-amber-400/40 bg-amber-400/10" />
-      <span className="h-px flex-1 bg-gradient-to-r from-amber-400/40 to-border" />
+      <span className="h-px flex-1 bg-gradient-to-r from-border to-accent/40" />
+      <span className="size-6 shrink-0 rounded border border-accent/40 bg-accent/10" />
+      <span className="h-px flex-1 bg-gradient-to-r from-accent/40 to-border" />
       <span className="size-6 shrink-0 rounded border border-border bg-muted/40" />
     </div>
   );
@@ -82,7 +82,7 @@ function Cell({
       )}
     >
       <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-background/50">
-        <Icon className="size-5 text-amber-400/80" />
+        <Icon className="size-5 text-accent/80" />
       </div>
       <h3 className="mt-5 text-lg font-semibold tracking-tight">
         {capability.title}
@@ -104,7 +104,7 @@ export function CapabilitiesSection() {
     <section className="relative py-16 md:py-24">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_0%,rgba(255,214,170,0.04),transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_0%,rgba(139,140,248,0.04),transparent)]"
       />
       <Container className="relative">
         <Reveal>

@@ -62,7 +62,7 @@ export default function ServicesPage() {
                           </p>
                         </div>
                         <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background/50">
-                          <Icon className="size-5 text-amber-400/80" />
+                          <Icon className="size-5 text-accent/80" />
                         </div>
                       </div>
                       <div className="mt-8 grid gap-8 md:grid-cols-2">
@@ -102,7 +102,7 @@ export default function ServicesPage() {
                         <span className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                           <span
                             aria-hidden
-                            className="size-1.5 bg-amber-400/90"
+                            className="size-1.5 bg-accent/90"
                           />
                           What you get
                         </span>
@@ -129,7 +129,7 @@ export default function ServicesPage() {
               <div className="relative mt-12">
                 <div
                   aria-hidden
-                  className="absolute inset-x-8 top-9 hidden h-px bg-gradient-to-r from-border via-amber-400/30 to-border lg:block"
+                  className="absolute inset-x-8 top-9 hidden h-px bg-gradient-to-r from-border via-accent/30 to-border lg:block"
                 />
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {workflow.map((step) => (
@@ -137,7 +137,7 @@ export default function ServicesPage() {
                       key={step.step}
                       className="rounded-xl border border-border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-foreground/15"
                     >
-                      <div className="flex size-9 items-center justify-center rounded-lg border border-amber-400/30 bg-amber-400/5 font-mono text-sm text-amber-400/90">
+                      <div className="flex size-9 items-center justify-center rounded-lg border border-accent/30 bg-accent/5 font-mono text-sm text-accent/90">
                         {step.step}
                       </div>
                       <h3 className="mt-4 text-lg font-semibold tracking-tight">

@@ -53,10 +53,10 @@ function OrbitField() {
       <div className="absolute size-[470px] rounded-full border border-border/25" />
       <div className="absolute size-[600px] rounded-full border border-border/15" />
       <motion.div className="absolute size-[470px]" {...spin(44)}>
-        <span className="absolute top-0 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400 shadow-[0_0_14px_3px_rgba(251,191,36,0.45)]" />
+        <span className="absolute top-0 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_14px_3px_rgba(139,140,248,0.45)]" />
       </motion.div>
       <motion.div className="absolute size-[340px]" {...spin(32, true)}>
-        <span className="absolute top-0 left-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-300/70" />
+        <span className="absolute top-0 left-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-bright/70" />
       </motion.div>
     </div>
   );
@@ -72,7 +72,7 @@ function BuildStatusCard() {
       <div className="relative overflow-hidden rounded-xl border border-border bg-card/90 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)] ring-1 ring-white/5 backdrop-blur-sm">
         <div
           aria-hidden
-          className="animate-scan absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-amber-400/8 to-transparent"
+          className="animate-scan absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-accent/8 to-transparent"
         />
         <div className="relative flex items-center gap-3 border-b border-border bg-background/40 px-4 py-3">
           <span aria-hidden className="flex gap-1.5">
@@ -85,7 +85,7 @@ function BuildStatusCard() {
           </p>
           <span
             aria-hidden
-            className="size-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_1px_rgba(251,191,36,0.6)]"
+            className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
           />
         </div>
         <ul className="relative divide-y divide-border/60">
@@ -100,7 +100,7 @@ function BuildStatusCard() {
               <span className="flex shrink-0 items-center gap-2 text-muted-foreground">
                 <span
                   aria-hidden
-                  className="size-1 rounded-full bg-amber-400/80"
+                  className="size-1 rounded-full bg-accent/80"
                 />
                 {projectStatusLabel[project.status].toLowerCase()}
               </span>
@@ -121,7 +121,7 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden border-b border-border/60">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(255,214,170,0.10),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(139,140,248,0.10),transparent)]" />
       </div>
       <Container className="relative grid gap-16 pt-24 pb-24 md:pt-36 md:pb-32 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
         <div>
@@ -129,7 +129,7 @@ export function HeroSection() {
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
               <span
                 aria-hidden
-                className="size-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_1px_rgba(251,191,36,0.6)]"
+                className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
               />
               {site.availability}
             </p>
@@ -137,7 +137,7 @@ export function HeroSection() {
           <Entrance delay={0.06}>
             <h1 className="mt-7 max-w-4xl text-5xl font-semibold tracking-tight text-balance md:text-7xl lg:text-[5.5rem] lg:leading-[0.98]">
               {headline}
-              <span className="text-amber-400 [text-shadow:0_0_24px_rgba(251,191,36,0.5)]">
+              <span className="text-accent [text-shadow:0_0_24px_rgba(139,140,248,0.5)]">
                 .
               </span>
             </h1>

@@ -29,7 +29,7 @@ function StatusRail() {
           key={status}
           className="flex items-center gap-2 font-mono text-xs text-muted-foreground"
         >
-          <span aria-hidden className="size-1.5 rounded-full bg-amber-400/80" />
+          <span aria-hidden className="size-1.5 rounded-full bg-accent/80" />
           {count} × {projectStatusLabel[status].toLowerCase()}
         </span>
       ))}

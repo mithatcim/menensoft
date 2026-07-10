@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   <dd className="mt-3 flex items-center gap-2 text-sm">
                     <span
                       aria-hidden
-                      className="size-1.5 rounded-full bg-amber-400/90"
+                      className="size-1.5 rounded-full bg-accent/90"
                     />
                     {projectStatusLabel[project.status]}
                     {project.year && (
@@ -156,7 +156,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       >
                         <span
                           aria-hidden
-                          className="size-1.5 shrink-0 bg-amber-400/80"
+                          className="size-1.5 shrink-0 bg-accent/80"
                         />
                         {item}
                       </li>
@@ -172,7 +172,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                   <span
                     aria-hidden
-                    className="size-1.5 rounded-full bg-amber-400/90"
+                    className="size-1.5 rounded-full bg-accent/90"
                   />
                   Current status &amp; scope
                 </p>

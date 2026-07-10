@@ -20,7 +20,7 @@ function StageNode({ stage }: { stage: Stage }) {
   return (
     <div className="flex flex-1 items-center gap-4 rounded-xl border border-border bg-background/40 p-4">
       <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-border bg-card">
-        <Icon className="size-5 text-amber-400/90" />
+        <Icon className="size-5 text-accent/90" />
       </div>
       <div className="min-w-0">
         <p className="text-sm font-semibold tracking-tight">{stage.label}</p>
@@ -33,10 +33,10 @@ function StageNode({ stage }: { stage: Stage }) {
 function Connector({ delay }: { delay?: string }) {
   return (
     <div className="hidden md:flex md:w-14 md:items-center">
-      <div className="relative h-px w-full bg-gradient-to-r from-border via-amber-400/40 to-border">
+      <div className="relative h-px w-full bg-gradient-to-r from-border via-accent/40 to-border">
         <span
           aria-hidden
-          className="animate-flow-x absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400 shadow-[0_0_8px_1px_rgba(251,191,36,0.5)]"
+          className="animate-flow-x absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]"
           style={delay ? { animationDelay: delay } : undefined}
         />
       </div>
@@ -51,7 +51,7 @@ export function SystemFlowBand() {
         <Reveal>
           <div className="overflow-hidden rounded-2xl border border-border bg-card/40 p-6 ring-1 ring-white/5 md:p-10">
             <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-              <span aria-hidden className="size-1.5 bg-amber-400/90" />
+              <span aria-hidden className="size-1.5 bg-accent/90" />
               Database to interface
             </p>
             <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-stretch">

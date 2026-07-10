@@ -17,7 +17,7 @@ export function SectionHeading({
     <div className={cn("max-w-2xl", className)}>
       {eyebrow && (
         <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-          <span aria-hidden className="size-1.5 bg-amber-400/90" />
+          <span aria-hidden className="size-1.5 bg-accent/90" />
           {eyebrow}
         </p>
       )}
