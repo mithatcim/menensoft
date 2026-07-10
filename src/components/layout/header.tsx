@@ -23,7 +23,7 @@ export function Header() {
           {site.name}
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Ana menü" className="hidden items-center gap-1 md:flex">
           {mainNav.map((item) => {
             const active =
               pathname === item.href || pathname.startsWith(`${item.href}/`);

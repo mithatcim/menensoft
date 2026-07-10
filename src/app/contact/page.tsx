@@ -10,8 +10,9 @@ import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const metadata = pageMeta({
-  title: "Contact",
-  description: "Get in touch about a project — email is the fastest way.",
+  title: "İletişim",
+  description:
+    "Projeniz için iletişime geçin — e-posta en hızlı kanaldır. WhatsApp ile de ulaşabilirsiniz.",
   path: "/contact",
 });
 
@@ -44,9 +45,9 @@ export default function ContactPage() {
         <Reveal>
           <SectionHeading
             as="h1"
-            eyebrow="Contact"
-            title="Get in touch"
-            description="Email is the fastest way to reach me. Tell me what you're building and where it stands."
+            eyebrow="İletişim"
+            title="Proje görüşmesi başlatın"
+            description="En hızlı kanal e-posta. Ne kurmak istediğinizi ve işin bugünkü durumunu kısaca anlatın; kapsam ve yaklaşım hakkında dürüst bir değerlendirme alırsınız."
           />
         </Reveal>
 
@@ -65,7 +66,7 @@ export default function ContactPage() {
                         aria-hidden
                         className="size-1.5 rounded-full bg-accent/90"
                       />
-                      Email
+                      E-posta
                     </h2>
                     <Mail aria-hidden className="size-4 text-muted-foreground" />
                   </div>
@@ -76,7 +77,7 @@ export default function ContactPage() {
                     {site.email}
                   </a>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Direct to my inbox. No forms, no ticket queue.
+                    Doğrudan kurucuya ulaşır. Form yok, destek kuyruğu yok.
                   </p>
                   <div className="mt-7">
                     <a
@@ -87,7 +88,7 @@ export default function ContactPage() {
                       )}
                     >
                       <Mail className="size-4" />
-                      Write me an email
+                      E-posta gönder
                     </a>
                   </div>
                 </div>
@@ -125,14 +126,14 @@ export default function ContactPage() {
           <Reveal delay={0.08}>
             <div className="mt-12">
               <h2 className="text-xl font-semibold tracking-tight">
-                Useful things to include
+                Mesajınıza eklemeniz faydalı olur
               </h2>
               <div className="mt-4 overflow-hidden rounded-xl border border-border">
                 <ul className="divide-y divide-border/60">
                   {[
-                    "What you're building, in a sentence or two",
-                    "Where it stands: an idea, a design, or existing code",
-                    "Any rough timeline you have in mind",
+                    "Ne kurmak istediğiniz, bir iki cümleyle",
+                    "İşin bugünkü durumu: fikir mi, tasarım mı, mevcut kod mu",
+                    "Aklınızdaki kabaca zaman planı",
                   ].map((item) => (
                     <li
                       key={item}
@@ -148,8 +149,8 @@ export default function ContactPage() {
                 </ul>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                You&apos;ll get a reply with an honest take on scope and
-                approach.
+                Kapsam ve yaklaşım hakkında dürüst bir değerlendirmeyle yanıt
+                alırsınız.
               </p>
             </div>
           </Reveal>

@@ -74,7 +74,7 @@ export function TeardownRail({ stages }: { stages: TeardownStage[] }) {
   }, [reduceMotion, stages, progress]);
 
   return (
-    <nav aria-label="Teardown stages" className="relative">
+    <nav aria-label="İnceleme aşamaları" className="relative">
       <div
         aria-hidden
         className="absolute top-1 bottom-1 left-[5px] w-px bg-border"

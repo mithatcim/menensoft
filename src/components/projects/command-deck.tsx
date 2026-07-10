@@ -12,11 +12,7 @@ import {
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  projectImage,
-  projectStatusLabel,
-  type Project,
-} from "@/content/projects";
+import { projectImage, type Project } from "@/content/projects";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -41,22 +37,21 @@ interface Tier {
 const TIERS: Tier[] = [
   {
     id: "flagship",
-    label: "Flagship — active product build",
+    label: "Amiral gemisi — ürün altyapısı",
     quiet: false,
-    match: (p) => p.status === "active-build",
+    match: (p) => p.slug === "ecommerce-cms",
   },
   {
-    id: "completed",
-    label: "Completed systems",
+    id: "delivered",
+    label: "Tamamlanmış sistemler",
     quiet: false,
-    match: (p) =>
-      p.status === "completed-system" || p.status === "completed-website",
+    match: (p) => p.tier === "delivered" && p.slug !== "ecommerce-cms",
   },
   {
     id: "internal",
-    label: "Internal & archived",
+    label: "İç altyapı & önceki çalışmalar",
     quiet: true,
-    match: (p) => p.status === "prototype" || p.status === "archived",
+    match: (p) => p.tier === "internal",
   },
 ];
 
@@ -67,13 +62,13 @@ function StatusBadge({ project }: { project: Project }) {
         aria-hidden
         className="size-1.5 rounded-full bg-accent/90 shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]"
       />
-      {projectStatusLabel[project.status]}
+      {project.statusLabel}
     </p>
   );
 }
 
 function PreviewBody({ project }: { project: Project }) {
-  const quiet = project.status === "prototype" || project.status === "archived";
+  const quiet = project.tier === "internal";
 
   return (
     <div className="p-5 md:p-6">
@@ -99,7 +94,7 @@ function PreviewBody({ project }: { project: Project }) {
             title={`/${project.slug}`}
             image={projectImage(project)}
           >
-            <ScreenshotSlot label="Interface capture reserved" />
+            <ScreenshotSlot label="Arayüz görseli için alan ayrıldı" />
           </BrowserFrame>
         </div>
       </div>
@@ -115,7 +110,7 @@ function PreviewBody({ project }: { project: Project }) {
       {project.statusNote && (
         <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-3.5">
           <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-            Current scope
+            Güncel kapsam
           </p>
           <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
             {project.statusNote}
@@ -128,12 +123,12 @@ function PreviewBody({ project }: { project: Project }) {
           href={`/projects/${project.slug}`}
           className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
         >
-          Open case study
+          Proje detayını aç
           <ArrowUpRight className="size-4" />
         </Link>
-        {/* honest telemetry: counts derived from real content only */}
+        {/* dürüst telemetri: yalnızca gerçek içerikten türetilen sayılar */}
         <p className="font-mono text-xs text-muted-foreground/70">
-          {project.built.length} modules · {project.stack.length} stack
+          {project.built.length} modül · {project.stack.length} teknoloji
         </p>
       </div>
     </div>
@@ -146,7 +141,7 @@ function PreviewPanel({ project }: { project: Project }) {
   return (
     <div
       role="region"
-      aria-label="Selected project preview"
+      aria-label="Seçili proje önizlemesi"
       className="overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm"
     >
       <div className="flex items-center gap-3 border-b border-border bg-background/40 px-4 py-2.5">
@@ -218,7 +213,7 @@ function DeckCard({
         type="button"
         onClick={onSelect}
         aria-pressed={selected}
-        aria-label={`Select ${project.name}`}
+        aria-label={`Projeyi seç: ${project.name}`}
         className="absolute inset-0 z-10 cursor-pointer rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
       <span
@@ -240,11 +235,11 @@ function DeckCard({
                 selected ? "text-accent" : "text-muted-foreground/50",
               )}
             >
-              {selected ? "selected" : "select"}
+              {selected ? "seçili" : "seç"}
             </span>
             <Link
               href={`/projects/${project.slug}`}
-              aria-label={`Open ${project.name} case study`}
+              aria-label={`${project.name} proje detayını aç`}
               className="pointer-events-auto -m-1 p-1 text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowUpRight className="size-4" />

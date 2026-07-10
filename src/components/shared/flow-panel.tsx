@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
  * Nodes light up sequentially as the panel scrolls into view.
  */
 export function FlowPanel({
-  label = "System flow",
+  label = "Sistem akışı",
   nodes,
   className,
 }: {

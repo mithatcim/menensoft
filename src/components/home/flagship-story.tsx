@@ -42,31 +42,31 @@ interface Stage {
 const STAGES: Stage[] = [
   {
     id: "01",
-    title: "Input",
-    alt: "The problem",
-    body: "A real workflow, still unstructured: requests, orders, and content moving through hands, chats, and spreadsheets.",
-    telemetry: ["capturing raw input", "mapping the workflow", "naming the problem"],
+    title: "Girdi",
+    alt: "Problem",
+    body: "Henüz yapılandırılmamış gerçek bir iş akışı: eller, sohbetler ve tablolar arasında dolaşan talepler, siparişler ve içerik.",
+    telemetry: ["ham girdi yakalanıyor", "iş akışı haritalanıyor", "problem adlandırılıyor"],
   },
   {
     id: "02",
-    title: "Logic",
-    alt: "The architecture",
-    body: "The system takes shape: a data model, backend logic, and clear boundaries between the parts.",
-    telemetry: ["designing the schema", "wiring backend logic", "drawing the boundaries"],
+    title: "Mantık",
+    alt: "Mimari",
+    body: "Sistem şekilleniyor: veri modeli, backend mantığı ve parçalar arasında net sınırlar.",
+    telemetry: ["şema tasarlanıyor", "backend mantığı bağlanıyor", "sınırlar çiziliyor"],
   },
   {
     id: "03",
     title: "Dashboard",
-    alt: "The product",
-    body: "Screens people actually run the day on: admin panels, dashboards, and storefronts.",
-    telemetry: ["building the screens", "role-based views", "state that stays honest"],
+    alt: "Ürün",
+    body: "İnsanların günü gerçekten yönettiği ekranlar: yönetim panelleri, dashboardlar ve vitrinler.",
+    telemetry: ["ekranlar kuruluyor", "role özel görünümler", "tutarlı kalan durum"],
   },
   {
     id: "04",
-    title: "Result",
-    alt: "A complete system",
-    body: "One coherent system, owned end to end, from the database to the interface.",
-    telemetry: ["database to interface", "one person, every layer", "built to be run"],
+    title: "Sonuç",
+    alt: "Eksiksiz bir sistem",
+    body: "Veritabanından arayüze, uçtan uca sahiplenilmiş tek bir tutarlı sistem.",
+    telemetry: ["veritabanından arayüze", "tek sahip, her katman", "işletilmek üzere kuruldu"],
   },
 ];
 
@@ -85,7 +85,7 @@ function InputVisual() {
     { l: "66%", t: "80%", w: "w-14" },
     { l: "44%", t: "10%", w: "w-12" },
   ];
-  const words = ["requests", "orders", "content", "users"];
+  const words = ["talepler", "siparişler", "içerik", "kullanıcılar"];
   return (
     <div aria-hidden className="relative h-full w-full">
       {scatter.map((s, i) => (
@@ -116,10 +116,10 @@ function InputVisual() {
 
 function LogicVisual({ active }: { active: boolean }) {
   const nodes = [
-    { x: 22, y: 84, label: "Data model" },
+    { x: 22, y: 84, label: "Veri modeli" },
     { x: 150, y: 24, label: "API" },
     { x: 150, y: 144, label: "Auth" },
-    { x: 292, y: 84, label: "Routing" },
+    { x: 292, y: 84, label: "Yönlendirme" },
   ];
   const links = [
     "M106 92 L150 40",
@@ -233,7 +233,7 @@ function DashboardVisual() {
 }
 
 function ResultVisual({ active }: { active: boolean }) {
-  const parts = ["Database", "Backend", "Interface"];
+  const parts = ["Veritabanı", "Backend", "Arayüz"];
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="flex w-full max-w-[430px] items-center gap-2">
@@ -336,10 +336,10 @@ function StoryHeading() {
     <div>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        How a system comes together
+        Bir sistem nasıl kurulur
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-        From raw input to running product.
+        Ham girdiden çalışan ürüne.
       </h2>
     </div>
   );
@@ -489,7 +489,7 @@ function PinnedStory() {
                 </motion.div>
               ))}
               <p className="absolute bottom-3 left-5 font-mono text-xs tracking-[0.2em] text-muted-foreground/60 uppercase">
-                system stage — {STAGES[stage].title.toLowerCase()}
+                sistem aşaması — {STAGES[stage].title.toLocaleLowerCase("tr-TR")}
               </p>
               <span
                 aria-hidden

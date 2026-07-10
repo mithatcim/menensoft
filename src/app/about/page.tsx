@@ -11,8 +11,8 @@ import { about, site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
-  title: "About",
-  description: `${site.name} — ${site.role}. Background, skills, and how I work.`,
+  title: "Hakkında",
+  description: `${site.positioning}. Kurucu: ${site.founder}. Yaklaşım, yetkinlikler ve çalışma şekli.`,
   path: "/about",
 });
 
@@ -24,7 +24,7 @@ export default function AboutPage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              eyebrow="About"
+              eyebrow="Hakkında"
               title={site.name}
               description={site.positioning}
             />
@@ -46,13 +46,13 @@ export default function AboutPage() {
             <Reveal delay={0.08}>
               <div className="space-y-4">
                 <FlowPanel
-                  label="How a build is structured"
-                  nodes={["Data model", "Backend", "Interface"]}
+                  label="Bir kurulum nasıl yapılanır"
+                  nodes={["Veri modeli", "Backend", "Arayüz"]}
                 />
                 <div className="rounded-xl border border-border bg-card p-5">
                   <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                     <span aria-hidden className="size-1.5 bg-accent/90" />
-                    Core stack
+                    Çekirdek teknoloji
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {site.coreStack.map((tech) => (
@@ -70,9 +70,9 @@ export default function AboutPage() {
           <div className="mt-16">
             <Reveal>
               <SectionHeading
-                eyebrow="Operating principles"
-                title="How I think about systems"
-                description="The rules every build runs on, whatever its size."
+                eyebrow="Çalışma ilkeleri"
+                title="Sistemlere bakış"
+                description="Boyutu ne olursa olsun her kurulumun uyduğu kurallar."
               />
             </Reveal>
             <Reveal delay={0.08} className="mt-10">
@@ -100,9 +100,9 @@ export default function AboutPage() {
           <div className="mt-20">
             <Reveal>
               <SectionHeading
-                eyebrow="Build / avoid"
-                title="What I build — and what I won't"
-                description="Honest scope starts with saying no to the wrong work."
+                eyebrow="Kurulan / kaçınılan"
+                title="Neler kurulur — neler kurulmaz"
+                description="Dürüst kapsam, yanlış işe hayır demekle başlar."
               />
             </Reveal>
             <Reveal delay={0.08} className="mt-10">
@@ -111,7 +111,7 @@ export default function AboutPage() {
                   <div className="bg-card p-6">
                     <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                       <span aria-hidden className="size-1.5 bg-accent/90" />
-                      I build
+                      Kurulanlar
                     </p>
                     <ul className="mt-4 space-y-2.5">
                       {about.builds.map((item) => (
@@ -134,7 +134,7 @@ export default function AboutPage() {
                         aria-hidden
                         className="size-1.5 rotate-45 border border-muted-foreground/50"
                       />
-                      I avoid
+                      Kaçınılanlar
                     </p>
                     <ul className="mt-4 space-y-2.5">
                       {about.avoids.map((item) => (
@@ -160,8 +160,8 @@ export default function AboutPage() {
           <div className="mt-20">
             <Reveal>
               <SectionHeading
-                eyebrow="Stack"
-                title="Stack philosophy"
+                eyebrow="Teknoloji"
+                title="Teknoloji felsefesi"
                 description={about.stackPhilosophy}
               />
             </Reveal>
@@ -194,9 +194,9 @@ export default function AboutPage() {
           <div className="mt-20">
             <Reveal>
               <SectionHeading
-                eyebrow="Process"
-                title="How I build"
-                description="The same workflow every project runs through."
+                eyebrow="Süreç"
+                title="Nasıl kurulur"
+                description="Her projenin geçtiği aynı iş akışı."
               />
             </Reveal>
             <Reveal delay={0.08} className="mt-10">
@@ -223,7 +223,7 @@ export default function AboutPage() {
                   <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                       <span aria-hidden className="size-1.5 bg-accent/90" />
-                      Tooling
+                      Araçlar
                     </span>
                     <span className="text-sm leading-relaxed text-muted-foreground">
                       {about.tooling}

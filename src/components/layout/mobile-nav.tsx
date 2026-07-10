@@ -52,7 +52,7 @@ export function MobileNav() {
             <motion.nav
               key="panel"
               id="mobile-nav"
-              aria-label="Mobile"
+              aria-label="Mobil menü"
               initial={reduceMotion ? false : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}

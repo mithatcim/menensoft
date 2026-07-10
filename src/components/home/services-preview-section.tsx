@@ -12,9 +12,9 @@ export function ServicesPreviewSection() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Services"
-            title="How I can help"
-            description="Project-based work that ends with software you can actually run."
+            eyebrow="Çözümler"
+            title="Çözüm alanları"
+            description="Proje bazlı çalışma — sonunda gerçekten işletebileceğiniz bir yazılım teslim edilir."
           />
         </Reveal>
         <Reveal delay={0.08} className="mt-12">

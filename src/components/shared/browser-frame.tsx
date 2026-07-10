@@ -73,7 +73,7 @@ function CornerBracket({ className }: { className?: string }) {
 }
 
 export function ScreenshotSlot({
-  label = "Screenshot slot reserved — interface capture to be added",
+  label = "Ekran görüntüsü alanı ayrıldı — arayüz görseli eklenecek",
 }: {
   label?: string;
 }) {
@@ -95,7 +95,7 @@ export function ScreenshotSlot({
       <CornerBracket className="right-3 bottom-3 border-r border-b" />
 
       <span className="absolute top-3 left-8 font-mono text-xs tracking-[0.2em] text-muted-foreground/70 uppercase">
-        interface preview
+        arayüz önizleme
       </span>
       <span
         aria-hidden

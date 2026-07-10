@@ -13,11 +13,11 @@ export default function HomePage() {
       <HeroSection />
       <FlagshipStory />
       <SystemLayers />
-      <TelemetryDivider code="SYS·02" label="capability console" />
+      <TelemetryDivider code="SYS·02" label="yetkinlik konsolu" />
       <CapabilityConsole />
-      <TelemetryDivider code="SYS·03" label="selected work" />
+      <TelemetryDivider code="SYS·03" label="seçili işler" />
       <FeaturedProjectsSection />
-      <TelemetryDivider code="SYS·04" label="services" />
+      <TelemetryDivider code="SYS·04" label="çözümler" />
       <ServicesPreviewSection />
       <ContactCTA />
     </>

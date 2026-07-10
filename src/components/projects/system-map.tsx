@@ -49,7 +49,7 @@ export function SystemMap({
       <div aria-hidden className="scanlines absolute inset-0 opacity-40" />
       <p className="relative flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        System map
+        Sistem haritası
       </p>
 
       {/* vertical flow chain with drawn connectors */}
@@ -95,7 +95,7 @@ export function SystemMap({
       {shownModules.length > 0 && (
         <div className="relative mt-4 border-t border-border/60 pt-3">
           <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-            Modules
+            Modüller
           </p>
           <ul className="mt-2 space-y-1.5">
             {shownModules.map((m, i) => (
@@ -121,15 +121,15 @@ export function SystemMap({
 /* ---------------------------- capability matrix --------------------------- */
 
 const CATEGORIES = [
-  { id: "interface", label: "Interface" },
-  { id: "admin", label: "Admin / dashboard" },
-  { id: "data", label: "Data model" },
-  { id: "automation", label: "Automation" },
-  { id: "operations", label: "Operations" },
-  { id: "security", label: "Security / logging" },
-  { id: "content", label: "Content mgmt" },
-  { id: "ordering", label: "Ordering / workflow" },
-  { id: "membership", label: "Membership / publishing" },
+  { id: "interface", label: "Arayüz" },
+  { id: "admin", label: "Yönetim / dashboard" },
+  { id: "data", label: "Veri modeli" },
+  { id: "automation", label: "Otomasyon" },
+  { id: "operations", label: "Operasyon" },
+  { id: "security", label: "Güvenlik / log" },
+  { id: "content", label: "İçerik yönetimi" },
+  { id: "ordering", label: "Sipariş / iş akışı" },
+  { id: "membership", label: "Üyelik / yayınlama" },
 ] as const;
 
 /**
@@ -178,7 +178,7 @@ export function CapabilityMatrix({
     <div className={className}>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Capability matrix
+        Yetkinlik matrisi
         <span className="text-muted-foreground/50">
           {lit.size} / {CATEGORIES.length}
         </span>

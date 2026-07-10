@@ -16,9 +16,9 @@ import { services, workflow } from "@/content/services";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
-  title: "Services",
+  title: "Çözümler",
   description:
-    "Admin panels, e-commerce systems, full-stack web applications, and automation tools — built end to end.",
+    "Yönetim panelleri, e-ticaret sistemleri, full-stack web uygulamaları ve otomasyon araçları — uçtan uca kurulur.",
   path: "/services",
 });
 
@@ -37,9 +37,9 @@ export default function ServicesPage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              eyebrow="Services"
-              title="What I can build for you"
-              description="Project-based work that ends with working software: not a deck, not a throwaway prototype. You work directly with me, and scope is agreed before anything gets built."
+              eyebrow="Çözümler"
+              title="İşletmeniz için ne kurulabilir"
+              description="Proje bazlı çalışma; sonuç çalışan bir yazılımdır — sunum değil, kullanılıp atılan bir prototip değil. Doğrudan sistemi kuran kişiyle çalışırsınız ve kapsam, geliştirme başlamadan önce netleşir."
             />
           </Reveal>
         </Container>
@@ -76,7 +76,7 @@ export default function ServicesPage() {
                       <div className="mt-8 grid gap-8 md:grid-cols-2">
                         <div>
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                            What&apos;s included
+                            Kapsama dahil
                           </h3>
                           <ul className="mt-4 space-y-2">
                             {service.includes.map((item) => (
@@ -95,7 +95,7 @@ export default function ServicesPage() {
                         </div>
                         <div>
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                            Typical stack
+                            Tipik teknoloji
                           </h3>
                           <div className="mt-4 flex flex-wrap gap-2">
                             {service.stack.map((tech) => (
@@ -112,7 +112,7 @@ export default function ServicesPage() {
                             aria-hidden
                             className="size-1.5 bg-accent/90"
                           />
-                          What you get
+                          Teslim edilen
                         </span>
                         <span className="text-sm leading-relaxed text-foreground/90">
                           {service.deliverable}
@@ -130,9 +130,9 @@ export default function ServicesPage() {
           <div className="mt-20 md:mt-24">
             <Reveal>
               <SectionHeading
-                eyebrow="Process"
-                title="How I work"
-                description="The concrete engagement facts behind the scene above. No process theater."
+                eyebrow="Süreç"
+                title="Çalışma şekli"
+                description="Yukarıdaki sahnenin arkasındaki somut çalışma adımları. Süreç tiyatrosu yok."
               />
             </Reveal>
             <Reveal delay={0.08} className="mt-10">

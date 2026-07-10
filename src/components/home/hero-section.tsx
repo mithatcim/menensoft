@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { buttonVariants } from "@/components/ui/button";
-import { projects, projectStatusLabel } from "@/content/projects";
+import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -102,7 +102,7 @@ function BuildStatusCard() {
                   aria-hidden
                   className="size-1 rounded-full bg-accent/80"
                 />
-                {projectStatusLabel[project.status].toLowerCase()}
+                {project.statusLabel.toLocaleLowerCase("tr-TR")}
               </span>
             </li>
           ))}

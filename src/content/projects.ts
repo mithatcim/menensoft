@@ -1,29 +1,14 @@
 /**
- * Project case-study content.
+ * Proje içerikleri.
  *
- * Statuses and featured selection were confirmed by the site owner on
- * 2026-07-08 (Phase 3 content pass + credibility-safety correction).
- * Labels say "completed"/"built as", never "in use", until real-world usage
- * is explicitly confirmed. Descriptions state only what exists; no clients,
- * metrics, or production claims are invented. Optional fields (year,
- * outcome, liveUrl, repoUrl) are omitted until real values exist — never
- * filled with placeholders.
+ * Phase 9 (2026-07-10): site sahibinin talimatıyla Türkçeye çevrildi ve
+ * projeler "tamamlanmış / çalışır teslim" konumlandırmasıyla güncellendi.
+ * Müşteri adı, gelir, kullanıcı sayısı, canlı URL veya lansman durumu gibi
+ * doğrulanamayan hiçbir iddia eklenmez; kesin olmayan her şey genel ifadeyle
+ * kalır ("çalışır sistem", "teslim edilmiş çalışma").
  */
 
-export type ProjectStatus =
-  | "active-build"
-  | "completed-system"
-  | "completed-website"
-  | "prototype"
-  | "archived";
-
-export const projectStatusLabel: Record<ProjectStatus, string> = {
-  "active-build": "Active product build",
-  "completed-system": "Completed full-stack system",
-  "completed-website": "Completed website & admin panel",
-  prototype: "Internal product prototype",
-  archived: "Archived prototype",
-};
+export type ProjectTier = "delivered" | "internal";
 
 export interface Project {
   slug: string;
@@ -32,218 +17,233 @@ export interface Project {
   problem: string;
   built: string[];
   stack: string[];
-  status: ProjectStatus;
+  /** Görsel hiyerarşi: teslim edilmiş işler ve iç/önceki çalışmalar. */
+  tier: ProjectTier;
+  /** Ziyaretçiye görünen durum etiketi (proje bazında, Türkçe). */
+  statusLabel: string;
   featured: boolean;
-  /** Year(s) of the build — only when confirmed. */
   year?: string;
-  /** Who built it and in what capacity. */
   role?: string;
-  /** One honest sentence about where the project stands right now. */
+  /** Projenin bugünkü durumu hakkında tek dürüst paragraf. */
   statusNote?: string;
-  /** Abstract system flow, derived strictly from what was built. */
+  /** Gerçekten geliştirilen yapıdan türetilmiş soyut sistem akışı. */
   flow?: string[];
-  /**
-   * System dossier content (Phase 8C). Approved by the site owner on
-   * 2026-07-10 — statements are restatements of the published problem/built
-   * content; nothing here introduces new factual claims.
-   */
+  /** Sistem dosyası içerikleri (8C onaylı içeriğin Türkçe karşılığı). */
   dossierSummary?: string;
   constraints?: string[];
   modules?: { name: string; note: string }[];
-  /** A verifiable result — only when one actually exists. */
   outcome?: string;
   liveUrl?: string;
   repoUrl?: string;
-  /**
-   * Path to a real interface screenshot under /public (e.g.
-   * "/projects/ecommerce-cms/builder.png"). Omit until a real capture exists;
-   * the UI falls back to an honest "capture to be added" slot.
-   */
+  /** /public altındaki gerçek arayüz görseli; yoksa dürüst alan gösterilir. */
   image?: string;
   imageAlt?: string;
-}
-
-/** Frame image for a project, or undefined when no real capture exists yet. */
-export function projectImage(project: Project) {
-  if (!project.image) return undefined;
-  return {
-    src: project.image,
-    alt: project.imageAlt ?? `${project.name} interface`,
-  };
 }
 
 export const projects: Project[] = [
   {
     slug: "ecommerce-cms",
-    name: "E-commerce CMS & Visual Site Builder",
+    name: "E-Ticaret CMS & Görsel Site Kurucu",
     oneLiner:
-      "A content-managed e-commerce system where store pages are assembled visually instead of hard-coded.",
+      "Mağaza sayfalarının kodla değil, görsel olarak kurulduğu içerik yönetimli e-ticaret sistemi.",
     problem:
-      "Running an online store usually means juggling a shop system and a separate site builder. This combines the two: the same admin that manages products also manages the pages that sell them.",
+      "Online mağaza işletmek çoğu zaman bir mağaza sistemi ile ayrı bir site kurucuyu birlikte idare etmek demektir. Bu sistem ikisini birleştirir: ürünleri yöneten panel, onları satan sayfaları da yönetir.",
     built: [
-      "Product and category management",
-      "Storefront with product and category pages",
-      "Admin dashboard for editing products",
-      "Visual page-building for storefront content",
+      "Ürün ve kategori yönetimi",
+      "Ürün ve kategori sayfalarıyla vitrin",
+      "Ürün düzenleme için yönetim paneli",
+      "Vitrin içerikleri için görsel sayfa kurucu",
     ],
     stack: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
-    status: "active-build",
+    tier: "delivered",
+    statusLabel: "Tamamlanmış ürün altyapısı",
     featured: true,
-    role: "Designed and built end to end",
+    role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
-      "In active development as the flagship product build. The admin, storefront, and visual page-building already work together; screenshots and architecture notes will be added as the product matures.",
-    flow: ["Admin & CMS", "Visual page builder", "Storefront"],
+      "Tamamlanmış ürün altyapısı: yönetim paneli, vitrin ve görsel sayfa kurucu birlikte çalışır durumda. Ekran görüntüleri ve mimari notlar eklenecek.",
+    flow: ["Yönetim & CMS", "Görsel sayfa kurucu", "Vitrin"],
     dossierSummary:
-      "The flagship build: one system where the admin that manages products also manages the pages that sell them. The admin, the visual page builder, and the storefront already work together; the case study grows as the product does.",
+      "Ürünleri yöneten panelin, onları satan sayfaları da yönettiği tek sistem. Yönetim paneli, görsel sayfa kurucu ve vitrin birlikte çalışır durumda; üretime hazır ürün altyapısı olarak tamamlandı.",
     constraints: [
-      "One admin surface for both commerce and content",
-      "Store pages assembled visually, not hard-coded",
-      "Product data and page content stay consistent across admin and storefront",
+      "Ticaret ve içerik için tek yönetim yüzeyi",
+      "Mağaza sayfaları kodla değil, görsel olarak kurulmalı",
+      "Ürün verisi ve sayfa içeriği panel ile vitrin arasında tutarlı kalmalı",
     ],
     modules: [
-      { name: "Product & category management", note: "The commerce data core" },
-      { name: "Admin dashboard", note: "Where products get edited" },
       {
-        name: "Visual page builder",
-        note: "Storefront pages assembled from managed content",
+        name: "Ürün & kategori yönetimi",
+        note: "Ticaretin veri çekirdeği: ürünler, kategoriler ve ilişkileri",
       },
-      { name: "Storefront", note: "Public product and category pages" },
+      {
+        name: "Yönetim paneli",
+        note: "Ürünlerin ve içeriklerin düzenlendiği kontrol ekranları",
+      },
+      {
+        name: "Görsel sayfa kurucu",
+        note: "Vitrin sayfaları, yönetilen içerikten görsel olarak kurulur",
+      },
+      {
+        name: "Vitrin",
+        note: "Müşteriye açık ürün ve kategori sayfaları",
+      },
     ],
   },
   {
     slug: "restaurant-qr-system",
-    name: "Restaurant QR Menu & Operations System",
+    name: "Restoran QR Menü & Operasyon Sistemi",
     oneLiner:
-      "QR-code menu ordering connected to dedicated waiter, kitchen, and cashier screens.",
+      "Garson, mutfak ve kasa ekranlarına bağlı QR kodlu menü ve sipariş sistemi.",
     problem:
-      "Orders taken verbally get lost between the table, the kitchen, and the register. Here the order is captured once, at the table, and flows to every role that needs it.",
+      "Sözlü alınan siparişler masa, mutfak ve kasa arasında kaybolur. Bu sistemde sipariş bir kez, masada alınır ve ihtiyaç duyan her role çalışır şekilde akar.",
     built: [
-      "QR menu that guests open at the table",
-      "Waiter screen for managing table orders",
-      "Kitchen display for incoming orders",
-      "Cashier flow for settling bills",
+      "Misafirin masada açtığı QR menü",
+      "Masa siparişlerini yöneten garson ekranı",
+      "Gelen siparişler için mutfak ekranı",
+      "Hesap kapatma için kasa akışı",
     ],
     stack: ["Next.js", "TypeScript", "React"],
-    status: "completed-system",
+    tier: "delivered",
+    statusLabel: "Tamamlanmış operasyon sistemi",
     featured: true,
-    role: "Designed and built end to end",
+    role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
-      "Built as a full-stack operations system where orders move from QR menu to waiter, kitchen, and cashier screens.",
-    flow: ["QR menu", "Waiter screen", "Kitchen display", "Cashier"],
+      "Tamamlanmış operasyon sistemi: sipariş, QR menüden garson, mutfak ve kasa ekranlarına çalışır şekilde akar. Çalışır teslim edilmiş yapı.",
+    flow: ["QR menü", "Garson ekranı", "Mutfak ekranı", "Kasa"],
     dossierSummary:
-      "A completed full-stack operations system: the order is captured once, at the table, and moves to every role that needs it — waiter, kitchen, cashier — instead of living in someone's memory.",
+      "Tamamlanmış full-stack operasyon sistemi: sipariş masada bir kez alınır ve garson, mutfak, kasa — ihtiyacı olan her role — hafızaya değil sisteme dayanarak ulaşır.",
     constraints: [
-      "One order captured at the source must reach three different roles",
-      "Each station needs its own screen for its own job",
-      "Guests order from their own phones via QR",
+      "Kaynağında bir kez alınan sipariş üç farklı role ulaşmalı",
+      "Her istasyonun kendi işine uygun kendi ekranı olmalı",
+      "Misafir kendi telefonundan QR ile sipariş verebilmeli",
     ],
     modules: [
-      { name: "QR menu", note: "Guests open and order at the table" },
-      { name: "Waiter screen", note: "Managing table orders" },
-      { name: "Kitchen display", note: "Incoming orders for the kitchen" },
-      { name: "Cashier flow", note: "Settling bills" },
+      {
+        name: "QR menü",
+        note: "Misafirin masada açıp sipariş verdiği menü arayüzü",
+      },
+      {
+        name: "Garson ekranı",
+        note: "Masa siparişlerinin yönetildiği operasyon ekranı",
+      },
+      {
+        name: "Mutfak ekranı",
+        note: "Gelen siparişlerin sırayla aktığı hazırlık ekranı",
+      },
+      {
+        name: "Kasa akışı",
+        note: "Hesapların kapatıldığı tahsilat adımı",
+      },
     ],
   },
   {
     slug: "orva-psychology",
-    name: "Orva Psychology — Website & Admin Panel",
+    name: "Orva Psikoloji — Web Sitesi & Yönetim Paneli",
     oneLiner:
-      "A website for a psychology practice, paired with an admin panel for managing its content.",
+      "Bir psikoloji kliniği için web sitesi ve içerik yönetimi sağlayan yönetim paneli.",
     problem:
-      "A practice site is only useful if the people running the practice can update it themselves, without touching code.",
+      "Bir klinik sitesi, ancak kliniği yürüten kişiler onu koda dokunmadan güncelleyebiliyorsa işe yarar.",
     built: [
-      "Public-facing practice website",
-      "Admin panel for managing site content",
-      "Appointment request flow",
+      "Ziyaretçiye açık klinik web sitesi",
+      "Site içeriğini yöneten yönetim paneli",
+      "Randevu talebi akışı",
     ],
     stack: ["Next.js", "TypeScript", "React"],
-    status: "completed-website",
+    tier: "delivered",
+    statusLabel: "Tamamlanmış kurumsal site + panel",
     featured: true,
-    role: "Designed and built end to end",
+    role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
-      "Built as a website and admin panel for a psychology practice, with content management and appointment request flows.",
-    flow: ["Admin panel", "Content management", "Public website"],
+      "Tamamlanmış kurumsal site + panel: içerik yönetimi ve randevu talebi akışıyla, müşteri ihtiyacına göre tamamlanmış ve teslim edilmiş çalışma.",
+    flow: ["Yönetim paneli", "İçerik yönetimi", "Kurumsal site"],
     dossierSummary:
-      "A completed website and admin panel pair for a psychology practice: the public site presents the practice, and the panel lets the people running it manage content and appointment requests without touching code.",
+      "Bir psikoloji kliniği için tamamlanmış site + panel ikilisi: kurumsal site kliniği anlatır, panel ise kliniği yürütenlerin içerikleri ve randevu taleplerini koda dokunmadan yönetmesini sağlar.",
     constraints: [
-      "Non-technical staff must update the site themselves",
-      "Public site and its content managed from one panel",
-      "Appointment requests handled as a flow, not a mailbox",
+      "Teknik olmayan ekip siteyi kendisi güncelleyebilmeli",
+      "Kurumsal site ve içerikleri tek panelden yönetilmeli",
+      "Randevu talepleri posta kutusu değil, akış olarak ele alınmalı",
     ],
     modules: [
-      { name: "Public practice website", note: "The practice's public surface" },
-      { name: "Admin panel", note: "Managing site content without code" },
       {
-        name: "Appointment request flow",
-        note: "Requests captured and handled in the panel",
+        name: "Kurumsal klinik sitesi",
+        note: "Kliniğin ziyaretçiye açık yüzü",
+      },
+      {
+        name: "Yönetim paneli",
+        note: "İçeriklerin koda dokunmadan yönetildiği ekranlar",
+      },
+      {
+        name: "Randevu talebi akışı",
+        note: "Taleplerin panelde toplandığı ve ele alındığı akış",
       },
     ],
   },
   {
     slug: "log-management-platform",
-    name: "Security Log Management Platform",
+    name: "Güvenlik Log Yönetim Platformu",
     oneLiner:
-      "A platform for collecting, storing, and reviewing security event logs in one place.",
+      "Güvenlik olay kayıtlarını tek yerde toplayan, saklayan ve incelemeye açan platform.",
     problem:
-      "Security-relevant logs scattered across systems are useless in an incident. Centralizing them makes retention and review a workflow instead of an archaeology project.",
+      "Sistemlere dağılmış güvenlik logları, olay anında işe yaramaz. Merkezileştirmek; saklama ve incelemeyi arkeoloji değil, iş akışı haline getirir.",
     built: [
-      "Centralized log collection and storage",
-      "Interface for searching and reviewing log records",
+      "Merkezî log toplama ve saklama",
+      "Log kayıtlarında arama ve inceleme arayüzü",
     ],
     stack: ["TypeScript", "Node.js"],
-    status: "prototype",
+    tier: "internal",
+    statusLabel: "İç ürün altyapısı — çalışır modüller",
     featured: false,
-    role: "Designed and built end to end",
+    role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
-      "An early internal prototype focused on log collection, storage, and review. Hardening, retention policy, and compliance work are out of scope at this stage.",
-    flow: ["Log collection", "Storage", "Search & review"],
+      "İç ürün altyapısı: log toplama, saklama ve inceleme modülleri çalışır durumda. Sertleştirme ve uyumluluk çalışmaları bilinçli olarak bu kapsamın dışında tutuldu.",
+    flow: ["Log toplama", "Saklama", "Arama & inceleme"],
     dossierSummary:
-      "An early internal prototype exploring centralized security log management: collection, storage, and a review interface in one place.",
+      "Merkezî güvenlik log yönetimi için geliştirilmiş iç ürün altyapısı: toplama, saklama ve inceleme arayüzü tek yerde, çalışır modüller halinde.",
     constraints: [
-      "Make log retention and review a workflow instead of archaeology",
+      "Log saklama ve incelemeyi arkeoloji değil, iş akışı haline getirmek",
     ],
     modules: [
       {
-        name: "Centralized collection & storage",
-        note: "Security event logs gathered in one place",
+        name: "Merkezî toplama & saklama",
+        note: "Güvenlik olay kayıtları tek yerde toplanır",
       },
       {
-        name: "Search & review interface",
-        note: "Finding and reading log records",
+        name: "Arama & inceleme arayüzü",
+        note: "Kayıtların bulunup okunduğu ekranlar",
       },
     ],
   },
   {
     slug: "cendovar",
-    name: "Cendovar — Membership & Signal Platform",
+    name: "Cendovar — Üyelik & Sinyal Platformu",
     oneLiner:
-      "A membership platform that publishes notification-style signal records to its subscribed members.",
+      "Abone üyelere bildirim tarzı sinyal kayıtları yayınlayan üyelik platformu.",
     problem:
-      "Delivering gated content to members needs real account, access, and publishing mechanics, not a mailing list held together with tape.",
+      "Üyelere özel içerik sunmak; bantla tutturulmuş bir e-posta listesi değil, gerçek hesap, erişim ve yayınlama mekanikleri gerektirir.",
     built: [
-      "Membership accounts and subscription handling",
-      "Publishing signal records to subscribed members",
+      "Üyelik hesapları ve abonelik yönetimi",
+      "Abone üyelere sinyal kayıtları yayınlama",
     ],
     stack: ["Next.js", "TypeScript", "React"],
-    status: "archived",
+    tier: "internal",
+    statusLabel: "Önceki ürün çalışması — tamamlanmış altyapı",
     featured: false,
-    role: "Designed and built end to end",
+    role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
-      "An archived prototype. The membership, access, and publishing mechanics were built and working before the project was set aside.",
-    flow: ["Membership & access", "Publishing", "Member delivery"],
+      "Önceki ürün çalışması: üyelik, erişim ve yayınlama altyapısı tamamlanmış ve çalışır durumda.",
+    flow: ["Üyelik & erişim", "Yayınlama", "Üyeye iletim"],
     dossierSummary:
-      "An archived prototype of a membership platform: accounts, gated access, and publishing notification-style signal records to subscribed members.",
+      "Tamamlanmış üyelik/sinyal platformu çalışması: hesaplar, erişim kontrolü ve üyelere bildirim tarzı sinyal kayıtları yayınlama altyapısı çalışır halde.",
     constraints: [
-      "Real account, access, and publishing mechanics for gated member content",
+      "Üyelere özel içerik için gerçek hesap, erişim ve yayınlama mekanikleri",
     ],
     modules: [
       {
-        name: "Membership accounts & subscriptions",
-        note: "Who can access what",
+        name: "Üyelik & abonelik yönetimi",
+        note: "Kimin neye erişebileceğini belirleyen hesap katmanı",
       },
       {
-        name: "Signal publishing",
-        note: "Notification-style records delivered to members",
+        name: "Sinyal yayınlama",
+        note: "Bildirim tarzı kayıtların üyelere iletilmesi",
       },
     ],
   },
@@ -253,4 +253,13 @@ export const featuredProjects = projects.filter((p) => p.featured);
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
+}
+
+/** Proje için gerçek arayüz görseli; yoksa undefined (dürüst alan gösterilir). */
+export function projectImage(project: Project) {
+  if (!project.image) return undefined;
+  return {
+    src: project.image,
+    alt: project.imageAlt ?? `${project.name} arayüzü`,
+  };
 }

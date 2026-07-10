@@ -14,15 +14,15 @@ export function FeaturedProjectsSection() {
         <Reveal>
           <div className="flex items-end justify-between gap-6">
             <SectionHeading
-              eyebrow="Selected work"
-              title="Projects"
-              description="A selection of the systems I build: e-commerce, operations, and platform work."
+              eyebrow="Seçili işler"
+              title="Projeler"
+              description="Kurulan sistemlerden bir seçki: e-ticaret, operasyon ve platform çalışmaları."
             />
             <Link
               href="/projects"
               className="hidden shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground md:inline-flex"
             >
-              All projects
+              Tüm projeler
               <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -39,7 +39,7 @@ export function FeaturedProjectsSection() {
             href="/projects"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            All projects
+            Tüm projeler
             <ArrowRight className="size-4" />
           </Link>
         </div>

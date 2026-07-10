@@ -1,5 +1,5 @@
 import { SpotlightCard } from "@/components/shared/spotlight-card";
-import { projectStatusLabel, type Project } from "@/content/projects";
+import { type Project } from "@/content/projects";
 import { cn } from "@/lib/utils";
 
 /**
@@ -12,14 +12,12 @@ import { cn } from "@/lib/utils";
  */
 
 export function isCompactDossier(project: Project) {
-  return project.status === "prototype" || project.status === "archived";
+  return project.tier === "internal";
 }
 
 export function DossierSummary({ project }: { project: Project }) {
   if (!project.dossierSummary) return null;
   const compact = isCompactDossier(project);
-  const compactLabel =
-    project.status === "archived" ? "archived prototype" : "internal prototype";
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5">
@@ -28,15 +26,15 @@ export function DossierSummary({ project }: { project: Project }) {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
             <span aria-hidden className="size-1.5 bg-accent/90" />
-            System dossier
+            Sistem dosyası
           </p>
           {compact && (
             <p className="rounded-md border border-border/60 bg-background/50 px-2 py-0.5 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-              compact — {compactLabel}
+              kompakt dosya
             </p>
           )}
           <p className="ml-auto hidden font-mono text-xs text-muted-foreground/60 sm:block">
-            {projectStatusLabel[project.status].toLowerCase()}
+            {project.statusLabel.toLocaleLowerCase("tr-TR")}
           </p>
         </div>
         <p
@@ -61,7 +59,7 @@ export function DossierConstraints({ project }: { project: Project }) {
   return (
     <div className="mt-5 rounded-xl border border-border/60 bg-background/40 p-4">
       <p className="font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-        {compact ? "What was explored" : "Constraints"}
+        {compact ? "Neye odaklandı" : "Kısıtlar"}
       </p>
       <ul className="mt-3 space-y-2">
         {project.constraints.map((c) => (

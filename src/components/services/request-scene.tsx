@@ -41,45 +41,45 @@ interface Beat {
 const BEATS: Beat[] = [
   {
     id: "01",
-    title: "Request",
-    alt: "What you bring",
-    body: "A real business need, in your own words: a workflow that leaks time, an idea, a store, an operation to run.",
-    telemetry: ["a problem in plain words", "no spec required", "direct conversation"],
+    title: "Talep",
+    alt: "Sizden gelen",
+    body: "Kendi cümlelerinizle gerçek bir iş ihtiyacı: zaman sızdıran bir iş akışı, bir fikir, bir mağaza, yürütülecek bir operasyon.",
+    telemetry: ["düz cümlelerle bir problem", "şartname gerekmez", "doğrudan görüşme"],
   },
   {
     id: "02",
-    title: "Constraints",
-    alt: "What shapes it",
-    body: "The need gets structured: scope, data, users, business rules, and the systems it must live alongside.",
-    telemetry: ["scope agreed in writing", "data & users mapped", "integrations identified"],
+    title: "Kısıtlar",
+    alt: "Şekillendiren",
+    body: "İhtiyaç yapılandırılır: kapsam, veri, kullanıcılar, iş kuralları ve birlikte yaşayacağı sistemler.",
+    telemetry: ["kapsam yazılı netleşir", "veri & kullanıcılar haritalanır", "entegrasyonlar belirlenir"],
   },
   {
     id: "03",
-    title: "Architecture",
-    alt: "The system takes shape",
-    body: "A data model, backend logic, roles, and the screen structure, drawn before anything gets built.",
-    telemetry: ["data model drawn", "roles & boundaries set", "screens structured"],
+    title: "Mimari",
+    alt: "Sistem şekilleniyor",
+    body: "Veri modeli, backend mantığı, roller ve ekran yapısı — henüz hiçbir şey kurulmadan çizilir.",
+    telemetry: ["veri modeli çizilir", "roller & sınırlar belirlenir", "ekranlar yapılandırılır"],
   },
   {
     id: "04",
-    title: "Implementation",
-    alt: "The build",
-    body: "Frontend, backend, and admin built in small, reviewable steps: one coherent codebase, not glued parts.",
-    telemetry: ["small reviewable steps", "backend & admin wired", "integrations connected"],
+    title: "Geliştirme",
+    alt: "Kurulum",
+    body: "Frontend, backend ve yönetim paneli küçük, incelenebilir adımlarla kurulur: yapıştırılmış parçalar değil, tek tutarlı kod tabanı.",
+    telemetry: ["küçük incelenebilir adımlar", "backend & panel bağlanır", "entegrasyonlar kurulur"],
   },
   {
     id: "05",
-    title: "Interface",
-    alt: "The screens",
-    body: "The surfaces people actually use: the dashboard, the storefront or site, the internal panel.",
-    telemetry: ["dashboard & panel", "public surface", "states that stay honest"],
+    title: "Arayüz",
+    alt: "Ekranlar",
+    body: "İnsanların gerçekten kullandığı yüzeyler: dashboard, vitrin ya da site, iç panel.",
+    telemetry: ["dashboard & panel", "dışa açık yüzey", "tutarlı kalan durumlar"],
   },
   {
     id: "06",
-    title: "Handoff",
-    alt: "A system you can run",
-    body: "A working web system, delivered cleanly: reviewable scope, maintainable structure, documentation you can follow.",
-    telemetry: ["working system", "clean delivery", "documentation included"],
+    title: "Teslim",
+    alt: "İşletebileceğiniz bir sistem",
+    body: "Temiz teslim edilen, çalışan bir web sistemi: incelenebilir kapsam, sürdürülebilir yapı, takip edebileceğiniz dokümantasyon.",
+    telemetry: ["çalışan sistem", "temiz teslim", "dokümantasyon dahil"],
   },
 ];
 
@@ -98,7 +98,7 @@ function RequestVisual() {
         >
           <span className="size-1.5 rounded-full bg-accent/80" />
           <span className="font-mono text-xs text-muted-foreground">
-            incoming request
+            gelen talep
           </span>
         </motion.div>
         <div className="space-y-2 p-4">
@@ -113,7 +113,7 @@ function RequestVisual() {
             variants={itemVariants}
             className="pt-1 font-mono text-xs text-muted-foreground/60"
           >
-            — in your own words
+            — kendi cümlelerinizle
           </motion.p>
         </div>
       </div>
@@ -122,7 +122,7 @@ function RequestVisual() {
 }
 
 function ConstraintsVisual() {
-  const chips = ["scope", "data", "users", "business rules", "integrations", "operations"];
+  const chips = ["kapsam", "veri", "kullanıcılar", "iş kuralları", "entegrasyonlar", "operasyon"];
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="flex max-w-[360px] flex-wrap justify-center gap-2">
@@ -142,10 +142,10 @@ function ConstraintsVisual() {
 
 function ArchitectureVisual({ active }: { active: boolean }) {
   const nodes = [
-    { x: 22, y: 84, label: "Data model" },
+    { x: 22, y: 84, label: "Veri modeli" },
     { x: 150, y: 24, label: "Backend" },
-    { x: 150, y: 144, label: "Roles" },
-    { x: 292, y: 84, label: "Screens" },
+    { x: 150, y: 144, label: "Roller" },
+    { x: 292, y: 84, label: "Ekranlar" },
   ];
   const links = [
     "M106 92 L150 40",
@@ -195,7 +195,7 @@ function ArchitectureVisual({ active }: { active: boolean }) {
 }
 
 function ImplementationVisual() {
-  const rows = ["frontend", "backend", "admin panel", "workflows", "integrations"];
+  const rows = ["frontend", "backend", "yönetim paneli", "iş akışları", "entegrasyonlar"];
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="w-full max-w-[320px] space-y-2">
@@ -274,8 +274,8 @@ function InterfaceVisual() {
 }
 
 function HandoffVisual({ active }: { active: boolean }) {
-  const parts = ["Database", "Backend", "Interface"];
-  const marks = ["reviewable scope", "maintainable", "documented"];
+  const parts = ["Veritabanı", "Backend", "Arayüz"];
+  const marks = ["incelenebilir kapsam", "sürdürülebilir", "dokümante"];
   return (
     <div
       aria-hidden
@@ -358,10 +358,10 @@ function SceneHeading() {
     <div>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Build pipeline — request to running system
+        Kurulum hattı — talepten çalışan sisteme
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-        A request becomes a system you can run.
+        Bir talep, işletebileceğiniz bir sisteme dönüşür.
       </h2>
     </div>
   );
@@ -513,7 +513,7 @@ function PinnedScene() {
                   </motion.div>
                 ))}
                 <p className="absolute bottom-3 left-5 font-mono text-xs tracking-[0.2em] text-muted-foreground/60 uppercase">
-                  pipeline beat — {BEATS[beat].title.toLowerCase()}
+                  hat aşaması — {BEATS[beat].title.toLocaleLowerCase("tr-TR")}
                 </p>
                 <span
                   aria-hidden

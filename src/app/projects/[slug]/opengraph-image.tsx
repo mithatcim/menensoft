@@ -1,8 +1,8 @@
-import { getProject, projects, projectStatusLabel } from "@/content/projects";
+import { getProject, projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { OG_CONTENT_TYPE, OG_SIZE, renderOgImage } from "@/lib/og";
 
-export const alt = "Project overview";
+export const alt = "Proje özeti";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
@@ -21,13 +21,13 @@ export default async function OpengraphImage({
   if (!project) {
     return renderOgImage({
       eyebrow: site.name,
-      title: "Project",
+      title: "Proje",
       footer: site.positioning,
     });
   }
 
   return renderOgImage({
-    eyebrow: projectStatusLabel[project.status],
+    eyebrow: project.statusLabel,
     title: project.name,
     subtitle: project.oneLiner,
     footer: site.name,

@@ -17,7 +17,7 @@ import { Fragment, useState } from "react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { projects, projectStatusLabel } from "@/content/projects";
+import { projects } from "@/content/projects";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -44,76 +44,74 @@ const CHANNELS: Channel[] = [
   {
     id: "ecommerce",
     icon: ShoppingCart,
-    label: "E-commerce systems",
+    label: "E-ticaret sistemleri",
     meaning:
-      "A storefront and the management layer behind it, editable without code.",
+      "Vitrin ve arkasındaki yönetim katmanı — kod bilmeden düzenlenebilir.",
     builds: [
-      "Product catalog and category structure",
-      "Clean, fast storefront product pages",
-      "Content management for non-technical editors",
-      "Order and inventory screens",
+      "Ürün kataloğu ve kategori yapısı",
+      "Temiz ve hızlı vitrin ürün sayfaları",
+      "Teknik olmayan editörler için içerik yönetimi",
+      "Sipariş ve stok ekranları",
     ],
-    flow: ["Storefront", "Admin", "Orders"],
+    flow: ["Vitrin", "Yönetim", "Sipariş"],
     provenIn: ["ecommerce-cms"],
   },
   {
     id: "admin",
     icon: LayoutDashboard,
-    label: "Admin panels",
-    meaning:
-      "Internal tools your team signs into and runs the day on.",
+    label: "Yönetim panelleri",
+    meaning: "Ekibinizin giriş yapıp günü yönettiği iç araçlar.",
     builds: [
-      "CRUD screens for your core data",
-      "Role-based access to sensitive areas",
-      "Search, filtering, and fast data tables",
-      "Clean forms with proper validation",
+      "Çekirdek verileriniz için yönetim ekranları",
+      "Hassas alanlara rol bazlı erişim",
+      "Arama, filtreleme ve hızlı veri tabloları",
+      "Doğru doğrulamalı temiz formlar",
     ],
-    flow: ["Data", "Screens", "Roles"],
+    flow: ["Veri", "Ekranlar", "Roller"],
     provenIn: ["ecommerce-cms", "orva-psychology"],
   },
   {
     id: "dashboards",
     icon: AppWindow,
-    label: "Dashboards",
+    label: "Dashboard ekranları",
     meaning:
-      "Operational screens that show the current state of the work at a glance.",
+      "İşin anlık durumunu tek bakışta gösteren operasyon ekranları.",
     builds: [
-      "Live operational views for daily work",
-      "Role-specific screens for each job",
-      "Lists, filters, and states that stay current",
-      "Clear status without digging",
+      "Günlük iş için canlı operasyon görünümleri",
+      "Her görev için role özel ekranlar",
+      "Güncel kalan listeler, filtreler ve durumlar",
+      "Aramadan görünen net durum bilgisi",
     ],
-    flow: ["Events", "Views", "Action"],
+    flow: ["Olaylar", "Görünümler", "Aksiyon"],
     provenIn: ["restaurant-qr-system", "log-management-platform"],
   },
   {
     id: "automation",
     icon: Workflow,
-    label: "Automation tools",
-    meaning:
-      "Purpose-built software that replaces a manual workflow.",
+    label: "Otomasyon araçları",
+    meaning: "Manuel bir iş akışının yerini alan, amaca özel yazılım.",
     builds: [
-      "Mapping the current manual process honestly",
-      "A tool scoped to the workflow, not a platform fantasy",
-      "Integrations with the systems you already use",
-      "Documentation your team can follow",
+      "Mevcut manuel sürecin dürüstçe haritalanması",
+      "Platform fantezisi değil, iş akışına göre ölçülmüş bir araç",
+      "Halihazırda kullandığınız sistemlerle entegrasyon",
+      "Ekibinizin takip edebileceği dokümantasyon",
     ],
-    flow: ["Input", "Rules", "Routed"],
+    flow: ["Girdi", "Kurallar", "Yönlendirme"],
     provenIn: ["restaurant-qr-system", "cendovar"],
   },
   {
     id: "operational",
     icon: CircuitBoard,
-    label: "Operational systems",
+    label: "Operasyon sistemleri",
     meaning:
-      "Multi-role systems where one captured input flows to every station that needs it.",
+      "Tek bir girdinin ihtiyacı olan her istasyona aktığı çok rollü sistemler.",
     builds: [
-      "The workflow captured once, at the source",
-      "A screen for each station in the flow",
-      "Shared state across every role",
-      "Built to run a working day",
+      "İş akışı kaynağında bir kez yakalanır",
+      "Akıştaki her istasyon için ayrı ekran",
+      "Tüm roller arasında paylaşılan durum",
+      "Bir iş gününü taşıyacak şekilde kurulur",
     ],
-    flow: ["Capture", "Flow", "Every role"],
+    flow: ["Yakala", "Akıt", "Her rol"],
     provenIn: ["restaurant-qr-system", "log-management-platform"],
   },
 ];
@@ -160,7 +158,7 @@ function ChannelDetail({ channel }: { channel: Channel }) {
       {proven.length > 0 && (
         <div className="mt-5 border-t border-border/60 pt-4">
           <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-            Proven in
+            Kanıtlandığı projeler
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {proven.map((project) => (
@@ -175,7 +173,7 @@ function ChannelDetail({ channel }: { channel: Channel }) {
                 />
                 <span className="text-foreground/85">{project.name}</span>
                 <span className="font-mono text-xs text-muted-foreground/70">
-                  {projectStatusLabel[project.status].toLowerCase()}
+                  {project.statusLabel.toLocaleLowerCase("tr-TR")}
                 </span>
                 <ArrowUpRight className="size-3.5 text-muted-foreground transition-colors group-hover:text-foreground" />
               </Link>
@@ -201,9 +199,9 @@ export function CapabilityConsole() {
       <Container className="relative">
         <Reveal>
           <SectionHeading
-            eyebrow="Capability console"
-            title="What I build"
-            description="Five kinds of systems, one owner. Select a channel to inspect what it covers and where it has been exercised."
+            eyebrow="Yetkinlik konsolu"
+            title="Neler kuruluyor"
+            description="Beş sistem türü, tek çatı altında. Bir kanal seçin; neyi kapsadığını ve hangi projelerde kanıtlandığını inceleyin."
           />
         </Reveal>
 

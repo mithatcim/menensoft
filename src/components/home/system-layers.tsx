@@ -30,51 +30,51 @@ const LAYERS: Layer[] = [
   {
     id: "input",
     tag: "REQ",
-    title: "Input / request",
-    line: "Where the workflow enters: forms, orders, requests, content.",
-    chips: ["forms", "orders", "content"],
+    title: "Girdi / talep",
+    line: "İş akışının sisteme girdiği yer: formlar, siparişler, talepler, içerik.",
+    chips: ["formlar", "siparişler", "içerik"],
   },
   {
     id: "data",
     tag: "DATA",
-    title: "Data model",
-    line: "Schema and relationships designed for how the business actually works.",
-    chips: ["schema", "relations", "SQL"],
+    title: "Veri modeli",
+    line: "İşin gerçekte nasıl yürüdüğüne göre tasarlanmış şema ve ilişkiler.",
+    chips: ["şema", "ilişkiler", "SQL"],
   },
   {
     id: "logic",
     tag: "API",
-    title: "Backend logic",
-    line: "APIs, auth, and rules that keep the data honest.",
-    chips: ["APIs", "auth", "validation"],
+    title: "Backend mantığı",
+    line: "Veriyi tutarlı tutan API'ler, kimlik doğrulama ve kurallar.",
+    chips: ["API'ler", "auth", "doğrulama"],
   },
   {
     id: "admin",
     tag: "ADMIN",
-    title: "Admin & dashboards",
-    line: "The control room: screens for the people who run the day.",
-    chips: ["CRUD", "roles", "tables"],
+    title: "Yönetim & dashboard",
+    line: "Kontrol odası: günü yöneten insanlar için ekranlar.",
+    chips: ["yönetim ekranları", "roller", "tablolar"],
   },
   {
     id: "auto",
     tag: "AUTO",
-    title: "Automation",
-    line: "Routing and repetitive work moved out of human hands.",
-    chips: ["routing", "jobs", "integrations"],
+    title: "Otomasyon",
+    line: "Yönlendirme ve tekrarlı işler insan elinden çıkar.",
+    chips: ["yönlendirme", "görevler", "entegrasyonlar"],
   },
   {
     id: "ui",
     tag: "UI",
-    title: "Interface",
-    line: "The public surface: storefronts and the screens customers touch.",
-    chips: ["storefront", "screens", "states"],
+    title: "Arayüz",
+    line: "Dışa açık yüzey: vitrinler ve müşterilerin dokunduğu ekranlar.",
+    chips: ["vitrin", "ekranlar", "durumlar"],
   },
   {
     id: "ship",
     tag: "SHIP",
-    title: "Handoff",
-    line: "Documentation and a clean handover: a system you can run.",
-    chips: ["docs", "handover", "ownership"],
+    title: "Teslim",
+    line: "Dokümantasyon ve temiz devir: işletebileceğiniz bir sistem.",
+    chips: ["dokümantasyon", "devir", "sahiplik"],
   },
 ];
 
@@ -119,7 +119,7 @@ function LayerStack({
               type="button"
               onClick={() => onSelect(i)}
               aria-pressed={isSel}
-              aria-label={`Highlight layer: ${layer.title}`}
+              aria-label={`Katmanı vurgula: ${layer.title}`}
               custom={{ i, base, selected: isSel }}
               variants={planeVariants}
               initial={reduceMotion ? false : "hidden"}
@@ -186,9 +186,9 @@ export function SystemLayers() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="System layers"
-            title="Every layer, one owner."
-            description="A complete web system is a stack, not a page. These are the layers I design and build in every project."
+            eyebrow="Sistem katmanları"
+            title="Her katman, tek sahip."
+            description="Eksiksiz bir web sistemi bir sayfa değil, bir yığındır. Her projede tasarlanıp kurulan katmanlar bunlar."
           />
         </Reveal>
 

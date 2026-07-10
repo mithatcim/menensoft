@@ -1,8 +1,6 @@
 /**
- * Services / capabilities content.
- *
- * Framed as offerings someone could actually hire — what's included and the
- * typical stack. No pricing, no invented process theater.
+ * Çözüm/hizmet içerikleri. Phase 9'da Türkçeye çevrildi; teklifler somut,
+ * süreç dili dürüst — ajans klişesi ve garanti vaadi yok.
  */
 
 export interface Service {
@@ -11,9 +9,72 @@ export interface Service {
   summary: string;
   includes: string[];
   stack: string[];
-  /** The concrete thing handed over at the end. */
+  /** Teslimde elinize geçen somut şey. */
   deliverable: string;
 }
+
+export const services: Service[] = [
+  {
+    id: "admin-panels",
+    title: "Yönetim panelleri & dashboard'lar",
+    summary:
+      "Ekibinizin her gün kullandığı iç araçlar: iş için tasarlanmış ekranlardan veri, içerik, sipariş ve kullanıcı yönetimi.",
+    includes: [
+      "Çekirdek verileriniz için CRUD ekranları",
+      "Hassas alanlara rol bazlı erişim",
+      "Hızlı kalan arama, filtreleme ve veri tabloları",
+      "Doğru doğrulamayla temiz formlar",
+    ],
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "SQL veritabanları"],
+    deliverable:
+      "Ekibinizin giriş yapıp günü üzerinde yürütebileceği, çalışır bir yönetim paneli.",
+  },
+  {
+    id: "ecommerce",
+    title: "E-ticaret sistemleri",
+    summary:
+      "Vitrin ve arkasındaki yönetim katmanı: ürünler, kategoriler ve içerikler, koda dokunmadan düzenlenebilir.",
+    includes: [
+      "Ürün kataloğu ve kategori yapısı",
+      "Temiz ve hızlı vitrin ürün sayfaları",
+      "Teknik olmayan editörler için içerik yönetimi",
+      "Sipariş ve stok ekranları",
+    ],
+    stack: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+    deliverable:
+      "Vitrin + arkasındaki yönetim katmanı; koda dokunmadan düzenlenebilir.",
+  },
+  {
+    id: "full-stack-apps",
+    title: "Full-stack web uygulamaları",
+    summary:
+      "Uçtan uca kurulan SaaS tarzı ürünler: veri modeli, backend mantığı ve arayüz, tek tutarlı sistem olarak teslim edilir.",
+    includes: [
+      "Veri modelleme ve API tasarımı",
+      "Kimlik doğrulama ve rol yönetimi",
+      "Duyarlı, erişilebilir arayüz",
+      "Yayına hazır proje kurulumu",
+    ],
+    stack: ["Next.js", "TypeScript", "Node.js", "SQL veritabanları"],
+    deliverable:
+      "Tek tutarlı kod tabanı: veri modeli, backend ve arayüz — yayına hazır.",
+  },
+  {
+    id: "automation-tools",
+    title: "Otomasyon & iç araçlar",
+    summary:
+      "Manuel bir iş akışını devralan, amaca özel yazılım: sipariş yönlendirme, içerik hatları, tekrarlayan ofis işleri.",
+    includes: [
+      "Mevcut manuel sürecin dürüstçe haritalanması",
+      "Platform fantezisi değil, iş akışına ölçeklenmiş araç",
+      "Halihazırda kullandığınız sistemlerle entegrasyon",
+      "Ekibinizin takip edebileceği dokümantasyon",
+    ],
+    stack: ["TypeScript", "Node.js", "Next.js"],
+    deliverable:
+      "Kapsamına göre kurgulanmış, manuel iş akışını devralan araç — dokümantasyonuyla birlikte.",
+  },
+];
 
 export interface WorkflowStep {
   step: string;
@@ -21,88 +82,25 @@ export interface WorkflowStep {
   description: string;
 }
 
-export const services: Service[] = [
-  {
-    id: "admin-panels",
-    title: "Admin panels & dashboards",
-    summary:
-      "Internal tools your team uses every day: manage data, content, orders, and users from screens built for the job.",
-    includes: [
-      "CRUD screens for your core data",
-      "Role-based access to sensitive areas",
-      "Search, filtering, and data tables that stay fast",
-      "Clean forms with proper validation",
-    ],
-    stack: ["Next.js", "TypeScript", "Tailwind CSS", "SQL databases"],
-    deliverable:
-      "A working admin panel your team can sign into and run the day on.",
-  },
-  {
-    id: "ecommerce",
-    title: "E-commerce systems",
-    summary:
-      "A storefront and the management layer behind it: products, categories, and content, all editable without code.",
-    includes: [
-      "Product catalog and category structure",
-      "Clean, fast storefront product and category pages",
-      "Content management for non-technical editors",
-      "Order and inventory screens",
-    ],
-    stack: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
-    deliverable:
-      "A storefront plus the management layer behind it, editable without code.",
-  },
-  {
-    id: "full-stack-apps",
-    title: "Full-stack web applications",
-    summary:
-      "SaaS-style products built end to end: data model, backend logic, and interface, shipped as one coherent system.",
-    includes: [
-      "Data modeling and API design",
-      "Authentication and role handling",
-      "Responsive, accessible UI",
-      "Deployment-ready project setup",
-    ],
-    stack: ["Next.js", "TypeScript", "Node.js", "SQL databases"],
-    deliverable:
-      "One coherent codebase: data model, backend, and interface, ready to deploy.",
-  },
-  {
-    id: "automation-tools",
-    title: "Automation & internal tools",
-    summary:
-      "Purpose-built software that replaces a manual workflow: order routing, content pipelines, repetitive back-office work.",
-    includes: [
-      "Mapping the current manual process honestly",
-      "A tool scoped to the workflow, not a platform fantasy",
-      "Integrations with the systems you already use",
-      "Documentation your team can follow",
-    ],
-    stack: ["TypeScript", "Node.js", "Next.js"],
-    deliverable:
-      "A tool that replaces the manual workflow it was scoped around, with documentation.",
-  },
-];
-
 export const workflow: WorkflowStep[] = [
   {
     step: "01",
-    title: "Scope",
-    description: "Agree on what to build — and what to leave out.",
+    title: "Kapsam",
+    description: "Neyin kurulacağında — ve neyin dışarıda kalacağında — anlaşılır.",
   },
   {
     step: "02",
-    title: "Build",
-    description: "Ship working software in small, reviewable steps.",
+    title: "Geliştirme",
+    description: "Çalışan yazılım, küçük ve gözden geçirilebilir adımlarla ilerler.",
   },
   {
     step: "03",
-    title: "Iterate",
-    description: "Adjust from real usage and feedback, not assumptions.",
+    title: "İterasyon",
+    description: "Varsayıma değil, gerçek kullanıma ve geri bildirime göre ayarlanır.",
   },
   {
     step: "04",
-    title: "Ship",
-    description: "Deliver, document, and hand over cleanly.",
+    title: "Teslim",
+    description: "Çalışır sistem; dokümante edilmiş ve temiz şekilde devredilmiş.",
   },
 ];

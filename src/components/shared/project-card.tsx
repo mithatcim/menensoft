@@ -3,7 +3,7 @@ import { Fragment } from "react";
 
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
-import { projectStatusLabel, type Project } from "@/content/projects";
+import { type Project } from "@/content/projects";
 import { cn } from "@/lib/utils";
 
 function StatusBadge({ project }: { project: Project }) {
@@ -13,7 +13,7 @@ function StatusBadge({ project }: { project: Project }) {
         aria-hidden
         className="size-1.5 rounded-full bg-accent/90 shadow-[0_0_8px_1px_rgba(139,140,248,0.5)]"
       />
-      {projectStatusLabel[project.status]}
+      {project.statusLabel}
     </p>
   );
 }
@@ -53,9 +53,9 @@ function FlowOverlay({ flow }: { flow: string[] }) {
 }
 
 export function ProjectCard({ project }: { project: Project }) {
-  // Prototype/archived work reads intentionally quieter than shipped work;
-  // shipped work carries a faint accent edge and livelier hover.
-  const quiet = project.status === "prototype" || project.status === "archived";
+  // İç/önceki çalışmalar bilinçli olarak daha sakin; teslim edilmiş işler
+  // hafif vurgu kenarı ve daha canlı hover taşır.
+  const quiet = project.tier === "internal";
 
   return (
     <SpotlightCard

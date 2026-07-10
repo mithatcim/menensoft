@@ -18,7 +18,7 @@ export function Footer() {
               Kurucu &amp; geliştirici: {site.founder}
             </p>
           </div>
-          <nav aria-label="Footer">
+          <nav aria-label="Alt menü">
             <ul className="flex flex-wrap gap-x-6 gap-y-2">
               {footerNav.map((item) => (
                 <li key={item.href}>

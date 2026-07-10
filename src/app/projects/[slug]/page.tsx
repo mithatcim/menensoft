@@ -24,12 +24,7 @@ import { FlowPanel } from "@/components/shared/flow-panel";
 import { Reveal } from "@/components/shared/reveal";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  getProject,
-  projectImage,
-  projects,
-  projectStatusLabel,
-} from "@/content/projects";
+import { getProject, projectImage, projects } from "@/content/projects";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -56,10 +51,10 @@ export async function generateMetadata({
 
 /** Teardown progression — presentation labels only, content stays real. */
 const TEARDOWN_STAGES: TeardownStage[] = [
-  { id: "input", num: "01", label: "Input", sub: "The problem" },
-  { id: "architecture", num: "02", label: "Architecture", sub: "System flow" },
-  { id: "interface", num: "03", label: "Interface", sub: "What was built" },
-  { id: "scope", num: "04", label: "Scope", sub: "Current status" },
+  { id: "input", num: "01", label: "Girdi", sub: "Problem" },
+  { id: "architecture", num: "02", label: "Mimari", sub: "Sistem akışı" },
+  { id: "interface", num: "03", label: "Arayüz", sub: "Neler kuruldu" },
+  { id: "scope", num: "04", label: "Kapsam", sub: "Güncel durum" },
 ];
 
 function StageChip({ num, label }: { num: string; label: string }) {
@@ -88,7 +83,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="size-4" />
-              All projects
+              Tüm projeler
             </Link>
 
             <div className="max-w-3xl">
@@ -103,14 +98,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <dl className="grid gap-px sm:grid-cols-3">
                   <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                     <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Status
+                      Durum
                     </dt>
                     <dd className="mt-3 flex items-center gap-2 text-sm">
                       <span
                         aria-hidden
                         className="size-1.5 rounded-full bg-accent/90"
                       />
-                      {projectStatusLabel[project.status]}
+                      {project.statusLabel}
                       {project.year && (
                         <span className="text-muted-foreground">
                           {project.year}
@@ -121,23 +116,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   {project.role ? (
                     <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                       <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Role
+                        Rol
                       </dt>
                       <dd className="mt-3 text-sm">{project.role}</dd>
                     </div>
                   ) : (
                     <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                       <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Case study
+                        Proje dosyası
                       </dt>
                       <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                        Draft; details get added as the build matures.
+                        Detaylar proje olgunlaştıkça eklenir.
                       </dd>
                     </div>
                   )}
                   <div className="bg-card p-5 transition-colors hover:bg-muted/20">
                     <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Stack
+                      Teknoloji
                     </dt>
                     <dd className="mt-3 flex flex-wrap gap-2">
                       {project.stack.map((tech) => (
@@ -168,9 +163,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     data-teardown="input"
                     className="scroll-mt-28"
                   >
-                    <StageChip num="01" label="Input — the problem" />
+                    <StageChip num="01" label="Girdi — problem" />
                     <h2 className="mt-4 text-xl font-semibold tracking-tight">
-                      The problem it handles
+                      Çözdüğü problem
                     </h2>
                     <p className="mt-3 leading-relaxed text-muted-foreground">
                       {project.problem}
@@ -186,9 +181,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       data-teardown="architecture"
                       className="scroll-mt-28"
                     >
-                      <StageChip num="02" label="Architecture — system flow" />
+                      <StageChip num="02" label="Mimari — sistem akışı" />
                       <FlowPanel
-                        label="System flow"
+                        label="Sistem akışı"
                         nodes={project.flow}
                         className="mt-4"
                       />
@@ -202,7 +197,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     data-teardown="interface"
                     className="scroll-mt-28"
                   >
-                    <StageChip num="03" label="Interface — what I built" />
+                    <StageChip num="03" label="Arayüz — neler kuruldu" />
                     <div className="mt-4">
                       <BrowserFrame
                         title={`/${project.slug}`}
@@ -240,7 +235,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     data-teardown="scope"
                     className="scroll-mt-28"
                   >
-                    <StageChip num="04" label="Scope — current status" />
+                    <StageChip num="04" label="Kapsam — güncel durum" />
                     <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
                       <CapabilityMatrix
                         slug={project.slug}
@@ -253,11 +248,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           aria-hidden
                           className="size-1.5 rounded-full bg-accent/90"
                         />
-                        Current status &amp; scope
+                        Güncel durum &amp; kapsam
                       </p>
                       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                         {project.statusNote ??
-                          `${projectStatusLabel[project.status]}. Details get added as the project matures.`}
+                          `${project.statusLabel}. Detaylar proje olgunlaştıkça eklenir.`}
                       </p>
                       {project.outcome && (
                         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -275,7 +270,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                 buttonVariants({ variant: "outline" }),
                               )}
                             >
-                              Visit live site
+                              Canlı siteyi gör
                               <ArrowUpRight className="size-4" />
                             </a>
                           )}
@@ -288,7 +283,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                 buttonVariants({ variant: "outline" }),
                               )}
                             >
-                              View repository
+                              Kod deposunu görüntüle
                               <ArrowUpRight className="size-4" />
                             </a>
                           )}
