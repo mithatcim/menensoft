@@ -221,6 +221,14 @@
   .animate-flow-x {
     animation: flow-x 2.8s ease-in-out infinite;
   }
+  /* Pulse travelling down a vertical connector; parent must be relative. */
+  .animate-flow-y {
+    animation: flow-y 2.6s ease-in-out infinite;
+  }
+  /* Soft expanding halo for the active rail node. */
+  .animate-node-pulse {
+    animation: node-pulse 2.4s ease-in-out infinite;
+  }
   /* Route-enter transition. template.tsx re-mounts this on each navigation. */
   .page-enter {
     animation: page-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -288,11 +296,42 @@
   }
 }
 
+@keyframes flow-y {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes node-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-drift-a,
   .animate-drift-b,
   .animate-scan,
   .animate-flow-x,
+  .animate-flow-y,
+  .animate-node-pulse,
   .page-enter {
     animation: none !important;
   }
