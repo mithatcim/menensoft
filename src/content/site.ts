@@ -111,8 +111,9 @@ export const capabilities: Capability[] = [
 ];
 
 export const about = {
-  // Reviewed in the Phase 3 content pass (2026-07-08). Nothing here should
-  // stay if it isn't accurate.
+  // Reviewed in the Phase 3 content pass (2026-07-08); principles, stack
+  // philosophy, build/avoid, and the tooling line added in Phase 8E
+  // (2026-07-10) — all restatements of published positioning, no new claims.
   intro: [
     "I'm Mithat, a full-stack developer. I build complete web systems: the data model, the backend, and the interface people actually use.",
     "Most of my recent work is systems with an operational back side: a restaurant ordering system with waiter, kitchen, and cashier screens, a psychology practice website with its own admin panel, and the flagship build in progress, an e-commerce CMS with a visual site builder. The work ranges from active product builds to completed full-stack systems and internal prototypes. I like owning the whole build, not a slice of it.",
@@ -132,4 +133,37 @@ export const about = {
       items: ["Git & GitHub", "pnpm", "ESLint", "Playwright"],
     },
   ] satisfies SkillGroup[],
+
+  principles: [
+    "Build complete systems, not isolated screens.",
+    "Keep admin workflows practical.",
+    "Make data, interface, and operations fit together.",
+    "Prefer honest scope over inflated claims.",
+    "Ship in small, reviewable steps.",
+    "Design for maintainability and handoff.",
+  ],
+
+  stackPhilosophy:
+    "One practical stack, used deliberately: TypeScript end to end, Next.js for the interface and its server side, Node.js and SQL databases behind it, Tailwind for disciplined UI. Reliable, well-understood technology over whatever is trending — a system you can run beats a stack you can brag about.",
+
+  builds: [
+    "E-commerce systems",
+    "Admin panels & dashboards",
+    "Workflow & operational tools",
+    "Content-managed websites",
+    "Prototype-to-system builds",
+  ],
+
+  avoids: [
+    "Screens with no system behind them",
+    "Unclear scope",
+    "Invented metrics",
+    "Unnecessary complexity",
+    "Trend-chasing gimmicks",
+    "Animation that hurts usability",
+  ],
+
+  // One honest tooling line — a workflow enhancer, never an identity.
+  tooling:
+    "Modern tooling, including AI-assisted development, speeds up planning, building, and review — applied with review discipline, never as a substitute for it.",
 };
