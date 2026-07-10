@@ -1,10 +1,14 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
+import {
+  CapabilityMatrix,
+  SystemMap,
+} from "@/components/projects/system-map";
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
@@ -68,25 +72,9 @@ function StatusBadge({ project }: { project: Project }) {
   );
 }
 
-/** Static, simplified flow strip (used inside previews; no hover needed). */
-function FlowStrip({ flow }: { flow: string[] }) {
-  return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {flow.map((node, index) => (
-        <Fragment key={node}>
-          {index > 0 && (
-            <ArrowRight aria-hidden className="size-3 shrink-0 text-accent/60" />
-          )}
-          <span className="rounded-md border border-border bg-background/50 px-2.5 py-1 font-mono text-xs text-foreground/80">
-            {node}
-          </span>
-        </Fragment>
-      ))}
-    </div>
-  );
-}
-
 function PreviewBody({ project }: { project: Project }) {
+  const quiet = project.status === "prototype" || project.status === "archived";
+
   return (
     <div className="p-5 md:p-6">
       <StatusBadge project={project} />
@@ -97,23 +85,26 @@ function PreviewBody({ project }: { project: Project }) {
         {project.oneLiner}
       </p>
 
-      <div className="mt-5">
-        <BrowserFrame title={`/${project.slug}`} image={projectImage(project)}>
-          <ScreenshotSlot />
-        </BrowserFrame>
+      {/* system map beside the honest reserved frame */}
+      <div className="mt-5 grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,236px)]">
+        {project.flow && (
+          <SystemMap
+            flow={project.flow}
+            modules={project.built}
+            quiet={quiet}
+          />
+        )}
+        <div>
+          <BrowserFrame
+            title={`/${project.slug}`}
+            image={projectImage(project)}
+          >
+            <ScreenshotSlot label="Interface capture reserved" />
+          </BrowserFrame>
+        </div>
       </div>
 
-      {project.flow && (
-        <div className="mt-5">
-          <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-            <span aria-hidden className="size-1.5 bg-accent/90" />
-            System flow
-          </p>
-          <div className="mt-3">
-            <FlowStrip flow={project.flow} />
-          </div>
-        </div>
-      )}
+      <CapabilityMatrix slug={project.slug} quiet={quiet} className="mt-5" />
 
       <div className="mt-5 flex flex-wrap gap-2 border-t border-border/60 pt-4">
         {project.stack.map((tech) => (
@@ -121,7 +112,18 @@ function PreviewBody({ project }: { project: Project }) {
         ))}
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      {project.statusNote && (
+        <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-3.5">
+          <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
+            Current scope
+          </p>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+            {project.statusNote}
+          </p>
+        </div>
+      )}
+
+      <div className="mt-5 flex items-center justify-between gap-4">
         <Link
           href={`/projects/${project.slug}`}
           className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
@@ -131,7 +133,7 @@ function PreviewBody({ project }: { project: Project }) {
         </Link>
         {/* honest telemetry: counts derived from real content only */}
         <p className="font-mono text-xs text-muted-foreground/70">
-          {project.built.length} capabilities · {project.stack.length} stack
+          {project.built.length} modules · {project.stack.length} stack
         </p>
       </div>
     </div>
