@@ -82,8 +82,8 @@ export default function ContactPage() {
                     <a
                       href={`mailto:${site.email}`}
                       className={cn(
-                        buttonVariants(),
-                        "h-11 px-6 shadow-[0_12px_32px_-12px_rgba(255,255,255,0.25)]",
+                        buttonVariants({ variant: "cta" }),
+                        "h-11 px-6",
                       )}
                     >
                       <Mail className="size-4" />

@@ -34,8 +34,8 @@ export function ContactCTA() {
                 <a
                   href={`mailto:${site.email}`}
                   className={cn(
-                    buttonVariants(),
-                    "h-12 px-7 text-base shadow-[0_12px_32px_-12px_rgba(255,255,255,0.3)]",
+                    buttonVariants({ variant: "cta" }),
+                    "h-12 px-7 text-base",
                   )}
                 >
                   <Mail className="size-4" />

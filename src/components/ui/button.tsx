@@ -9,6 +9,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        // High-emphasis marketing CTA: crisp white surface, true near-black
+        // text, tight violet glow instead of a hazy white bloom (the bloom
+        // made the label read as low-contrast against the dark page).
+        cta: "bg-white text-neutral-950 ring-1 ring-white/15 shadow-[0_8px_28px_-10px_rgba(139,140,248,0.55)] hover:bg-neutral-100 hover:shadow-[0_10px_34px_-10px_rgba(139,140,248,0.7)]",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
