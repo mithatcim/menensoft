@@ -104,7 +104,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Restoranınız için sipariş akışını netleştirin",
     ctaText:
-      "Masa sayınızı, mevcut düzeninizi ve akışın sıkıştığı noktayı yazın; kapsamı beraber netleştirelim.",
+      "Masa sayınızı, mevcut düzeninizi ve akışın sıkıştığı noktayı yazın; nereyi önce sistemleştireceğimize birlikte bakalım.",
     seoTitle: "Restoran QR Sipariş Sistemi",
     seoDescription:
       "Restoran ve kafeler için QR menü, sipariş yönlendirme ve rol bazlı operasyon ekranları: garson, mutfak, kasa. Panelden yönetilen, çalışır teslim edilen sipariş sistemi.",
@@ -173,7 +173,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Kliniğiniz için site ve randevu akışını netleştirin",
     ctaText:
-      "Mevcut sitenizi, randevu trafiğinizin bugün nasıl aktığını ve nerede kaybolduğunu yazın; kapsamı beraber netleştirelim.",
+      "Mevcut sitenizi ve randevu trafiğinizin bugün nerede koptuğunu yazın; talebin panele nasıl düşeceğini birlikte planlayalım.",
     seoTitle: "Psikoloji Kliniği Web Sitesi ve Randevu Sistemi",
     seoDescription:
       "Psikoloji klinikleri ve danışmanlık merkezleri için kurumsal web sitesi, randevu talebi akışı ve içerik yönetim paneli. Geliştiriciye bağımlı kalmadan yönetilen sistem.",
@@ -239,7 +239,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Satış altyapınızı kendi sisteminize taşıyın",
     ctaText:
-      "Bugün hangi platformdasınız, nerede sınıra takıldınız? Yazın; kapsamı beraber netleştirelim.",
+      "Bugün hangi platformdasınız, nerede sınıra takıldınız? Yazın; kendi altyapınıza geçişin kapsamını birlikte çıkaralım.",
     seoTitle: "E-Ticaret Yönetim Sistemi",
     seoDescription:
       "Online satış yapan işletmeler için sahip olduğunuz e-ticaret altyapısı: ürün kataloğu, vitrin, sipariş ekranları, içerik yönetimi ve görsel sayfa kurucu tek sistemde.",
@@ -308,7 +308,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Operasyonunuzu tek ekranda görün",
     ctaText:
-      "Bugün neyi telefonla sorarak öğreniyorsunuz? Yazın; hangi ekranların gerektiğini beraber netleştirelim.",
+      "Bugün neyi telefonla sorarak öğreniyorsunuz? Yazın; hangi ekranların gerektiğine birlikte karar verelim.",
     seoTitle: "Operasyon Dashboard Sistemi",
     seoDescription:
       "Operasyon yürüten işletmeler için canlı durum ekranları, iş listeleri ve rol bazlı dashboard sistemi. İşin anlık durumu sormadan, tek bakışta görünür.",
@@ -373,7 +373,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Log akışınızı incelenebilir hale getirin",
     ctaText:
-      "Hangi sistemlerin kaydını topluyorsunuz, olay anında neye bakamıyorsunuz? Yazın; kapsamı beraber netleştirelim.",
+      "Hangi sistemlerin kaydını topluyorsunuz, olay anında neye bakamıyorsunuz? Yazın; incelenebilir bir akış için kapsamı çıkaralım.",
     seoTitle: "Güvenlik Log Yönetim Sistemi",
     seoDescription:
       "BT ve güvenlik ekipleri için log toplama, depolama ve inceleme altyapısı: arama, filtreleme, gözden geçirme iş akışı ve rol bazlı erişim tek sistemde.",
@@ -437,7 +437,7 @@ export const sectors: Sector[] = [
     ],
     ctaTitle: "Üyelik akışınızı sisteme taşıyın",
     ctaText:
-      "Üyeleriniz bugün nasıl kaydoluyor, içerik onlara nasıl ulaşıyor? Yazın; kapsamı beraber netleştirelim.",
+      "Üyeleriniz bugün nasıl kaydoluyor, içerik onlara nasıl ulaşıyor? Yazın; akışın sistem hâlini birlikte tasarlayalım.",
     seoTitle: "Üyelik Platformu Geliştirme",
     seoDescription:
       "Üyeliğe dayalı işler için üye hesapları, erişim yönetimi ve üyelere yayınlama akışı: elle tutulan listeler yerine panelden yönetilen üyelik platformu.",

@@ -89,7 +89,7 @@ export const systems: SystemType[] = [
     ],
     ctaTitle: "Verinizi panele taşıyın",
     ctaText:
-      "Bugün hangi veriyi nerede yönetiyorsunuz? Yazın; panel kapsamını beraber netleştirelim.",
+      "Bugün hangi veriyi nerede yönetiyorsunuz? Yazın; panelin ekranlarını birlikte çıkaralım.",
     seoTitle: "Admin Panel Geliştirme",
     seoDescription:
       "İşletmeler için özel admin panel geliştirme: kayıt yönetimi, veri tabloları, rol bazlı yetki ve doğrulamalı formlar. Excel ve mesaj trafiği yerine tek yönetim yüzeyi.",
@@ -139,7 +139,7 @@ export const systems: SystemType[] = [
     ],
     ctaTitle: "Kendi satış altyapınızı kurun",
     ctaText:
-      "Bugün hangi platformdasınız, neyi değiştiremiyorsunuz? Yazın; kapsamı beraber netleştirelim.",
+      "Bugün hangi platformdasınız, neyi değiştiremiyorsunuz? Yazın; geçişin gerçekçi bir yolunu konuşalım.",
     seoTitle: "Özel E-Ticaret Sistemi Geliştirme",
     seoDescription:
       "Hazır paket sınırına takılmadan sahip olduğunuz e-ticaret sistemi: ürün kataloğu, hızlı vitrin, sipariş ekranları, görsel sayfa kurucu ve içerik yönetimi tek altyapıda.",
@@ -195,7 +195,7 @@ export const systems: SystemType[] = [
     ],
     ctaTitle: "İşinizi tek ekranda görün",
     ctaText:
-      "Bugün neyi göremiyorsunuz? Yazın; hangi görünümlerin gerektiğini beraber netleştirelim.",
+      "Bugün neyi göremiyorsunuz? Yazın; hangi görünümlerin gerektiğine birlikte bakalım.",
     seoTitle: "Dashboard ve Raporlama Sistemi",
     seoDescription:
       "İşletmeler için canlı dashboard ve raporlama ekranları: role özel görünümler, durum akışları, filtreli listeler ve elle derlenmeyen özetler tek sistemde.",
@@ -251,7 +251,7 @@ export const systems: SystemType[] = [
     ],
     ctaTitle: "Manuel akışınızı sisteme devredin",
     ctaText:
-      "Hangi iş elle dönüyor, nerede kopuyor? Yazın; otomasyonun sınırını beraber netleştirelim.",
+      "Hangi iş elle dönüyor, nerede kopuyor? Yazın; otomasyonun sınırını birlikte çizelim.",
     seoTitle: "İş Akışı Otomasyonu Geliştirme",
     seoDescription:
       "Elle yürüyen süreçler için amaca özel iş akışı otomasyonu: girdi yakalama, kurallı yönlendirme, durum takibi ve entegrasyonlar. Kişiye bağımlılık yerine sistem.",
@@ -301,7 +301,7 @@ export const systems: SystemType[] = [
     ],
     ctaTitle: "Sitenizi yönetilebilir hale getirin",
     ctaText:
-      "Mevcut siteniz neyi yapamıyor? Yazın; site + panel kapsamını beraber netleştirelim.",
+      "Mevcut siteniz neyi yapamıyor? Yazın; sitenin panelle nasıl yaşayacağını planlayalım.",
     seoTitle: "Kurumsal Web Sitesi ve Yönetim Paneli",
     seoDescription:
       "Panelden yönetilen kurumsal web sitesi: içerik yönetimi, talep toplama akışı, SEO'ya uygun hızlı sayfalar ve rol bazlı erişim. Donmuş vitrin değil, yaşayan site.",
