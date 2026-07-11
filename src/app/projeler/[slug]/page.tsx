@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
+import { SimilarSystemBand } from "@/components/projects/similar-system-band";
 import { CapabilityMatrix } from "@/components/projects/system-map";
 import {
   DossierConstraints,
@@ -268,15 +269,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           {project.outcome}
                         </p>
                       )}
-                      <p className="mt-4 border-t border-border/60 pt-4">
-                        <Link
-                          href="/teklif-al"
-                          className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
-                        >
-                          Benzer bir sistem için teklif al
-                          <ArrowUpRight className="size-4 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </Link>
-                      </p>
                       {(project.liveUrl || project.repoUrl) && (
                         <div className="mt-5 flex flex-wrap gap-3">
                           {project.liveUrl && (
@@ -315,6 +307,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </article>
         </Container>
       </section>
+      <SimilarSystemBand project={project} />
       <ContactCTA />
     </>
   );

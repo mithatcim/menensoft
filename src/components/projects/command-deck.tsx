@@ -12,6 +12,7 @@ import {
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
+import { projectToFitType } from "@/content/fit";
 import { projectImage, type Project } from "@/content/projects";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -118,14 +119,27 @@ function PreviewBody({ project }: { project: Project }) {
         </div>
       )}
 
-      <div className="mt-5 flex items-center justify-between gap-4">
-        <Link
-          href={`/projeler/${project.slug}`}
-          className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
-        >
-          Proje detayını aç
-          <ArrowUpRight className="size-4" />
-        </Link>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+        <span className="flex flex-wrap items-center gap-3">
+          <Link
+            href={`/projeler/${project.slug}`}
+            className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
+          >
+            Proje detayını aç
+            <ArrowUpRight className="size-4" />
+          </Link>
+          <Link
+            href={
+              projectToFitType[project.slug]
+                ? `/teklif-al?tur=${projectToFitType[project.slug]}`
+                : "/teklif-al"
+            }
+            className="group/similar inline-flex items-center gap-1.5 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
+          >
+            Benzer sistem istiyorum
+            <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover/similar:-translate-y-0.5 group-hover/similar:translate-x-0.5" />
+          </Link>
+        </span>
         {/* dürüst telemetri: yalnızca gerçek içerikten türetilen sayılar */}
         <p className="font-mono text-xs text-muted-foreground/70">
           {project.built.length} modül · {project.stack.length} teknoloji
