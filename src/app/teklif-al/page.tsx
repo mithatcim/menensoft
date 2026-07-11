@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -20,6 +21,30 @@ const SCOPE_FACTORS = [
   "Rol ve yetki yapısının derinliği",
   "Mevcut sistemlerle entegrasyonlar",
   "İçerik yönetimi ve panel ihtiyacı",
+];
+
+/** Teklif öncesi tipik itirazlar — kısa cevap + /sss'teki tam cevaba bağ. */
+const OBJECTIONS = [
+  {
+    q: "Tek kişiyle çalışmak riskli mi?",
+    a: "Riski kalabalık değil yapı azaltır: yazılı kapsam, dokümantasyon, devredilebilir kod tabanı.",
+    href: "/sss#tek-kisi-riski",
+  },
+  {
+    q: "Fiyat nasıl çıkar?",
+    a: "Sabit liste yok; fiyat, kapsam ve modüllere göre belirlenir — kapsam netleşince net teklif.",
+    href: "/sss#fiyat",
+  },
+  {
+    q: "Ne kadar sürer?",
+    a: "Kapsam netleşmeden tarih verilmez; gerçekçi çerçeve kapsamla birlikte konuşulur.",
+    href: "/sss#sure",
+  },
+  {
+    q: "Sonunda elimde ne olur?",
+    a: "Çalışır sistem, yönetilebilir panel, dokümantasyon ve temiz devir.",
+    href: "/sss#teslimde-ne-alinir",
+  },
 ];
 
 /** Mesaj sonrası ne olur — güven veren üç adım. */
@@ -135,6 +160,29 @@ export default function QuotePage() {
                     {item.description}
                   </p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* tipik itirazlar — kısa cevap, tam cevap /sss'te */}
+        <Reveal delay={0.05} className="mt-12">
+          <div className="overflow-hidden rounded-xl border border-border bg-border">
+            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
+              {OBJECTIONS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group bg-card p-5 transition-colors hover:bg-muted/20"
+                >
+                  <h2 className="flex items-start justify-between gap-3 text-sm font-semibold tracking-tight">
+                    {item.q}
+                    <ArrowRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
+                  </h2>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {item.a}
+                  </p>
+                </Link>
               ))}
             </div>
           </div>
