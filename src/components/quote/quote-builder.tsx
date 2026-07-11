@@ -20,6 +20,13 @@ import { useEffect, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import {
+  fitNeedsEn,
+  fitSituationsEn,
+  fitSystemsEn,
+  resolveRecommendationEn,
+} from "@/content/en/fit";
+import { getProjectEn } from "@/content/en/projects";
+import {
   fitNeeds,
   fitSituations,
   fitSystems,
@@ -27,13 +34,15 @@ import {
 } from "@/content/fit";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
 /**
  * Proje-uyum sihirbazı: iki kısa seçim + dürüst bir öneri. Backend yok,
  * sahte form yok — sonuç her zaman gerçek kanala (e-posta / WhatsApp)
- * önceden doldurulmuş mesaj olarak gider ve mesaj gönderilmeden önce
- * aynen görünür. İçerik src/content/fit.ts'te yaşar.
+ * önceden doldurulmuş mesaj olarak gider ve gönderilmeden önce aynen
+ * görünür. İçerik src/content/fit.ts (TR) ve src/content/en/fit.ts (EN);
+ * mesaj dili her zaman bulunulan rotanın diline uyar.
  */
 
 const ICONS: Record<string, LucideIcon> = {
@@ -46,46 +55,149 @@ const ICONS: Record<string, LucideIcon> = {
   "emin-degilim": HelpCircle,
 };
 
-const MAIL_SUBJECT = "Menensoft proje görüşmesi";
+const WIZARD_COPY = {
+  tr: {
+    systems: fitSystems,
+    situations: fitSituations,
+    needs: fitNeeds,
+    resolve: resolveRecommendation,
+    lookupProject: getProject,
+    subject: "Menensoft proje görüşmesi",
+    bodyLabels: {
+      system: "Sistem türü",
+      situation: "Mevcut durum",
+      needs: "Ek ihtiyaçlar",
+      goal: "Hedef",
+      existing: "Varsa mevcut site/sistem",
+      delivery: "Teslim beklentisi",
+      notes: "Ek not",
+    },
+    unset: "(henüz seçilmedi)",
+    waIntro: "Merhaba, Menensoft proje görüşmesi talep ediyorum.",
+    waGoal: "Hedef",
+    stepLabels: ["Sistem türü", "Mevcut durum", "Öneri & mesaj"],
+    q1: "01 — Ne yaptırmak istiyorsunuz?",
+    q2: "02 — Şu an durumunuz hangisine daha yakın?",
+    needsTitle: "İsteğe bağlı — ek ihtiyaçlar",
+    resultEyebrow: "03 — Sana en yakın başlangıç noktası",
+    linkSystem: "Sistem detayını incele",
+    linkSolutions: "Çözüm haritasına bak",
+    linkSector: "Sektör örneğini gör",
+    linkProof: "Kanıt",
+    linkProcess: "Süreci gör",
+    previewTitle: "Mesajınız böyle açılacak — düzenleyebilirsiniz",
+    copyIdle: "Mesajı kopyala",
+    copyDone: "Kopyalandı",
+    nextStepLabel: "Sonraki adım:",
+    nextStepText:
+      "mesajınıza kapsamı netleştiren birkaç somut soruyla dönüş yapılır — gerekiyorsa kısa bir görüşme.",
+    honest: [
+      "İlk mesaj için birkaç cümle yeterli — şartname gerekmez.",
+      "Kapsam netleşmeden fiyat veya süre söylenmez.",
+      "Amaç gereksiz modül eklemek değil; çalışan yapıyı kurmak.",
+    ],
+    ctaMail: "E-posta ile gönder",
+    ctaWa: "WhatsApp'tan yaz",
+    footnote: "mesajınız doğrudan kurucuya ulaşır.",
+    escapePre: "Seçim yapmadan yazmak isterseniz:",
+    escapeLink: "doğrudan e-posta gönderin",
+    systemBase: "/sistemler",
+    sectorBase: "/sektorler",
+    projectBase: "/projeler",
+    solutionsHref: "/cozumler",
+    processHref: "/surec",
+  },
+  en: {
+    systems: fitSystemsEn,
+    situations: fitSituationsEn,
+    needs: fitNeedsEn,
+    resolve: resolveRecommendationEn,
+    lookupProject: getProjectEn,
+    subject: "Menensoft project inquiry",
+    bodyLabels: {
+      system: "System type",
+      situation: "Current situation",
+      needs: "Additional needs",
+      goal: "Goal",
+      existing: "Existing site/system",
+      delivery: "Delivery expectation",
+      notes: "Extra notes",
+    },
+    unset: "(not selected yet)",
+    waIntro: "Hello, I'd like to request a Menensoft project review.",
+    waGoal: "Goal",
+    stepLabels: ["System type", "Current situation", "Recommendation & message"],
+    q1: "01 — What do you want to build?",
+    q2: "02 — Which is closest to your current situation?",
+    needsTitle: "Optional — additional needs",
+    resultEyebrow: "03 — Your closest starting point",
+    linkSystem: "See the system in depth",
+    linkSolutions: "Look at the solution map",
+    linkSector: "See the sector example",
+    linkProof: "Proof",
+    linkProcess: "See the process",
+    previewTitle: "Your message will open like this — you can edit it",
+    copyIdle: "Copy message",
+    copyDone: "Copied",
+    nextStepLabel: "Next step:",
+    nextStepText:
+      "you'll get a reply with a few concrete questions that clarify the scope — and a short call if needed.",
+    honest: [
+      "A few sentences are enough for the first message — no spec required.",
+      "No price or timeline is quoted before the scope is clear.",
+      "The goal isn't adding modules; it's building the structure that works.",
+    ],
+    ctaMail: "Send by email",
+    ctaWa: "Write on WhatsApp",
+    footnote: "your message goes directly to the founder.",
+    escapePre: "Prefer to write without selecting?",
+    escapeLink: "send an email directly",
+    systemBase: "/en/systems",
+    sectorBase: "/en/sectors",
+    projectBase: "/en/projects",
+    solutionsHref: "/en/solutions",
+    processHref: "/en/process",
+  },
+} as const;
 
-const HONEST_LINES = [
-  "İlk mesaj için birkaç cümle yeterli — şartname gerekmez.",
-  "Kapsam netleşmeden fiyat veya süre söylenmez.",
-  "Amaç gereksiz modül eklemek değil; çalışan yapıyı kurmak.",
-];
+type WizardCopy = (typeof WIZARD_COPY)[Locale];
 
-function mailBody(
+function buildMailBody(
+  copy: WizardCopy,
   systemLabel: string,
   situationLabel: string,
   needLabels: string[],
 ) {
+  const L = copy.bodyLabels;
   return [
-    `Sistem türü: ${systemLabel}`,
-    `Mevcut durum: ${situationLabel}`,
-    ...(needLabels.length ? [`Ek ihtiyaçlar: ${needLabels.join(", ")}`] : []),
+    `${L.system}: ${systemLabel}`,
+    `${L.situation}: ${situationLabel}`,
+    ...(needLabels.length ? [`${L.needs}: ${needLabels.join(", ")}`] : []),
     "",
-    "Hedef:",
+    `${L.goal}:`,
     "",
-    "Varsa mevcut site/sistem:",
+    `${L.existing}:`,
     "",
-    "Teslim beklentisi:",
+    `${L.delivery}:`,
     "",
-    "Ek not:",
+    `${L.notes}:`,
     "",
   ].join("\n");
 }
 
-function whatsappText(
+function buildWhatsappText(
+  copy: WizardCopy,
   systemLabel: string,
   situationLabel: string,
   needLabels: string[],
 ) {
+  const L = copy.bodyLabels;
   return [
-    "Merhaba, Menensoft proje görüşmesi talep ediyorum.",
-    `Sistem türü: ${systemLabel}`,
-    `Mevcut durum: ${situationLabel}`,
-    ...(needLabels.length ? [`Ek ihtiyaçlar: ${needLabels.join(", ")}`] : []),
-    "Hedef: ",
+    copy.waIntro,
+    `${L.system}: ${systemLabel}`,
+    `${L.situation}: ${situationLabel}`,
+    ...(needLabels.length ? [`${L.needs}: ${needLabels.join(", ")}`] : []),
+    `${copy.waGoal}: `,
   ].join("\n");
 }
 
@@ -121,7 +233,8 @@ function StepChip({
   );
 }
 
-export function QuoteBuilder() {
+export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
+  const copy = WIZARD_COPY[locale];
   const [systemId, setSystemId] = useState<string | null>(null);
   const [situationId, setSituationId] = useState<string | null>(null);
   const [needIds, setNeedIds] = useState<string[]>([]);
@@ -142,24 +255,26 @@ export function QuoteBuilder() {
       setSituationId(durum);
   }, []);
 
-  const system = fitSystems.find((s) => s.id === systemId);
-  const situation = fitSituations.find((s) => s.id === situationId);
+  const system = copy.systems.find((s) => s.id === systemId);
+  const situation = copy.situations.find((s) => s.id === situationId);
   const done = Boolean(system && situation);
-  const rec = done ? resolveRecommendation(system!.id, situation!.id) : null;
-  const proofProject = rec?.projectSlug ? getProject(rec.projectSlug) : null;
+  const rec = done ? copy.resolve(system!.id, situation!.id) : null;
+  const proofProject = rec?.projectSlug
+    ? copy.lookupProject(rec.projectSlug)
+    : null;
 
-  const needLabels = fitNeeds
+  const needLabels = copy.needs
     .filter((n) => needIds.includes(n.id))
     .map((n) => n.label);
-  const systemLabel = system?.label ?? "(henüz seçilmedi)";
-  const situationLabel = situation?.label ?? "(henüz seçilmedi)";
-  const body = mailBody(systemLabel, situationLabel, needLabels);
+  const systemLabel = system?.label ?? copy.unset;
+  const situationLabel = situation?.label ?? copy.unset;
+  const body = buildMailBody(copy, systemLabel, situationLabel, needLabels);
   const mailHref = `mailto:${site.email}?subject=${encodeURIComponent(
-    MAIL_SUBJECT,
+    copy.subject,
   )}&body=${encodeURIComponent(body)}`;
   const whatsappHref = site.whatsappUrl
     ? `${site.whatsappUrl}?text=${encodeURIComponent(
-        whatsappText(systemLabel, situationLabel, needLabels),
+        buildWhatsappText(copy, systemLabel, situationLabel, needLabels),
       )}`
     : undefined;
 
@@ -185,23 +300,31 @@ export function QuoteBuilder() {
     <div>
       {/* adım göstergesi */}
       <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-        <StepChip num="01" label="Sistem türü" state={system ? "done" : "active"} />
+        <StepChip
+          num="01"
+          label={copy.stepLabels[0]}
+          state={system ? "done" : "active"}
+        />
         <StepChip
           num="02"
-          label="Mevcut durum"
+          label={copy.stepLabels[1]}
           state={situation ? "done" : system ? "active" : "waiting"}
         />
-        <StepChip num="03" label="Öneri & mesaj" state={done ? "active" : "waiting"} />
+        <StepChip
+          num="03"
+          label={copy.stepLabels[2]}
+          state={done ? "active" : "waiting"}
+        />
       </div>
 
       {/* 01 — sistem türü */}
       <section className="mt-8">
         <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
           <span aria-hidden className="size-1.5 bg-accent/90" />
-          01 — Ne yaptırmak istiyorsunuz?
+          {copy.q1}
         </h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {fitSystems.map((option) => {
+          {copy.systems.map((option) => {
             const Icon = ICONS[option.id] ?? HelpCircle;
             const isSel = systemId === option.id;
             return (
@@ -261,10 +384,10 @@ export function QuoteBuilder() {
         <section className="mt-10">
           <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
             <span aria-hidden className="size-1.5 bg-accent/90" />
-            02 — Şu an durumunuz hangisine daha yakın?
+            {copy.q2}
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {fitSituations.map((option) => {
+            {copy.situations.map((option) => {
               const isSel = situationId === option.id;
               return (
                 <button
@@ -303,10 +426,10 @@ export function QuoteBuilder() {
               aria-hidden
               className="size-1.5 rotate-45 border border-muted-foreground/50"
             />
-            İsteğe bağlı — ek ihtiyaçlar
+            {copy.needsTitle}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {fitNeeds.map((need) => {
+            {copy.needs.map((need) => {
               const isSel = needIds.includes(need.id);
               return (
                 <button
@@ -348,7 +471,7 @@ export function QuoteBuilder() {
             <div className="border-b border-border/60 bg-accent/5 px-6 py-4">
               <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="size-1.5 bg-accent/90" />
-                03 — Sana en yakın başlangıç noktası
+                {copy.resultEyebrow}
               </p>
               <h2 className="mt-2 text-xl font-semibold tracking-tight text-balance md:text-2xl">
                 {rec.label}
@@ -362,44 +485,44 @@ export function QuoteBuilder() {
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                 {rec.systemSlug ? (
                   <Link
-                    href={`/sistemler/${rec.systemSlug}`}
+                    href={`${copy.systemBase}/${rec.systemSlug}`}
                     className="group inline-flex items-center gap-1.5 text-foreground/85 transition-colors hover:text-foreground"
                   >
-                    Sistem detayını incele
+                    {copy.linkSystem}
                     <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </Link>
                 ) : (
                   <Link
-                    href="/cozumler"
+                    href={copy.solutionsHref}
                     className="group inline-flex items-center gap-1.5 text-foreground/85 transition-colors hover:text-foreground"
                   >
-                    Çözüm haritasına bak
+                    {copy.linkSolutions}
                     <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </Link>
                 )}
                 {rec.sectorSlug && (
                   <Link
-                    href={`/sektorler/${rec.sectorSlug}`}
+                    href={`${copy.sectorBase}/${rec.sectorSlug}`}
                     className="group inline-flex items-center gap-1.5 text-foreground/85 transition-colors hover:text-foreground"
                   >
-                    Sektör örneğini gör
+                    {copy.linkSector}
                     <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </Link>
                 )}
                 {proofProject && (
                   <Link
-                    href={`/projeler/${proofProject.slug}`}
+                    href={`${copy.projectBase}/${proofProject.slug}`}
                     className="group inline-flex items-center gap-1.5 text-foreground/85 transition-colors hover:text-foreground"
                   >
-                    Kanıt: {proofProject.name}
+                    {copy.linkProof}: {proofProject.name}
                     <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </Link>
                 )}
                 <Link
-                  href="/surec"
+                  href={copy.processHref}
                   className="group inline-flex items-center gap-1.5 text-foreground/85 transition-colors hover:text-foreground"
                 >
-                  Süreci gör
+                  {copy.linkProcess}
                   <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </Link>
               </div>
@@ -408,7 +531,7 @@ export function QuoteBuilder() {
               <div className="mt-6 rounded-lg border border-border bg-background/50 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-                    Mesajınız böyle açılacak — düzenleyebilirsiniz
+                    {copy.previewTitle}
                   </p>
                   <button
                     type="button"
@@ -426,7 +549,7 @@ export function QuoteBuilder() {
                     ) : (
                       <Copy className="size-3" />
                     )}
-                    {copied ? "Kopyalandı" : "Mesajı kopyala"}
+                    {copied ? copy.copyDone : copy.copyIdle}
                   </button>
                 </div>
                 <pre className="mt-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-foreground/80">
@@ -436,14 +559,13 @@ export function QuoteBuilder() {
 
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                 <span className="font-medium text-foreground/85">
-                  Sonraki adım:
+                  {copy.nextStepLabel}
                 </span>{" "}
-                mesajınıza kapsamı netleştiren birkaç somut soruyla dönüş
-                yapılır — gerekiyorsa kısa bir görüşme.
+                {copy.nextStepText}
               </p>
 
               <ul className="mt-5 space-y-1.5">
-                {HONEST_LINES.map((line) => (
+                {copy.honest.map((line) => (
                   <li
                     key={line}
                     className="flex gap-2.5 text-xs leading-relaxed text-muted-foreground"
@@ -463,7 +585,7 @@ export function QuoteBuilder() {
                   className={cn(buttonVariants({ variant: "cta" }), "h-12 px-6")}
                 >
                   <Mail className="size-4" />
-                  E-posta ile gönder
+                  {copy.ctaMail}
                 </a>
                 {whatsappHref && (
                   <a
@@ -476,12 +598,12 @@ export function QuoteBuilder() {
                     )}
                   >
                     <MessageCircle className="size-4" />
-                    WhatsApp&apos;tan yaz
+                    {copy.ctaWa}
                   </a>
                 )}
               </div>
               <p className="mt-4 font-mono text-xs text-muted-foreground/70">
-                {site.email} — mesajınız doğrudan kurucuya ulaşır.
+                {site.email} — {copy.footnote}
               </p>
             </div>
           </section>
@@ -490,12 +612,12 @@ export function QuoteBuilder() {
 
       {/* düşük sürtünmeli kaçış: sihirbazsız yazmak isteyenler için */}
       <p className="mt-6 text-sm text-muted-foreground">
-        Seçim yapmadan yazmak isterseniz:{" "}
+        {copy.escapePre}{" "}
         <a
-          href={`mailto:${site.email}?subject=${encodeURIComponent(MAIL_SUBJECT)}`}
+          href={`mailto:${site.email}?subject=${encodeURIComponent(copy.subject)}`}
           className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
         >
-          doğrudan e-posta gönderin
+          {copy.escapeLink}
         </a>
         .
       </p>
