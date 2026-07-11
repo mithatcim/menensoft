@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-// Honest monogram from the owner's initials — not a final logo mark.
+// Honest Menensoft monogram in the site's accent — not a final logo mark.
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
@@ -15,14 +15,14 @@ export default function AppleIcon() {
           alignItems: "center",
           justifyContent: "center",
           background: "#0a0a0b",
-          color: "#fbbf24",
-          fontSize: 84,
+          color: "#8b8cf8",
+          fontSize: 96,
           fontWeight: 700,
           letterSpacing: -3,
           fontFamily: "sans-serif",
         }}
       >
-        MY
+        M
       </div>
     ),
     { ...size },

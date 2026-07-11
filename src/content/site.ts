@@ -12,14 +12,6 @@ export interface SkillGroup {
   items: string[];
 }
 
-export type CapabilityIcon = "dashboard" | "commerce" | "app" | "automation";
-
-export interface Capability {
-  title: string;
-  description: string;
-  icon: CapabilityIcon;
-}
-
 export interface SiteConfig {
   name: string;
   founder: string;
@@ -81,33 +73,6 @@ export const site: SiteConfig = {
   whatsappUrl: "https://wa.me/905303115870",
   // linkedinUrl, location, timezone remain omitted until real values exist.
 };
-
-export const capabilities: Capability[] = [
-  {
-    title: "Yönetim panelleri & dashboard'lar",
-    description:
-      "İşletmenin üzerinde döndüğü ekranlar: ürün, sipariş, içerik ve kullanıcı yönetimi.",
-    icon: "dashboard",
-  },
-  {
-    title: "E-ticaret sistemleri",
-    description:
-      "Vitrin ve arkasındaki yönetim katmanı: ürünler, kategoriler ve sayfa içerikleri.",
-    icon: "commerce",
-  },
-  {
-    title: "Full-stack web uygulamaları",
-    description:
-      "Gerçek veri modeli, rol bazlı ekranlar ve temiz arayüzle SaaS tarzı ürünler.",
-    icon: "app",
-  },
-  {
-    title: "Otomasyon & iç araçlar",
-    description:
-      "Manuel iş akışını devralan, amaca özel araçlar; örneğin siparişleri roller arasında yönlendirmek.",
-    icon: "automation",
-  },
-];
 
 export const about = {
   // Phase 9: Menensoft framing; principles/stack philosophy/build-avoid and

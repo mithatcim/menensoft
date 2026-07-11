@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
  * System Dossier pieces (Phase 8C). These render the owner-approved dossier
  * content from src/content/projects.ts and are composed into the existing
  * teardown stages: summary strip near the top, constraints inside stage 01,
- * module cards inside stage 03. Compact-tier projects (prototype/archived)
- * carry an explicit label so their brevity reads deliberate, not empty.
+ * module cards inside stage 03. Internal-tier projects render the compact
+ * dossier so their brevity reads deliberate, not empty.
  * Server components; motion comes from the surrounding Reveal wrappers.
  */
 
