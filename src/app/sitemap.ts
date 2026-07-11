@@ -1,50 +1,32 @@
 import type { MetadataRoute } from "next";
 
-import { projects } from "@/content/projects";
-import { sectors } from "@/content/sectors";
 import { siteUrl } from "@/content/site";
-import { systems } from "@/content/systems";
+import {
+  projectRoutes,
+  sectorRoutes,
+  staticRoutes,
+  systemRoutes,
+} from "@/lib/routes";
 
-// Yalnızca kanonik Türkçe rotalar; eski İngilizce rotalar 308 ile yönlenir.
-const staticRoutes = [
-  "",
-  "/projeler",
-  "/cozumler",
-  "/surec",
-  "/teklif-al",
-  "/sss",
-  "/hakkimda",
-  "/iletisim",
-  "/sektorler",
-  "/sistemler",
-  "/neden-menensoft",
-  "/hazir-site-mi-ozel-sistem-mi",
-];
-
+/**
+ * Sitemap yalnızca src/lib/routes.ts envanterinden beslenir — rota
+ * eklemek/çıkarmak için orayı güncelle. İngilizce yönlendirmeler ve
+ * metadata rotaları bilinçli olarak dışarıdadır.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
+  const entry = (
+    route: string,
+    priority: number,
+  ): MetadataRoute.Sitemap[number] => ({
     url: `${siteUrl}${route || "/"}`,
     changeFrequency: "monthly",
-    priority: route === "" ? 1 : 0.8,
-  }));
+    priority,
+  });
 
-  const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
-    url: `${siteUrl}/projeler/${project.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
-
-  const sectorPages: MetadataRoute.Sitemap = sectors.map((sector) => ({
-    url: `${siteUrl}/sektorler/${sector.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
-
-  const systemPages: MetadataRoute.Sitemap = systems.map((system) => ({
-    url: `${siteUrl}/sistemler/${system.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
-
-  return [...pages, ...projectPages, ...sectorPages, ...systemPages];
+  return [
+    ...staticRoutes.map((r) => entry(r, r === "" ? 1 : 0.8)),
+    ...projectRoutes.map((r) => entry(r, 0.6)),
+    ...sectorRoutes.map((r) => entry(r, 0.7)),
+    ...systemRoutes.map((r) => entry(r, 0.7)),
+  ];
 }
