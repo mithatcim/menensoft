@@ -169,6 +169,16 @@ export function HeroSection() {
                 Projeleri incele
               </Link>
             </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Hangi sistemi seçeceğinizden emin değil misiniz?{" "}
+              <Link
+                href="/teklif-al"
+                className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                İki soruluk kısa akış size gösterir
+              </Link>
+              .
+            </p>
           </Entrance>
           <Entrance delay={0.24}>
             <p className="mt-16 font-mono text-xs text-muted-foreground">

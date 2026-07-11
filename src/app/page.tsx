@@ -1,3 +1,4 @@
+import { BuyerBridge } from "@/components/home/buyer-bridge";
 import { CapabilityConsole } from "@/components/home/capability-console";
 import { ExploreHubs } from "@/components/home/explore-hubs";
 import { FeaturedProjectsSection } from "@/components/home/featured-projects-section";
@@ -13,6 +14,8 @@ export default function HomePage() {
     <>
       <HeroSection />
       <FlagshipStory />
+      <TelemetryDivider code="SYS·01" label="ihtiyaçtan sisteme" />
+      <BuyerBridge />
       <SystemLayers />
       <TelemetryDivider code="SYS·02" label="yetkinlik konsolu" />
       <CapabilityConsole />
