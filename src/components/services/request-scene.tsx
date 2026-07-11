@@ -38,6 +38,66 @@ interface Beat {
   telemetry: string[];
 }
 
+interface SceneCopy {
+  beats: Beat[];
+  eyebrow: string;
+  heading: string;
+  beatFooter: string;
+  incoming: string;
+  ownWords: string;
+  chips: string[];
+  archNodes: [string, string, string, string];
+  rows: string[];
+  parts: [string, string, string];
+  marks: string[];
+  lower: (s: string) => string;
+}
+
+const BEATS_EN: Beat[] = [
+  {
+    id: "01",
+    title: "Request",
+    alt: "What you bring",
+    body: "A real business need in your own words: a workflow leaking hours, an idea, a store, an operation to run.",
+    telemetry: ["a problem in plain words", "no spec required", "a direct conversation"],
+  },
+  {
+    id: "02",
+    title: "Constraints",
+    alt: "What shapes it",
+    body: "The need gets structured: scope, data, users, business rules and the systems it must live alongside.",
+    telemetry: ["scope agreed in writing", "data & users mapped", "integrations identified"],
+  },
+  {
+    id: "03",
+    title: "Architecture",
+    alt: "The system takes shape",
+    body: "Data model, backend logic, roles and the screen structure — drawn before anything gets built.",
+    telemetry: ["data model drawn", "roles & boundaries set", "screens structured"],
+  },
+  {
+    id: "04",
+    title: "Build",
+    alt: "The implementation",
+    body: "Frontend, backend and admin panel built in small, reviewable steps: one coherent codebase, not glued parts.",
+    telemetry: ["small reviewable steps", "backend & panel wired", "integrations connected"],
+  },
+  {
+    id: "05",
+    title: "Interface",
+    alt: "The screens",
+    body: "The surfaces people actually use: the dashboard, the storefront or site, the internal panel.",
+    telemetry: ["dashboard & panel", "the public surface", "states that stay consistent"],
+  },
+  {
+    id: "06",
+    title: "Handoff",
+    alt: "A system you can run",
+    body: "A working web system, delivered cleanly: reviewable scope, maintainable structure, documentation you can follow.",
+    telemetry: ["a working system", "a clean delivery", "documentation included"],
+  },
+];
+
 const BEATS: Beat[] = [
   {
     id: "01",
@@ -85,10 +145,41 @@ const BEATS: Beat[] = [
 
 /* Scene variants are shared with the home flagship story via lib/motion. */
 
+const SCENE_COPY: Record<"tr" | "en", SceneCopy> = {
+  tr: {
+    beats: BEATS,
+    eyebrow: "Kurulum hattı — talepten çalışan sisteme",
+    heading: "Bir talep, işletebileceğiniz bir sisteme dönüşür.",
+    beatFooter: "hat aşaması",
+    incoming: "gelen talep",
+    ownWords: "— kendi cümlelerinizle",
+    chips: ["kapsam", "veri", "kullanıcılar", "iş kuralları", "entegrasyonlar", "operasyon"],
+    archNodes: ["Veri modeli", "Backend", "Roller", "Ekranlar"],
+    rows: ["frontend", "backend", "yönetim paneli", "iş akışları", "entegrasyonlar"],
+    parts: ["Veritabanı", "Backend", "Arayüz"],
+    marks: ["incelenebilir kapsam", "sürdürülebilir", "dokümante"],
+    lower: (s) => s.toLocaleLowerCase("tr-TR"),
+  },
+  en: {
+    beats: BEATS_EN,
+    eyebrow: "Build pipeline — from request to running system",
+    heading: "A request becomes a system you can run.",
+    beatFooter: "pipeline beat",
+    incoming: "incoming request",
+    ownWords: "— in your own words",
+    chips: ["scope", "data", "users", "business rules", "integrations", "operations"],
+    archNodes: ["Data model", "Backend", "Roles", "Screens"],
+    rows: ["frontend", "backend", "admin panel", "workflows", "integrations"],
+    parts: ["Database", "Backend", "Interface"],
+    marks: ["reviewable scope", "maintainable", "documented"],
+    lower: (s) => s.toLowerCase(),
+  },
+};
+
 /* ------------------------------ beat visuals ----------------------------- */
 /* Abstract schematics only — no real data, no fake claims. */
 
-function RequestVisual() {
+function RequestVisual({ copy }: { copy: SceneCopy }) {
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="w-full max-w-[320px] overflow-hidden rounded-lg border border-border/70 bg-background/40">
@@ -98,7 +189,7 @@ function RequestVisual() {
         >
           <span className="size-1.5 rounded-full bg-accent/80" />
           <span className="font-mono text-xs text-muted-foreground">
-            gelen talep
+            {copy.incoming}
           </span>
         </motion.div>
         <div className="space-y-2 p-4">
@@ -113,7 +204,7 @@ function RequestVisual() {
             variants={itemVariants}
             className="pt-1 font-mono text-xs text-muted-foreground/60"
           >
-            — kendi cümlelerinizle
+            {copy.ownWords}
           </motion.p>
         </div>
       </div>
@@ -121,8 +212,8 @@ function RequestVisual() {
   );
 }
 
-function ConstraintsVisual() {
-  const chips = ["kapsam", "veri", "kullanıcılar", "iş kuralları", "entegrasyonlar", "operasyon"];
+function ConstraintsVisual({ copy }: { copy: SceneCopy }) {
+  const chips = copy.chips;
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="flex max-w-[360px] flex-wrap justify-center gap-2">
@@ -140,12 +231,18 @@ function ConstraintsVisual() {
   );
 }
 
-function ArchitectureVisual({ active }: { active: boolean }) {
+function ArchitectureVisual({
+  active,
+  copy,
+}: {
+  active: boolean;
+  copy: SceneCopy;
+}) {
   const nodes = [
-    { x: 22, y: 84, label: "Veri modeli" },
-    { x: 150, y: 24, label: "Backend" },
-    { x: 150, y: 144, label: "Roller" },
-    { x: 292, y: 84, label: "Ekranlar" },
+    { x: 22, y: 84, label: copy.archNodes[0] },
+    { x: 150, y: 24, label: copy.archNodes[1] },
+    { x: 150, y: 144, label: copy.archNodes[2] },
+    { x: 292, y: 84, label: copy.archNodes[3] },
   ];
   const links = [
     "M106 92 L150 40",
@@ -194,8 +291,8 @@ function ArchitectureVisual({ active }: { active: boolean }) {
   );
 }
 
-function ImplementationVisual() {
-  const rows = ["frontend", "backend", "yönetim paneli", "iş akışları", "entegrasyonlar"];
+function ImplementationVisual({ copy }: { copy: SceneCopy }) {
+  const rows = copy.rows;
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="w-full max-w-[320px] space-y-2">
@@ -273,9 +370,15 @@ function InterfaceVisual() {
   );
 }
 
-function HandoffVisual({ active }: { active: boolean }) {
-  const parts = ["Veritabanı", "Backend", "Arayüz"];
-  const marks = ["incelenebilir kapsam", "sürdürülebilir", "dokümante"];
+function HandoffVisual({
+  active,
+  copy,
+}: {
+  active: boolean;
+  copy: SceneCopy;
+}) {
+  const parts = copy.parts;
+  const marks = copy.marks;
   return (
     <div
       aria-hidden
@@ -325,20 +428,28 @@ function HandoffVisual({ active }: { active: boolean }) {
   );
 }
 
-function BeatVisual({ index, active }: { index: number; active: boolean }) {
+function BeatVisual({
+  index,
+  active,
+  copy,
+}: {
+  index: number;
+  active: boolean;
+  copy: SceneCopy;
+}) {
   switch (index) {
     case 0:
-      return <RequestVisual />;
+      return <RequestVisual copy={copy} />;
     case 1:
-      return <ConstraintsVisual />;
+      return <ConstraintsVisual copy={copy} />;
     case 2:
-      return <ArchitectureVisual active={active} />;
+      return <ArchitectureVisual active={active} copy={copy} />;
     case 3:
-      return <ImplementationVisual />;
+      return <ImplementationVisual copy={copy} />;
     case 4:
       return <InterfaceVisual />;
     default:
-      return <HandoffVisual active={active} />;
+      return <HandoffVisual active={active} copy={copy} />;
   }
 }
 
@@ -353,15 +464,15 @@ function CornerBracket({ className }: { className?: string }) {
   );
 }
 
-function SceneHeading() {
+function SceneHeading({ copy }: { copy: SceneCopy }) {
   return (
     <div>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Kurulum hattı — talepten çalışan sisteme
+        {copy.eyebrow}
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-        Bir talep, işletebileceğiniz bir sisteme dönüşür.
+        {copy.heading}
       </h2>
     </div>
   );
@@ -369,7 +480,8 @@ function SceneHeading() {
 
 /* --------------------------- pinned (desktop) ---------------------------- */
 
-function PinnedScene() {
+function PinnedScene({ copy }: { copy: SceneCopy }) {
+  const BEATS = copy.beats;
   const outerRef = useRef<HTMLDivElement>(null);
   const [beat, setBeat] = useState(0);
   const { scrollYProgress } = useScroll({
@@ -404,7 +516,7 @@ function PinnedScene() {
         />
         <Container className="relative w-full">
           <div className="flex items-end justify-between gap-6">
-            <SceneHeading />
+            <SceneHeading copy={copy} />
             <p className="shrink-0 font-mono text-sm text-muted-foreground">
               <span className="relative inline-block h-[1.25em] w-[2ch] overflow-hidden align-bottom">
                 <AnimatePresence initial={false} mode="popLayout">
@@ -509,11 +621,11 @@ function PinnedScene() {
                     initial={false}
                     animate={stateFor(i)}
                   >
-                    <BeatVisual index={i} active={i === beat} />
+                    <BeatVisual index={i} active={i === beat} copy={copy} />
                   </motion.div>
                 ))}
                 <p className="absolute bottom-3 left-5 font-mono text-xs tracking-[0.2em] text-muted-foreground/60 uppercase">
-                  hat aşaması — {BEATS[beat].title.toLocaleLowerCase("tr-TR")}
+                  {copy.beatFooter} — {copy.lower(BEATS[beat].title)}
                 </p>
                 <span
                   aria-hidden
@@ -565,12 +677,13 @@ function PinnedScene() {
 
 /* -------------------- stacked (mobile / reduced motion) ------------------ */
 
-function StackedScene() {
+function StackedScene({ copy }: { copy: SceneCopy }) {
   const reduceMotion = useReducedMotion();
+  const BEATS = copy.beats;
   return (
     <Container className="py-12 md:py-16">
       <Reveal>
-        <SceneHeading />
+        <SceneHeading copy={copy} />
       </Reveal>
       <div className="mt-10 space-y-6">
         {BEATS.map((b, i) => (
@@ -593,7 +706,7 @@ function StackedScene() {
                 viewport={{ once: true, margin: "-60px" }}
               >
                 <div aria-hidden className="scanlines absolute inset-0 opacity-50" />
-                <BeatVisual index={i} active />
+                <BeatVisual index={i} active copy={copy} />
               </motion.div>
               <p className="px-5 py-4 text-sm leading-relaxed text-muted-foreground">
                 {b.body}
@@ -608,20 +721,21 @@ function StackedScene() {
 
 /* --------------------------------- export -------------------------------- */
 
-export function RequestScene() {
+export function RequestScene({ locale = "tr" }: { locale?: "tr" | "en" }) {
   const reduceMotion = useReducedMotion();
+  const copy = SCENE_COPY[locale];
 
   return (
     <section className="relative border-y border-border/60">
       {reduceMotion ? (
-        <StackedScene />
+        <StackedScene copy={copy} />
       ) : (
         <>
           <div className="hidden lg:block">
-            <PinnedScene />
+            <PinnedScene copy={copy} />
           </div>
           <div className="lg:hidden">
-            <StackedScene />
+            <StackedScene copy={copy} />
           </div>
         </>
       )}
