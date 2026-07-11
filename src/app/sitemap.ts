@@ -17,6 +17,8 @@ const staticRoutes = [
   "/iletisim",
   "/sektorler",
   "/sistemler",
+  "/neden-menensoft",
+  "/hazir-site-mi-ozel-sistem-mi",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
