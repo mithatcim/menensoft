@@ -53,7 +53,7 @@ export default function QuotePage() {
             as="h1"
             eyebrow="Teklif al"
             title="Proje görüşmesi başlatın"
-            description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. Aşağıdaki seçim mesajınızı hazırlar; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
+            description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. İki kısa seçim size uygun çözümü gösterir ve mesajınızı hazırlar; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
           />
         </Reveal>
 
