@@ -72,7 +72,7 @@ export default function AboutPage() {
               <SectionHeading
                 eyebrow="Çalışma ilkeleri"
                 title="Sistemlere bakış"
-                description="Boyutu ne olursa olsun her kurulumun uyduğu kurallar."
+                description="Bu kurallar estetik tercih değil, sizin için risk kontrolüdür: net kapsam sürpriz maliyeti önler, sürdürülebilir yapı kişiye bağımlılığı azaltır, pratik panel akışları devirden sonra da işinizi yürütür."
               />
             </Reveal>
             <Reveal delay={0.08} className="mt-10">

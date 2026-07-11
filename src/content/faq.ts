@@ -54,10 +54,24 @@ export const faq: FaqItem[] = [
     links: [{ label: "Projeleri gör", href: "/projeler" }],
   },
   {
+    id: "veri-tasima",
+    question: "Mevcut veri veya sistem yeni sisteme taşınabilir mi?",
+    answer:
+      "Duruma bağlı. Belirleyici olan mevcut verinin erişilebilirliği, dışa aktarım seçenekleri ve hedef veri modelidir. Veriye erişim varsa taşıma, kapsam görüşmesinde ayrı bir iş kalemi olarak planlanır; erişim yoksa ya da veri dağınıksa önce bu netleştirilir. Her sistemden her verinin taşınacağı sözü baştan verilmez — önce bakılır, sonra söylenir.",
+    links: [{ label: "Teklif al", href: "/teklif-al" }],
+  },
+  {
     id: "surec",
     question: "Proje süreci nasıl ilerler?",
     answer:
       "Beş adımda: talep, kapsam netleştirme, mimari tasarım, geliştirme ve teslim. Kapsam yazılı olarak netleşmeden geliştirme başlamaz; iş küçük ve incelenebilir adımlarla ilerler. Sürecin tamamı /surec sayfasında anlatılıyor.",
+    links: [{ label: "Süreci incele", href: "/surec" }],
+  },
+  {
+    id: "sure",
+    question: "Proje ne kadar sürer?",
+    answer:
+      "Kapsam netleşmeden verilen her süre tahmin değil pazarlıktır; bu yüzden ilk adım her zaman kapsam netleştirmedir. Süreyi modül sayısı, rol ve yetki yapısı, entegrasyonlar ve içeriğin hazır olup olmaması belirler: küçük bir site + panel işi ile çok rollü bir operasyon sistemi aynı takvimi paylaşmaz. Kapsam yazılı netleştiğinde gerçekçi bir zaman çerçevesi birlikte konuşulur; sabit tarih sözü kapsamdan önce verilmez.",
     links: [{ label: "Süreci incele", href: "/surec" }],
   },
   {
@@ -72,6 +86,13 @@ export const faq: FaqItem[] = [
     answer:
       "Projeler tamamlanmış ve çalışır durumda sistemlerdir; bir kısmı müşteri ihtiyacına göre teslim edilmiş, bir kısmı iç ürün altyapısı olarak kullanılmaktadır. Herkese açık canlı adresler bu sitede yayınlanmıyor; her projenin kapsamı, modülleri ve mimarisi kendi proje sayfasında şeffaf biçimde listelenir.",
     links: [{ label: "Proje detayları", href: "/projeler" }],
+  },
+  {
+    id: "tek-kisi-riski",
+    question: "Tek kişilik bir markayla çalışmak riskli değil mi?",
+    answer:
+      "Menensoft'u tek kurucu-geliştirici yürütür ve bu gizlenmez; muhatabınız doğrudan sistemi kuran kişidir. Riski azaltan şey kalabalık ekip değil, yapıdır: kapsam yazılı netleşir, kod tabanı sürdürülebilir tutulur, dokümantasyon ve temiz devir standarttır. Teslim edilen sistem kişiye bağımlı bir kara kutu değildir; gerektiğinde başka bir geliştiricinin devralabileceği yapıda bırakılır. Karşılığında 7/24 kurumsal destek hattı vaadi de verilmez — bu da dürüstlüğün parçasıdır.",
+    links: [{ label: "Çalışma ilkeleri", href: "/neden-menensoft" }],
   },
   {
     id: "iletisim",
