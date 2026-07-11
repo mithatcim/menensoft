@@ -42,7 +42,7 @@ export const notWe = [
   "Kalabalık bir ajans değil: markanın arkasında tek kurucu-geliştirici var ve muhatabınız doğrudan o.",
   "Şablon bayisi değil: hazır tema üstüne logo değiştiren bir iş modeli yok.",
   "Her işe evet diyen bir tedarikçi değil: kapsam işe uymuyorsa açıkça söylenir.",
-  "Vaat makinesi değil: burada müşteri adı, uydurma rakam ya da sıralama garantisi bulamazsınız.",
+  "Vaat makinesi değil: burada müşteri adı, uydurma rakam ya da sıralama vaadi bulamazsınız.",
 ];
 
 export const whoFits = [
