@@ -12,6 +12,8 @@ export interface FitSystemOption {
   systemSlug?: string;
   /** Gerçekten uyan bir sektör örneği varsa /sektorler sayfası. */
   sectorSlug?: string;
+  /** Bu sistem türünü kanıtlayan gerçek proje. */
+  projectSlug?: string;
   /** Öneri kartındaki kısa açıklama. */
   recText?: string;
 }
@@ -23,6 +25,7 @@ export const fitSystems: FitSystemOption[] = [
     hint: "Vitrin + yönetim paneli + sipariş",
     systemSlug: "e-ticaret-sistemi",
     sectorSlug: "e-ticaret-yonetim-sistemi",
+    projectSlug: "ecommerce-cms",
     recText:
       "Vitrin ve yönetim katmanı tek altyapıda: hazır paketin sınırı yerine sahip olduğunuz bir sistem. İlk görüşmede bugünkü platformunuz ve ürün yapınız konuşulur.",
   },
@@ -31,6 +34,7 @@ export const fitSystems: FitSystemOption[] = [
     label: "Yönetim paneli",
     hint: "Veri, roller, iç ekranlar",
     systemSlug: "admin-panel",
+    projectSlug: "ecommerce-cms",
     recText:
       "Tablolarda ve mesajlarda yaşayan veri, rol bazlı yetkili ekranlara taşınır. İlk görüşmede hangi verinin nerede yönetildiği konuşulur.",
   },
@@ -40,6 +44,7 @@ export const fitSystems: FitSystemOption[] = [
     hint: "Panelden yönetilen, talep toplayan site",
     systemSlug: "kurumsal-web-sitesi",
     sectorSlug: "psikoloji-klinik-randevu-sistemi",
+    projectSlug: "orva-psychology",
     recText:
       "Donmuş vitrin yerine panelden güncellenen, talepleri sistemde toplayan bir site. İlk görüşmede mevcut sitenizin neyi yapamadığı konuşulur.",
   },
@@ -49,6 +54,7 @@ export const fitSystems: FitSystemOption[] = [
     hint: "Canlı durum ve özetler",
     systemSlug: "dashboard-raporlama",
     sectorSlug: "operasyon-dashboard-sistemi",
+    projectSlug: "restaurant-qr-system",
     recText:
       "İşin anlık durumu sormadan, tek bakışta görünür hale gelir. İlk görüşmede bugün neyi göremediğiniz konuşulur.",
   },
@@ -57,6 +63,7 @@ export const fitSystems: FitSystemOption[] = [
     label: "İş akışı otomasyonu",
     hint: "Manuel işin yazılıma taşınması",
     systemSlug: "is-akisi-otomasyonu",
+    projectSlug: "restaurant-qr-system",
     recText:
       "Elle dönen akış kaynağında bir kez yakalanır, kurala göre yönlenir. İlk görüşmede mevcut süreç olduğu gibi haritalanır.",
   },
@@ -66,6 +73,7 @@ export const fitSystems: FitSystemOption[] = [
     hint: "Çok rollü istasyon ekranları",
     systemSlug: "operasyon-sistemi",
     sectorSlug: "restoran-qr-siparis-sistemi",
+    projectSlug: "restaurant-qr-system",
     recText:
       "Tek girdi her istasyona kendi ekranıyla ulaşır; durum herkes için aynıdır. İlk görüşmede işinizin geçtiği istasyonlar konuşulur.",
   },
@@ -90,11 +98,34 @@ export const fitSituations: FitSituation[] = [
   { id: "toparlama", label: "Mevcut sistemi düzenlemek istiyorum" },
 ];
 
+/** İsteğe bağlı ek ihtiyaçlar — mesajı zenginleştirir, sihirbazı uzatmaz. */
+export const fitNeeds: { id: string; label: string }[] = [
+  { id: "admin-panel", label: "Admin panel" },
+  { id: "odeme-siparis", label: "Ödeme / sipariş" },
+  { id: "randevu", label: "Randevu akışı" },
+  { id: "uyelik", label: "Üyelik" },
+  { id: "raporlama", label: "Raporlama" },
+  { id: "icerik", label: "İçerik yönetimi" },
+  { id: "otomasyon", label: "Otomasyon" },
+  { id: "veri-tasima", label: "Veri taşıma" },
+  { id: "rol-yetki", label: "Rol / yetki sistemi" },
+];
+
+/** Proje sayfalarından sihirbaza önseçim köprüsü (?tur=...). */
+export const projectToFitType: Record<string, string> = {
+  "ecommerce-cms": "e-ticaret",
+  "restaurant-qr-system": "operasyon",
+  "orva-psychology": "kurumsal-site",
+  "log-management-platform": "dashboard",
+  cendovar: "otomasyon",
+};
+
 export interface FitRecommendation {
   label: string;
   text: string;
   systemSlug?: string;
   sectorSlug?: string;
+  projectSlug?: string;
 }
 
 /**
@@ -110,17 +141,20 @@ export const unsureRecommendations: Record<string, FitRecommendation> = {
     label: "Site + panel yenileme görüşmesi",
     text: "Yetersiz kalan bir site çoğu zaman panel eksikliğidir: içerik güncellenemez, talepler kaybolur. Panelden yönetilen kurumsal site yapısı bu duruma birebir bakar.",
     systemSlug: "kurumsal-web-sitesi",
+    projectSlug: "orva-psychology",
   },
   manuel: {
     label: "İş akışı otomasyonu",
     text: "Excel ve mesajla dönen iş, kaynağında bir kez yakalanan bir akışa taşınabilir. İlk görüşmede mevcut manuel süreç olduğu gibi haritalanır; otomasyonun sınırı birlikte çizilir.",
     systemSlug: "is-akisi-otomasyonu",
+    projectSlug: "restaurant-qr-system",
   },
   platform: {
     label: "Özel e-ticaret altyapısına geçiş",
     text: "Hazır platformun sınırına geldiyseniz, sahip olduğunuz bir altyapıya geçişin gerçekçi bir yolu konuşulur: veri, ürün yapısı ve sipariş akışı adım adım ele alınır.",
     systemSlug: "e-ticaret-sistemi",
     sectorSlug: "e-ticaret-yonetim-sistemi",
+    projectSlug: "ecommerce-cms",
   },
   fikir: {
     label: "Ürün altyapısı görüşmesi",
@@ -144,6 +178,7 @@ export function resolveRecommendation(
       text: system.recText,
       systemSlug: system.systemSlug,
       sectorSlug: system.sectorSlug,
+      projectSlug: system.projectSlug,
     };
   }
   return (
