@@ -27,7 +27,10 @@
 
 const BASE = (process.env.BASE || "http://localhost:3000").replace(/\/+$/, "");
 
-const EXPECTED_CANONICAL_COUNT = 29;
+const EXPECTED_CANONICAL_COUNT = 58; // 29 Türkçe + 29 İngilizce (/en)
+
+/** FAQPage şemasının izinli olduğu sayfalar (görünür SSS içeren). */
+const FAQ_ROUTES = ["/sss", "/en/faq"];
 
 const REDIRECTS = [
   ["/projects", "/projeler"],
@@ -50,7 +53,7 @@ const METADATA_ROUTES = [
   "/manifest.webmanifest",
 ];
 
-/** Görünür kopyada asla geçmemesi gereken kalıplar. */
+/** Görünür kopyada asla geçmemesi gereken kalıplar (TR + EN). */
 const BANNED_TERMS = [
   "mitopasa42",
   "garantisi",
@@ -58,6 +61,10 @@ const BANNED_TERMS = [
   "oltalama",
   "phishing",
   "world-class",
+  "industry-leading",
+  "award-winning",
+  "trusted by",
+  "guaranteed",
 ];
 
 const issues = [];
@@ -131,6 +138,24 @@ async function main() {
         fail(`${route}: canonical ${canonPath} ile eşleşmiyor`);
     }
 
+    // hreflang: her kanonik sayfada tr + en alternates olmalı ve
+    // gösterilen yollar envanterin içinde kalmalı (karşılıklılık kilidi)
+    const hreflangs = {};
+    for (const m of html.matchAll(
+      /<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g,
+    ))
+      hreflangs[m[1]] = new URL(m[2], BASE).pathname;
+    for (const lang of ["tr", "en"]) {
+      if (!hreflangs[lang]) fail(`${route}: hreflang ${lang} yok`);
+      else if (!paths.includes(hreflangs[lang]))
+        fail(
+          `${route}: hreflang ${lang} envanter dışını gösteriyor: ${hreflangs[lang]}`,
+        );
+    }
+    const selfLang = route.startsWith("/en") ? "en" : "tr";
+    if (hreflangs[selfLang] && hreflangs[selfLang] !== route)
+      fail(`${route}: kendi dili hreflang'i kendini göstermiyor`);
+
     const ldBlocks = [
       ...html.matchAll(
         /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
@@ -140,8 +165,8 @@ async function main() {
       try {
         const parsed = JSON.parse(block);
         const types = (parsed["@graph"] || [parsed]).map((x) => x["@type"]);
-        if (types.includes("FAQPage") && route !== "/sss")
-          fail(`${route}: FAQPage şeması /sss dışında`);
+        if (types.includes("FAQPage") && !FAQ_ROUTES.includes(route))
+          fail(`${route}: FAQPage şeması SSS sayfaları dışında`);
         if (
           types.some((t) =>
             ["Review", "AggregateRating", "Offer"].includes(t),

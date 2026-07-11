@@ -54,15 +54,18 @@ export function websiteSchema() {
     "@id": WEBSITE_ID,
     name: site.name,
     url: siteUrl,
-    inLanguage: "tr",
+    inLanguage: ["tr", "en"],
     publisher: { "@id": ORG_ID },
   };
 }
 
-export function faqSchema() {
+/** FAQPage — varsayılan Türkçe içerik; /en/faq kendi çevirisini geçirir. */
+export function faqSchema(
+  items: { question: string; answer: string }[] = faq,
+) {
   return {
     "@type": "FAQPage",
-    mainEntity: faq.map((item) => ({
+    mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: { "@type": "Answer", text: item.answer },
@@ -100,18 +103,20 @@ export function collectionPageSchema({
   description,
   path,
   items,
+  inLanguage = "tr",
 }: {
   name: string;
   description: string;
   path: string;
   items: { name: string; path: string }[];
+  inLanguage?: string;
 }) {
   return {
     "@type": "CollectionPage",
     name,
     description,
     url: `${siteUrl}${path}`,
-    inLanguage: "tr",
+    inLanguage,
     isPartOf: { "@id": WEBSITE_ID },
     mainEntity: {
       "@type": "ItemList",
@@ -171,13 +176,16 @@ export function projectBreadcrumbSchema(project: Project) {
  * gerektirdiği mağaza/fiyat alanları burada doğru olmayacağı için
  * bilinçli olarak kullanılmıyor (aşırı iddia yok).
  */
-export function projectSchema(project: Project) {
+export function projectSchema(
+  project: Pick<Project, "name" | "oneLiner" | "slug" | "stack">,
+  { path, inLanguage = "tr" }: { path?: string; inLanguage?: string } = {},
+) {
   return {
     "@type": "CreativeWork",
     name: project.name,
     description: project.oneLiner,
-    url: `${siteUrl}/projeler/${project.slug}`,
-    inLanguage: "tr",
+    url: `${siteUrl}${path ?? `/projeler/${project.slug}`}`,
+    inLanguage,
     creator: { "@id": ORG_ID },
     keywords: project.stack.join(", "),
   };

@@ -1,6 +1,7 @@
 import { projects } from "@/content/projects";
 import { sectors } from "@/content/sectors";
 import { systems } from "@/content/systems";
+import { enPathFor } from "@/lib/locale";
 
 /**
  * Kanonik rota envanteri — tek doğruluk kaynağı.
@@ -38,12 +39,21 @@ export const projectRoutes = projects.map((p) => `/projeler/${p.slug}`);
 export const sectorRoutes = sectors.map((s) => `/sektorler/${s.slug}`);
 export const systemRoutes = systems.map((s) => `/sistemler/${s.slug}`);
 
-/** Tüm kanonik rotalar, normalize edilmiş ("" yerine "/"). */
-export const allCanonicalRoutes: string[] = [
+/** Türkçe kanonik rotalar, normalize edilmiş ("" yerine "/"). */
+export const trCanonicalRoutes: string[] = [
   ...staticRoutes.map((r) => r || "/"),
   ...projectRoutes,
   ...sectorRoutes,
   ...systemRoutes,
+];
+
+/** İngilizce kanonik rotalar — TR envanterinden locale haritasıyla türetilir. */
+export const enCanonicalRoutes: string[] = trCanonicalRoutes.map(enPathFor);
+
+/** İki dilin tüm kanonik rotaları (58). */
+export const allCanonicalRoutes: string[] = [
+  ...trCanonicalRoutes,
+  ...enCanonicalRoutes,
 ];
 
 /**
