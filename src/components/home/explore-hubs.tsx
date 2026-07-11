@@ -3,38 +3,61 @@ import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
+import { type Locale } from "@/lib/locale";
 
 /**
  * Ziyaretçi yolu: sisteme ihtiyacın varsa → çözümleri/sektörleri incele →
  * kararsızsan rehberi oku → teklif al. Üç sessiz keşif kartı; ağır sahne yok.
  */
-const HUBS = [
-  {
-    href: "/sektorler",
-    eyebrow: "Sektörler",
-    title: "Sektörünüze göre inceleyin",
-    text: "Restoran, klinik, e-ticaret, operasyon, log yönetimi ve üyelik: tipik problem ve kurulan modüller.",
-  },
-  {
-    href: "/sistemler",
-    eyebrow: "Sistemler",
-    title: "Sistem türüne göre inceleyin",
-    text: "Admin panel, e-ticaret, dashboard, otomasyon, kurumsal site ve operasyon sistemi — ne işe yarar, nasıl kurulur.",
-  },
-  {
-    href: "/hazir-site-mi-ozel-sistem-mi",
-    eyebrow: "Karar rehberi",
-    title: "Hazır site mi, özel sistem mi?",
-    text: "Dürüst karşılaştırma: hangisi ne zaman mantıklı, altı boyutta fark nedir, üç soruyla nasıl karar verilir.",
-  },
-];
+const HUBS = {
+  tr: [
+    {
+      href: "/sektorler",
+      eyebrow: "Sektörler",
+      title: "Sektörünüze göre inceleyin",
+      text: "Restoran, klinik, e-ticaret, operasyon, log yönetimi ve üyelik: tipik problem ve kurulan modüller.",
+    },
+    {
+      href: "/sistemler",
+      eyebrow: "Sistemler",
+      title: "Sistem türüne göre inceleyin",
+      text: "Admin panel, e-ticaret, dashboard, otomasyon, kurumsal site ve operasyon sistemi — ne işe yarar, nasıl kurulur.",
+    },
+    {
+      href: "/hazir-site-mi-ozel-sistem-mi",
+      eyebrow: "Karar rehberi",
+      title: "Hazır site mi, özel sistem mi?",
+      text: "Dürüst karşılaştırma: hangisi ne zaman mantıklı, altı boyutta fark nedir, üç soruyla nasıl karar verilir.",
+    },
+  ],
+  en: [
+    {
+      href: "/en/sectors",
+      eyebrow: "Sectors",
+      title: "Browse by your sector",
+      text: "Restaurants, clinics, e-commerce, operations, log management and membership: the typical problem and the modules built.",
+    },
+    {
+      href: "/en/systems",
+      eyebrow: "Systems",
+      title: "Browse by system type",
+      text: "Admin panel, e-commerce, dashboards, automation, corporate site and operations system — what each does and how it's built.",
+    },
+    {
+      href: "/en/custom-system-vs-template",
+      eyebrow: "Decision guide",
+      title: "Ready-made site or custom system?",
+      text: "An honest comparison: when each makes sense, how they differ across six dimensions, and how to decide with three questions.",
+    },
+  ],
+} as const;
 
-export function ExploreHubs() {
+export function ExploreHubs({ locale = "tr" }: { locale?: Locale }) {
   return (
     <section className="py-16 md:py-24">
       <Container>
         <div className="grid gap-6 md:grid-cols-3">
-          {HUBS.map((hub, i) => (
+          {HUBS[locale].map((hub, i) => (
             <Reveal key={hub.href} delay={i * 0.06} className="h-full">
               <SpotlightCard
                 href={hub.href}

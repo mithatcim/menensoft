@@ -6,10 +6,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { footerNav } from "@/content/navigation";
+import { footerNav, type NavItem } from "@/content/navigation";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
-export function MobileNav() {
+export function MobileNav({
+  items = footerNav,
+  locale = "tr",
+}: {
+  items?: NavItem[];
+  locale?: Locale;
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
@@ -29,7 +36,15 @@ export function MobileNav() {
         type="button"
         aria-expanded={open}
         aria-controls="mobile-nav"
-        aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
+        aria-label={
+          open
+            ? locale === "en"
+              ? "Close menu"
+              : "Menüyü kapat"
+            : locale === "en"
+              ? "Open menu"
+              : "Menüyü aç"
+        }
         onClick={() => setOpen((v) => !v)}
         className="-mr-2 inline-flex size-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
       >
@@ -52,7 +67,7 @@ export function MobileNav() {
             <motion.nav
               key="panel"
               id="mobile-nav"
-              aria-label="Mobil menü"
+              aria-label={locale === "en" ? "Mobile menu" : "Mobil menü"}
               initial={reduceMotion ? false : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
@@ -60,7 +75,7 @@ export function MobileNav() {
               className="absolute inset-x-0 top-16 z-50 border-b border-border bg-background shadow-[0_24px_48px_-16px_rgba(0,0,0,0.7)]"
             >
               <ul className="divide-y divide-border/60 px-6 py-2">
-                {footerNav.map((item) => {
+                {items.map((item) => {
                   const active =
                     pathname === item.href ||
                     pathname.startsWith(`${item.href}/`);

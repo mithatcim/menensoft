@@ -4,10 +4,38 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
+import { siteEn } from "@/content/en/site";
 import { site } from "@/content/site";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
-export function ContactCTA() {
+const COPY = {
+  tr: {
+    availability: site.availability,
+    title: "Kurulacak bir sisteminiz mi var?",
+    text: "İhtiyacınızı yazın; kapsam ve yaklaşım konusunda net, dürüst bir dönüş alın.",
+    primary: "Teklif al",
+    primaryHref: "/teklif-al",
+    secondary: "E-posta gönder",
+    footerPre: "ya da",
+    footerLink: "iletişim bilgilerini görün",
+    footerHref: "/iletisim",
+  },
+  en: {
+    availability: siteEn.availability,
+    title: "Have a system that needs building?",
+    text: "Tell us what you need; you'll get a clear, honest read on scope and approach.",
+    primary: "Start a project",
+    primaryHref: "/en/start-project",
+    secondary: "Send an email",
+    footerPre: "or",
+    footerLink: "see the contact details",
+    footerHref: "/en/contact",
+  },
+} as const;
+
+export function ContactCTA({ locale = "tr" }: { locale?: Locale }) {
+  const copy = COPY[locale];
   return (
     <section className="pt-4 pb-20 md:pt-6 md:pb-28">
       <Container>
@@ -21,24 +49,23 @@ export function ContactCTA() {
             <div className="relative">
               <p className="inline-flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="size-1.5 rounded-full bg-accent" />
-                {site.availability}
+                {copy.availability}
               </p>
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance md:text-5xl">
-                Kurulacak bir sisteminiz mi var?
+                {copy.title}
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                İhtiyacınızı yazın; kapsam ve yaklaşım konusunda net, dürüst
-                bir dönüş alın.
+                {copy.text}
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <Link
-                  href="/teklif-al"
+                  href={copy.primaryHref}
                   className={cn(
                     buttonVariants({ variant: "cta" }),
                     "h-12 px-7 text-base",
                   )}
                 >
-                  Teklif al
+                  {copy.primary}
                   <ArrowRight className="size-4" />
                 </Link>
                 <a
@@ -49,16 +76,16 @@ export function ContactCTA() {
                   )}
                 >
                   <Mail className="size-4" />
-                  E-posta gönder
+                  {copy.secondary}
                 </a>
               </div>
               <p className="mt-5 text-sm text-muted-foreground">
-                ya da{" "}
+                {copy.footerPre}{" "}
                 <Link
-                  href="/iletisim"
+                  href={copy.footerHref}
                   className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
                 >
-                  iletişim bilgilerini görün
+                  {copy.footerLink}
                 </Link>
               </p>
             </div>

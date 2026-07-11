@@ -1,6 +1,24 @@
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { type Project } from "@/content/projects";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
+
+const DOSSIER_COPY = {
+  tr: {
+    dossier: "Sistem dosyası",
+    compact: "kompakt dosya",
+    explored: "Neye odaklandı",
+    constraints: "Kısıtlar",
+    lower: (s: string) => s.toLocaleLowerCase("tr-TR"),
+  },
+  en: {
+    dossier: "System dossier",
+    compact: "compact dossier",
+    explored: "What it focused on",
+    constraints: "Constraints",
+    lower: (s: string) => s.toLowerCase(),
+  },
+} as const;
 
 /**
  * System Dossier pieces (Phase 8C). These render the owner-approved dossier
@@ -15,9 +33,16 @@ export function isCompactDossier(project: Project) {
   return project.tier === "internal";
 }
 
-export function DossierSummary({ project }: { project: Project }) {
+export function DossierSummary({
+  project,
+  locale = "tr",
+}: {
+  project: Project;
+  locale?: Locale;
+}) {
   if (!project.dossierSummary) return null;
   const compact = isCompactDossier(project);
+  const copy = DOSSIER_COPY[locale];
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5">
@@ -26,15 +51,15 @@ export function DossierSummary({ project }: { project: Project }) {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
             <span aria-hidden className="size-1.5 bg-accent/90" />
-            Sistem dosyası
+            {copy.dossier}
           </p>
           {compact && (
             <p className="rounded-md border border-border/60 bg-background/50 px-2 py-0.5 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-              kompakt dosya
+              {copy.compact}
             </p>
           )}
           <p className="ml-auto hidden font-mono text-xs text-muted-foreground/60 sm:block">
-            {project.statusLabel.toLocaleLowerCase("tr-TR")}
+            {copy.lower(project.statusLabel)}
           </p>
         </div>
         <p
@@ -52,14 +77,21 @@ export function DossierSummary({ project }: { project: Project }) {
   );
 }
 
-export function DossierConstraints({ project }: { project: Project }) {
+export function DossierConstraints({
+  project,
+  locale = "tr",
+}: {
+  project: Project;
+  locale?: Locale;
+}) {
   if (!project.constraints || project.constraints.length === 0) return null;
   const compact = isCompactDossier(project);
+  const copy = DOSSIER_COPY[locale];
 
   return (
     <div className="mt-5 rounded-xl border border-border/60 bg-background/40 p-4">
       <p className="font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-        {compact ? "Neye odaklandı" : "Kısıtlar"}
+        {compact ? copy.explored : copy.constraints}
       </p>
       <ul className="mt-3 space-y-2">
         {project.constraints.map((c) => (

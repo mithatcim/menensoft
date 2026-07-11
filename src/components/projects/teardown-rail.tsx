@@ -19,7 +19,13 @@ export interface TeardownStage {
  * passive scroll listener — no pinned scenes, no scroll hijacking. Under
  * prefers-reduced-motion the rail renders fully lit and static.
  */
-export function TeardownRail({ stages }: { stages: TeardownStage[] }) {
+export function TeardownRail({
+  stages,
+  ariaLabel = "İnceleme aşamaları",
+}: {
+  stages: TeardownStage[];
+  ariaLabel?: string;
+}) {
   const reduceMotion = useReducedMotion();
   const [scrollActive, setScrollActive] = useState(0);
   const progress = useSpring(0, { stiffness: 90, damping: 28, mass: 0.4 });
@@ -74,7 +80,7 @@ export function TeardownRail({ stages }: { stages: TeardownStage[] }) {
   }, [reduceMotion, stages, progress]);
 
   return (
-    <nav aria-label="İnceleme aşamaları" className="relative">
+    <nav aria-label={ariaLabel} className="relative">
       <div
         aria-hidden
         className="absolute top-1 bottom-1 left-[5px] w-px bg-border"

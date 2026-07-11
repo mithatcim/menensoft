@@ -13,6 +13,7 @@ import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame"
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
 import { projectToFitType } from "@/content/fit";
+import { type Locale } from "@/lib/locale";
 import { projectImage, type Project } from "@/content/projects";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,7 @@ interface Tier {
   match: (p: Project) => boolean;
 }
 
-const TIERS: Tier[] = [
+const TIERS_TR: Tier[] = [
   {
     id: "flagship",
     label: "Amiral gemisi — ürün altyapısı",
@@ -56,6 +57,62 @@ const TIERS: Tier[] = [
   },
 ];
 
+const TIERS_EN: Tier[] = [
+  {
+    id: "flagship",
+    label: "Flagship — product infrastructure",
+    quiet: false,
+    match: (p) => p.slug === "ecommerce-cms",
+  },
+  {
+    id: "delivered",
+    label: "Completed systems",
+    quiet: false,
+    match: (p) => p.tier === "delivered" && p.slug !== "ecommerce-cms",
+  },
+  {
+    id: "internal",
+    label: "Internal infrastructure & earlier work",
+    quiet: true,
+    match: (p) => p.tier === "internal",
+  },
+];
+
+const DECK_COPY = {
+  tr: {
+    locale: "tr" as const,
+    slotLabel: "Arayüz görseli için alan ayrıldı",
+    scope: "Güncel kapsam",
+    open: "Proje detayını aç",
+    similar: "Benzer sistem istiyorum",
+    telemetry: (b: number, s: number) => `${b} modül · ${s} teknoloji`,
+    select: "seç",
+    selected: "seçili",
+    selectAria: (n: string) => `Projeyi seç: ${n}`,
+    openAria: (n: string) => `${n} proje detayını aç`,
+    previewAria: "Seçili proje önizlemesi",
+    projectBase: "/projeler",
+    quoteBase: "/teklif-al",
+  },
+  en: {
+    locale: "en" as const,
+    slotLabel: "Interface capture reserved",
+    scope: "Current scope",
+    open: "Open project details",
+    similar: "I want a similar system",
+    telemetry: (b: number, s: number) => `${b} modules · ${s} stack`,
+    select: "select",
+    selected: "selected",
+    selectAria: (n: string) => `Select project: ${n}`,
+    openAria: (n: string) => `Open ${n} project details`,
+    previewAria: "Selected project preview",
+    projectBase: "/en/projects",
+    quoteBase: "/en/start-project",
+  },
+} as const;
+
+type DeckCopy = (typeof DECK_COPY)[Locale];
+
 function StatusBadge({ project }: { project: Project }) {
   return (
     <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
@@ -68,7 +125,7 @@ function StatusBadge({ project }: { project: Project }) {
   );
 }
 
-function PreviewBody({ project }: { project: Project }) {
+function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
   const quiet = project.tier === "internal";
 
   return (
@@ -88,6 +145,7 @@ function PreviewBody({ project }: { project: Project }) {
             flow={project.flow}
             modules={project.built}
             quiet={quiet}
+            locale={copy.locale}
           />
         )}
         <div>
@@ -95,12 +153,12 @@ function PreviewBody({ project }: { project: Project }) {
             title={`/${project.slug}`}
             image={projectImage(project)}
           >
-            <ScreenshotSlot label="Arayüz görseli için alan ayrıldı" />
+            <ScreenshotSlot label={copy.slotLabel} />
           </BrowserFrame>
         </div>
       </div>
 
-      <CapabilityMatrix slug={project.slug} quiet={quiet} className="mt-5" />
+      <CapabilityMatrix slug={project.slug} quiet={quiet} className="mt-5" locale={copy.locale} />
 
       <div className="mt-5 flex flex-wrap gap-2 border-t border-border/60 pt-4">
         {project.stack.map((tech) => (
@@ -111,7 +169,7 @@ function PreviewBody({ project }: { project: Project }) {
       {project.statusNote && (
         <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-3.5">
           <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-            Güncel kapsam
+            {copy.scope}
           </p>
           <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
             {project.statusNote}
@@ -122,27 +180,27 @@ function PreviewBody({ project }: { project: Project }) {
       <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
         <span className="flex flex-wrap items-center gap-3">
           <Link
-            href={`/projeler/${project.slug}`}
+            href={`${copy.projectBase}/${project.slug}`}
             className={cn(buttonVariants({ variant: "outline" }), "h-10 px-5")}
           >
-            Proje detayını aç
+            {copy.open}
             <ArrowUpRight className="size-4" />
           </Link>
           <Link
             href={
               projectToFitType[project.slug]
-                ? `/teklif-al?tur=${projectToFitType[project.slug]}`
-                : "/teklif-al"
+                ? `${copy.quoteBase}?tur=${projectToFitType[project.slug]}`
+                : copy.quoteBase
             }
             className="group/similar inline-flex items-center gap-1.5 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
           >
-            Benzer sistem istiyorum
+            {copy.similar}
             <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover/similar:-translate-y-0.5 group-hover/similar:translate-x-0.5" />
           </Link>
         </span>
         {/* dürüst telemetri: yalnızca gerçek içerikten türetilen sayılar */}
         <p className="font-mono text-xs text-muted-foreground/70">
-          {project.built.length} modül · {project.stack.length} teknoloji
+          {copy.telemetry(project.built.length, project.stack.length)}
         </p>
       </div>
     </div>
@@ -150,12 +208,12 @@ function PreviewBody({ project }: { project: Project }) {
 }
 
 /** Desktop inspection panel — crossfades between selected projects. */
-function PreviewPanel({ project }: { project: Project }) {
+function PreviewPanel({ project, copy }: { project: Project; copy: DeckCopy }) {
   const reduceMotion = useReducedMotion();
   return (
     <div
       role="region"
-      aria-label="Seçili proje önizlemesi"
+      aria-label={copy.previewAria}
       className="overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm"
     >
       <div className="flex items-center gap-3 border-b border-border bg-background/40 px-4 py-2.5">
@@ -180,7 +238,7 @@ function PreviewPanel({ project }: { project: Project }) {
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
           transition={{ duration: reduceMotion ? 0 : 0.28, ease: EASE_OUT }}
         >
-          <PreviewBody project={project} />
+          <PreviewBody project={project} copy={copy} />
         </motion.div>
       </AnimatePresence>
     </div>
@@ -194,6 +252,7 @@ function DeckCard({
   flagship,
   selected,
   onSelect,
+  copy,
 }: {
   project: Project;
   index: number;
@@ -201,6 +260,7 @@ function DeckCard({
   flagship: boolean;
   selected: boolean;
   onSelect: () => void;
+  copy: DeckCopy;
 }) {
   const reduceMotion = useReducedMotion();
   return (
@@ -227,7 +287,7 @@ function DeckCard({
         type="button"
         onClick={onSelect}
         aria-pressed={selected}
-        aria-label={`Projeyi seç: ${project.name}`}
+        aria-label={copy.selectAria(project.name)}
         className="absolute inset-0 z-10 cursor-pointer rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
       <span
@@ -249,11 +309,11 @@ function DeckCard({
                 selected ? "text-accent" : "text-muted-foreground/50",
               )}
             >
-              {selected ? "seçili" : "seç"}
+              {selected ? copy.selected : copy.select}
             </span>
             <Link
-              href={`/projeler/${project.slug}`}
-              aria-label={`${project.name} proje detayını aç`}
+              href={`${copy.projectBase}/${project.slug}`}
+              aria-label={copy.openAria(project.name)}
               className="pointer-events-auto -m-1 p-1 text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowUpRight className="size-4" />
@@ -282,7 +342,15 @@ function DeckCard({
   );
 }
 
-export function ProjectCommandDeck({ projects }: { projects: Project[] }) {
+export function ProjectCommandDeck({
+  projects,
+  locale = "tr",
+}: {
+  projects: Project[];
+  locale?: Locale;
+}) {
+  const copy = DECK_COPY[locale];
+  const TIERS = locale === "en" ? TIERS_EN : TIERS_TR;
   const [selectedSlug, setSelectedSlug] = useState(projects[0]?.slug);
   const reduceMotion = useReducedMotion();
   const selected =
@@ -329,6 +397,7 @@ export function ProjectCommandDeck({ projects }: { projects: Project[] }) {
                         flagship={tier.id === "flagship"}
                         selected={isSelected}
                         onSelect={() => setSelectedSlug(project.slug)}
+                        copy={copy}
                       />
                       {/* mobile inline preview under the selected card */}
                       <div className="lg:hidden">
@@ -354,7 +423,7 @@ export function ProjectCommandDeck({ projects }: { projects: Project[] }) {
                               className="overflow-hidden"
                             >
                               <div className="mt-3 rounded-xl border border-accent/25 bg-card/60 ring-1 ring-white/5">
-                                <PreviewBody project={project} />
+                                <PreviewBody project={project} copy={copy} />
                               </div>
                             </motion.div>
                           )}
@@ -371,7 +440,7 @@ export function ProjectCommandDeck({ projects }: { projects: Project[] }) {
 
       {/* desktop inspection panel */}
       <div className="sticky top-24 hidden lg:block">
-        <PreviewPanel project={selected} />
+        <PreviewPanel project={selected} copy={copy} />
       </div>
     </div>
   );

@@ -26,6 +26,58 @@ interface Layer {
   chips: string[];
 }
 
+const LAYERS_EN: Layer[] = [
+  {
+    id: "input",
+    tag: "REQ",
+    title: "Input / request",
+    line: "Where the workflow enters the system: forms, orders, requests, content.",
+    chips: ["forms", "orders", "content"],
+  },
+  {
+    id: "data",
+    tag: "DATA",
+    title: "Data model",
+    line: "Schema and relations designed around how the business really works.",
+    chips: ["schema", "relations", "SQL"],
+  },
+  {
+    id: "logic",
+    tag: "API",
+    title: "Backend logic",
+    line: "APIs, authentication and rules that keep data consistent.",
+    chips: ["APIs", "auth", "validation"],
+  },
+  {
+    id: "admin",
+    tag: "ADMIN",
+    title: "Admin & dashboards",
+    line: "The control room: screens for the people who run the day.",
+    chips: ["admin screens", "roles", "tables"],
+  },
+  {
+    id: "auto",
+    tag: "AUTO",
+    title: "Automation",
+    line: "Routing and repetitive work taken out of human hands.",
+    chips: ["routing", "jobs", "integrations"],
+  },
+  {
+    id: "ui",
+    tag: "UI",
+    title: "Interface",
+    line: "The public surface: storefronts and the screens customers touch.",
+    chips: ["storefront", "screens", "states"],
+  },
+  {
+    id: "ship",
+    tag: "SHIP",
+    title: "Handoff",
+    line: "Documentation and a clean handover: a system you can run.",
+    chips: ["docs", "handover", "ownership"],
+  },
+];
+
 const LAYERS: Layer[] = [
   {
     id: "input",
@@ -98,9 +150,13 @@ const planeVariants: Variants = {
 function LayerStack({
   selected,
   onSelect,
+  layers,
+  ariaHighlight,
 }: {
   selected: number;
   onSelect: (i: number) => void;
+  layers: Layer[];
+  ariaHighlight: string;
 }) {
   const reduceMotion = useReducedMotion();
   return (
@@ -110,8 +166,8 @@ function LayerStack({
         className="absolute inset-0 bg-[radial-gradient(ellipse_55%_55%_at_50%_55%,rgba(139,140,248,0.07),transparent)]"
       />
       <div className="absolute top-[56%] left-1/2 [transform:rotateX(55deg)_rotateZ(-45deg)] [transform-style:preserve-3d]">
-        {LAYERS.map((layer, i) => {
-          const base = (i - (LAYERS.length - 1) / 2) * Z_GAP;
+        {layers.map((layer, i) => {
+          const base = (i - (layers.length - 1) / 2) * Z_GAP;
           const isSel = selected === i;
           return (
             <motion.button
@@ -119,7 +175,7 @@ function LayerStack({
               type="button"
               onClick={() => onSelect(i)}
               aria-pressed={isSel}
-              aria-label={`Katmanı vurgula: ${layer.title}`}
+              aria-label={`${ariaHighlight}: ${layer.title}`}
               custom={{ i, base, selected: isSel }}
               variants={planeVariants}
               initial={reduceMotion ? false : "hidden"}
@@ -176,28 +232,47 @@ function LayerDetail({ layer }: { layer: Layer }) {
   );
 }
 
-export function SystemLayers() {
+const LAYER_HEADINGS = {
+  tr: {
+    eyebrow: "Sistem katmanları",
+    title: "Her katman, tek sahip.",
+    description:
+      "Eksiksiz bir web sistemi bir sayfa değil, bir yığındır. Her projede tasarlanıp kurulan katmanlar bunlar.",
+    ariaHighlight: "Katmanı vurgula",
+  },
+  en: {
+    eyebrow: "System layers",
+    title: "Every layer, one owner.",
+    description:
+      "A complete web system is a stack, not a page. These are the layers designed and built in every project.",
+    ariaHighlight: "Highlight layer",
+  },
+} as const;
+
+export function SystemLayers({ locale = "tr" }: { locale?: "tr" | "en" }) {
   const [selected, setSelected] = useState(1); // data model — the foundation
   const reduceMotion = useReducedMotion();
-  const layer = LAYERS[selected];
+  const layers = locale === "en" ? LAYERS_EN : LAYERS;
+  const heading = LAYER_HEADINGS[locale];
+  const layer = layers[selected];
 
   return (
     <section className="relative py-16 md:py-24">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Sistem katmanları"
-            title="Her katman, tek sahip."
-            description="Eksiksiz bir web sistemi bir sayfa değil, bir yığındır. Her projede tasarlanıp kurulan katmanlar bunlar."
+            eyebrow={heading.eyebrow}
+            title={heading.title}
+            description={heading.description}
           />
         </Reveal>
 
         {/* desktop: iso stack + selector list + detail */}
         <div className="mt-12 hidden items-center gap-12 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,380px)]">
-          <LayerStack selected={selected} onSelect={setSelected} />
+          <LayerStack selected={selected} onSelect={setSelected} layers={layers} ariaHighlight={heading.ariaHighlight} />
           <div>
             <ul className="space-y-1.5">
-              {LAYERS.map((l, i) => (
+              {layers.map((l, i) => (
                 <li key={l.id}>
                   <button
                     type="button"
@@ -255,7 +330,7 @@ export function SystemLayers() {
 
         {/* mobile: cascading flat stack with inline accordion */}
         <div className="mt-10 space-y-2 md:hidden">
-          {LAYERS.map((l, i) => {
+          {layers.map((l, i) => {
             const isSel = selected === i;
             return (
               <Reveal key={l.id} delay={i * 0.04}>

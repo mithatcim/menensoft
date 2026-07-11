@@ -1,10 +1,14 @@
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
-import { footerNav } from "@/content/navigation";
+import { siteEn } from "@/content/en/site";
+import { footerNav, footerNavEn } from "@/content/navigation";
 import { site } from "@/content/site";
+import { type Locale } from "@/lib/locale";
 
-export function Footer() {
+export function Footer({ locale = "tr" }: { locale?: Locale }) {
+  const en = locale === "en";
+  const items = en ? footerNavEn : footerNav;
   return (
     <footer className="border-t border-border">
       <Container className="py-12 md:py-16">
@@ -12,15 +16,16 @@ export function Footer() {
           <div>
             <p className="text-sm font-semibold tracking-tight">{site.name}</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {site.positioning}
+              {en ? siteEn.positioning : site.positioning}
             </p>
             <p className="mt-1 text-xs text-muted-foreground/70">
-              Kurucu &amp; geliştirici: {site.founder}
+              {en ? "Founder & developer" : "Kurucu & geliştirici"}:{" "}
+              {site.founder}
             </p>
           </div>
-          <nav aria-label="Alt menü">
+          <nav aria-label={en ? "Footer menu" : "Alt menü"}>
             <ul className="flex flex-wrap gap-x-6 gap-y-2">
-              {footerNav.map((item) => (
+              {items.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

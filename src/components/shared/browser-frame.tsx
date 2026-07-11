@@ -74,8 +74,10 @@ function CornerBracket({ className }: { className?: string }) {
 
 export function ScreenshotSlot({
   label = "Ekran görüntüsü alanı ayrıldı — arayüz görseli eklenecek",
+  cornerLabel = "arayüz önizleme",
 }: {
   label?: string;
+  cornerLabel?: string;
 }) {
   return (
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-background/30 p-6">
@@ -95,7 +97,7 @@ export function ScreenshotSlot({
       <CornerBracket className="right-3 bottom-3 border-r border-b" />
 
       <span className="absolute top-3 left-8 font-mono text-xs tracking-[0.2em] text-muted-foreground/70 uppercase">
-        arayüz önizleme
+        {cornerLabel}
       </span>
       <span
         aria-hidden

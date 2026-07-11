@@ -2,7 +2,13 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
+import { type Locale } from "@/lib/locale";
 import { EASE_OUT } from "@/lib/motion";
+
+const MAP_COPY = {
+  tr: { map: "Sistem haritası", modules: "Modüller", matrix: "Yetkinlik matrisi" },
+  en: { map: "System map", modules: "Modules", matrix: "Capability matrix" },
+} as const;
 import { cn } from "@/lib/utils";
 
 /**
@@ -30,11 +36,13 @@ export function SystemMap({
   modules,
   quiet,
   className,
+  locale = "tr",
 }: {
   flow: string[];
   modules: string[];
   quiet?: boolean;
   className?: string;
+  locale?: Locale;
 }) {
   const reduceMotion = useReducedMotion();
   const shownModules = modules.slice(0, 4);
@@ -49,7 +57,7 @@ export function SystemMap({
       <div aria-hidden className="scanlines absolute inset-0 opacity-40" />
       <p className="relative flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Sistem haritası
+        {MAP_COPY[locale].map}
       </p>
 
       {/* vertical flow chain with drawn connectors */}
@@ -95,7 +103,7 @@ export function SystemMap({
       {shownModules.length > 0 && (
         <div className="relative mt-4 border-t border-border/60 pt-3">
           <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-            Modüller
+            {MAP_COPY[locale].modules}
           </p>
           <ul className="mt-2 space-y-1.5">
             {shownModules.map((m, i) => (
@@ -119,6 +127,18 @@ export function SystemMap({
 }
 
 /* ---------------------------- capability matrix --------------------------- */
+
+const CATEGORIES_EN = [
+  { id: "interface", label: "Interface" },
+  { id: "admin", label: "Admin / dashboard" },
+  { id: "data", label: "Data model" },
+  { id: "automation", label: "Automation" },
+  { id: "operations", label: "Operations" },
+  { id: "security", label: "Security / logs" },
+  { id: "content", label: "Content management" },
+  { id: "ordering", label: "Orders / workflow" },
+  { id: "membership", label: "Membership / publishing" },
+] as const;
 
 const CATEGORIES = [
   { id: "interface", label: "Arayüz" },
@@ -166,11 +186,14 @@ export function CapabilityMatrix({
   slug,
   quiet,
   className,
+  locale = "tr",
 }: {
   slug: string;
   quiet?: boolean;
   className?: string;
+  locale?: Locale;
 }) {
+  const cats = locale === "en" ? CATEGORIES_EN : CATEGORIES;
   const reduceMotion = useReducedMotion();
   const lit = new Set(LIT[slug] ?? []);
 
@@ -178,13 +201,13 @@ export function CapabilityMatrix({
     <div className={className}>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Yetkinlik matrisi
+        {MAP_COPY[locale].matrix}
         <span className="text-muted-foreground/50">
-          {lit.size} / {CATEGORIES.length}
+          {lit.size} / {cats.length}
         </span>
       </p>
       <div className="mt-3 grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-        {CATEGORIES.map((cat, i) => {
+        {cats.map((cat, i) => {
           const on = lit.has(cat.id);
           return (
             <motion.div

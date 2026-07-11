@@ -3,7 +3,9 @@ import Link from "next/link";
 
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
+import { getProjectEn } from "@/content/en/projects";
 import { getProject } from "@/content/projects";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
 /**
@@ -135,13 +137,17 @@ export function ModuleGrid({
 /** Gerçek projelere dürüst etiketli bağlantılar. */
 export function RelatedProjects({
   items,
+  locale = "tr",
 }: {
   items: { slug: string; note: string }[];
+  locale?: Locale;
 }) {
+  const lookup = locale === "en" ? getProjectEn : getProject;
+  const base = locale === "en" ? "/en/projects" : "/projeler";
   const resolved = items
-    .map((item) => ({ project: getProject(item.slug), note: item.note }))
+    .map((item) => ({ project: lookup(item.slug), note: item.note }))
     .filter(
-      (x): x is { project: NonNullable<ReturnType<typeof getProject>>; note: string } =>
+      (x): x is { project: NonNullable<ReturnType<typeof lookup>>; note: string } =>
         Boolean(x.project),
     );
   if (resolved.length === 0) return null;
@@ -150,7 +156,7 @@ export function RelatedProjects({
       {resolved.map(({ project, note }) => (
         <li key={project.slug}>
           <Link
-            href={`/projeler/${project.slug}`}
+            href={`${base}/${project.slug}`}
             className="group block rounded-lg border border-border bg-background/50 px-4 py-3 transition-colors hover:border-accent/40 hover:bg-card"
           >
             <span className="flex items-center justify-between gap-3">
@@ -198,11 +204,15 @@ export function ChipLinks({
 export function CtaBand({
   title,
   text,
+  primaryLabel = "Teklif al",
+  primaryHref = "/teklif-al",
   secondaryLabel = "Süreci gör",
   secondaryHref = "/surec",
 }: {
   title: string;
   text: string;
+  primaryLabel?: string;
+  primaryHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
 }) {
@@ -221,10 +231,10 @@ export function CtaBand({
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link
-            href="/teklif-al"
+            href={primaryHref}
             className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
           >
-            Teklif al
+            {primaryLabel}
             <ArrowRight className="size-4" />
           </Link>
           <Link

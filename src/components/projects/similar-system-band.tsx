@@ -4,25 +4,64 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
+import { sectorsEn } from "@/content/en/sectors";
+import { systemsEn } from "@/content/en/systems";
 import { projectToFitType } from "@/content/fit";
 import { type Project } from "@/content/projects";
 import { sectors } from "@/content/sectors";
 import { systems } from "@/content/systems";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
+
+const BAND_COPY = {
+  tr: {
+    eyebrow: "Teslim edilen yapı — sizin için de kurulabilir",
+    title: "Benzer bir sisteme mi ihtiyacınız var?",
+    text: "Bu sayfadaki modüller ve akış, gerçek bir ihtiyaç için kuruldu. Sizin işinizin girdisi farklı olabilir; teslim mantığı aynıdır: net kapsam, yönetilebilir panel, devredilebilir yapı.",
+    primary: "Benzer sistem istiyorum",
+    secondary: "Süreci gör",
+    secondaryHref: "/surec",
+    quoteBase: "/teklif-al",
+    systemBase: "/sistemler",
+    sectorBase: "/sektorler",
+  },
+  en: {
+    eyebrow: "Delivered structure — buildable for you too",
+    title: "Need a similar system?",
+    text: "The modules and flow on this page were built for a real need. Your input may differ; the delivery logic stays the same: clear scope, a manageable panel, a transferable structure.",
+    primary: "I want a similar system",
+    secondary: "See the process",
+    secondaryHref: "/en/process",
+    quoteBase: "/en/start-project",
+    systemBase: "/en/systems",
+    sectorBase: "/en/sectors",
+  },
+} as const;
 
 /**
  * Proje detayının satış köprüsü: "bu yapı sizin işiniz için de kurulabilir".
  * İlgili sistem/sektör sayfaları içerikten ters aramayla bulunur; birincil
  * CTA sihirbaza önseçimle gider. Uydurma kanıt yok — bağlantılar gerçek.
  */
-export function SimilarSystemBand({ project }: { project: Project }) {
+export function SimilarSystemBand({
+  project,
+  locale = "tr",
+}: {
+  project: Project;
+  locale?: Locale;
+}) {
+  const copy = BAND_COPY[locale];
   const fitType = projectToFitType[project.slug];
-  const quoteHref = fitType ? `/teklif-al?tur=${fitType}` : "/teklif-al";
+  const quoteHref = fitType
+    ? `${copy.quoteBase}?tur=${fitType}`
+    : copy.quoteBase;
 
-  const relatedSystems = systems.filter((sys) =>
+  const systemPool = locale === "en" ? systemsEn : systems;
+  const sectorPool = locale === "en" ? sectorsEn : sectors;
+  const relatedSystems = systemPool.filter((sys) =>
     sys.relatedProjects.some((rp) => rp.slug === project.slug),
   );
-  const relatedSectors = sectors.filter((sec) =>
+  const relatedSectors = sectorPool.filter((sec) =>
     sec.relatedProjects.some((rp) => rp.slug === project.slug),
   );
 
@@ -38,32 +77,30 @@ export function SimilarSystemBand({ project }: { project: Project }) {
             <div className="relative">
               <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="size-1.5 bg-accent/90" />
-                Teslim edilen yapı — sizin için de kurulabilir
+                {copy.eyebrow}
               </p>
               <h2 className="mt-3 text-xl font-semibold tracking-tight text-balance md:text-2xl">
-                Benzer bir sisteme mi ihtiyacınız var?
+                {copy.title}
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-                Bu sayfadaki modüller ve akış, gerçek bir ihtiyaç için kuruldu.
-                Sizin işinizin girdisi farklı olabilir; teslim mantığı aynıdır:
-                net kapsam, yönetilebilir panel, devredilebilir yapı.
+                {copy.text}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Link
                   href={quoteHref}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
                 >
-                  Benzer sistem istiyorum
+                  {copy.primary}
                   <ArrowRight className="size-4" />
                 </Link>
                 <Link
-                  href="/surec"
+                  href={copy.secondaryHref}
                   className={cn(
                     buttonVariants({ variant: "outline" }),
                     "h-11 px-6",
                   )}
                 >
-                  Süreci gör
+                  {copy.secondary}
                 </Link>
               </div>
               {(relatedSystems.length > 0 || relatedSectors.length > 0) && (
@@ -71,7 +108,7 @@ export function SimilarSystemBand({ project }: { project: Project }) {
                   {relatedSystems.map((sys) => (
                     <Link
                       key={sys.slug}
-                      href={`/sistemler/${sys.slug}`}
+                      href={`${copy.systemBase}/${sys.slug}`}
                       className="group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {sys.title}
@@ -81,7 +118,7 @@ export function SimilarSystemBand({ project }: { project: Project }) {
                   {relatedSectors.map((sec) => (
                     <Link
                       key={sec.slug}
-                      href={`/sektorler/${sec.slug}`}
+                      href={`${copy.sectorBase}/${sec.slug}`}
                       className="group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {sec.title}

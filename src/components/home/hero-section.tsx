@@ -6,10 +6,46 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { buttonVariants } from "@/components/ui/button";
+import { projectsEn } from "@/content/en/projects";
+import { siteEn } from "@/content/en/site";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
+import { type Locale } from "@/lib/locale";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+
+/** Kahraman bölümünün dil sözlüğü — TR varsayılan, EN /en sayfalarından gelir. */
+const HERO_COPY = {
+  tr: {
+    site,
+    projects,
+    primaryCta: "Proje görüşmesi başlat",
+    primaryHref: "/teklif-al",
+    secondaryCta: "Projeleri incele",
+    secondaryHref: "/projeler",
+    undecided: "Hangi sistemi seçeceğinizden emin değil misiniz?",
+    undecidedLink: "İki soruluk kısa akış size gösterir",
+    stackLabel: "Teknoloji yığını",
+    cardTitle: "~/projeler — sistem durumu",
+    cardFooter: (n: number) =>
+      `${n} sistem — uçtan uca tasarlandı ve geliştirildi`,
+    lower: (s: string) => s.toLocaleLowerCase("tr-TR"),
+  },
+  en: {
+    site: siteEn,
+    projects: projectsEn,
+    primaryCta: "Start a project conversation",
+    primaryHref: "/en/start-project",
+    secondaryCta: "View projects",
+    secondaryHref: "/en/projects",
+    undecided: "Not sure which system you need?",
+    undecidedLink: "A two-question flow will show you",
+    stackLabel: "Core stack",
+    cardTitle: "~/projects — system status",
+    cardFooter: (n: number) => `${n} systems — designed and built end to end`,
+    lower: (s: string) => s.toLowerCase(),
+  },
+} as const;
 
 function Entrance({
   delay,
@@ -62,7 +98,8 @@ function OrbitField() {
   );
 }
 
-function BuildStatusCard() {
+function BuildStatusCard({ locale }: { locale: Locale }) {
+  const copy = HERO_COPY[locale];
   return (
     <div className="relative">
       <div
@@ -81,7 +118,7 @@ function BuildStatusCard() {
             <span className="size-2.5 rounded-full border border-border bg-muted/60" />
           </span>
           <p className="flex-1 truncate font-mono text-xs text-muted-foreground">
-            ~/projeler — sistem durumu
+            {copy.cardTitle}
           </p>
           <span
             aria-hidden
@@ -89,7 +126,7 @@ function BuildStatusCard() {
           />
         </div>
         <ul className="relative divide-y divide-border/60">
-          {projects.map((project) => (
+          {copy.projects.map((project) => (
             <li
               key={project.slug}
               className="flex items-center justify-between gap-6 px-4 py-2.5 font-mono text-xs"
@@ -102,21 +139,22 @@ function BuildStatusCard() {
                   aria-hidden
                   className="size-1 rounded-full bg-accent/80"
                 />
-                {project.statusLabel.toLocaleLowerCase("tr-TR")}
+                {copy.lower(project.statusLabel)}
               </span>
             </li>
           ))}
         </ul>
         <p className="relative border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground">
-          {`${projects.length} sistem — uçtan uca tasarlandı ve geliştirildi`}
+          {copy.cardFooter(copy.projects.length)}
         </p>
       </div>
     </div>
   );
 }
 
-export function HeroSection() {
-  const headline = site.headline.replace(/\.$/, "");
+export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
+  const copy = HERO_COPY[locale];
+  const headline = copy.site.headline.replace(/\.$/, "");
 
   return (
     <section className="relative overflow-hidden border-b border-border/60">
@@ -131,7 +169,7 @@ export function HeroSection() {
                 aria-hidden
                 className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
               />
-              {site.availability}
+              {copy.site.availability}
             </p>
           </Entrance>
           <Entrance delay={0.06}>
@@ -144,45 +182,45 @@ export function HeroSection() {
           </Entrance>
           <Entrance delay={0.12}>
             <p className="mt-7 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground md:text-xl">
-              {site.subheadline}
+              {copy.site.subheadline}
             </p>
           </Entrance>
           <Entrance delay={0.18}>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
-                href="/teklif-al"
+                href={copy.primaryHref}
                 className={cn(
                   buttonVariants({ variant: "cta" }),
                   "h-12 px-7 text-base",
                 )}
               >
-                Proje görüşmesi başlat
+                {copy.primaryCta}
                 <ArrowRight className="size-4 transition-transform group-hover/button:translate-x-0.5" />
               </Link>
               <Link
-                href="/projeler"
+                href={copy.secondaryHref}
                 className={cn(
                   buttonVariants({ variant: "outline" }),
                   "h-12 px-7 text-base backdrop-blur",
                 )}
               >
-                Projeleri incele
+                {copy.secondaryCta}
               </Link>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
-              Hangi sistemi seçeceğinizden emin değil misiniz?{" "}
+              {copy.undecided}{" "}
               <Link
-                href="/teklif-al"
+                href={copy.primaryHref}
                 className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
               >
-                İki soruluk kısa akış size gösterir
+                {copy.undecidedLink}
               </Link>
               .
             </p>
           </Entrance>
           <Entrance delay={0.24}>
             <p className="mt-16 font-mono text-xs text-muted-foreground">
-              <span className="tracking-widest uppercase">Teknoloji yığını</span>
+              <span className="tracking-widest uppercase">{copy.stackLabel}</span>
               <span aria-hidden className="mx-2">
                 —
               </span>
@@ -193,7 +231,7 @@ export function HeroSection() {
         <div className="relative hidden lg:block">
           <OrbitField />
           <Entrance delay={0.3}>
-            <BuildStatusCard />
+            <BuildStatusCard locale={locale} />
           </Entrance>
         </div>
       </Container>

@@ -39,6 +39,49 @@ interface Stage {
   telemetry: string[];
 }
 
+/** Sahne sözlüğü — TR varsayılan; EN /en ana sayfasından locale ile gelir. */
+interface StoryCopy {
+  stages: Stage[];
+  eyebrow: string;
+  heading: string;
+  stageFooter: string;
+  inputWords: string[];
+  logicNodes: [string, string, string, string];
+  resultParts: [string, string, string];
+  lower: (s: string) => string;
+}
+
+const STAGES_EN: Stage[] = [
+  {
+    id: "01",
+    title: "Input",
+    alt: "The problem",
+    body: "A real workflow, still unstructured: requests, orders and content moving between hands, chats and spreadsheets.",
+    telemetry: ["capturing raw input", "mapping the workflow", "naming the problem"],
+  },
+  {
+    id: "02",
+    title: "Logic",
+    alt: "The architecture",
+    body: "The system takes shape: a data model, backend logic and clear boundaries between the parts.",
+    telemetry: ["designing the schema", "wiring backend logic", "drawing the boundaries"],
+  },
+  {
+    id: "03",
+    title: "Dashboard",
+    alt: "The product",
+    body: "Screens people actually run the day on: admin panels, dashboards and storefronts.",
+    telemetry: ["building the screens", "role-specific views", "state that stays consistent"],
+  },
+  {
+    id: "04",
+    title: "Result",
+    alt: "A complete system",
+    body: "One coherent system, owned end to end, from the database to the interface.",
+    telemetry: ["database to interface", "one owner, every layer", "built to be run"],
+  },
+];
+
 const STAGES: Stage[] = [
   {
     id: "01",
@@ -72,10 +115,33 @@ const STAGES: Stage[] = [
 
 /* Scene variants are shared with the services request scene via lib/motion. */
 
+const STORY_COPY: Record<"tr" | "en", StoryCopy> = {
+  tr: {
+    stages: STAGES,
+    eyebrow: "Bir sistem nasıl kurulur",
+    heading: "Ham girdiden çalışan ürüne.",
+    stageFooter: "sistem aşaması",
+    inputWords: ["talepler", "siparişler", "içerik", "kullanıcılar"],
+    logicNodes: ["Veri modeli", "API", "Auth", "Yönlendirme"],
+    resultParts: ["Veritabanı", "Backend", "Arayüz"],
+    lower: (s) => s.toLocaleLowerCase("tr-TR"),
+  },
+  en: {
+    stages: STAGES_EN,
+    eyebrow: "How a system comes together",
+    heading: "From raw input to a running product.",
+    stageFooter: "system stage",
+    inputWords: ["requests", "orders", "content", "users"],
+    logicNodes: ["Data model", "API", "Auth", "Routing"],
+    resultParts: ["Database", "Backend", "Interface"],
+    lower: (s) => s.toLowerCase(),
+  },
+};
+
 /* ----------------------------- stage visuals ---------------------------- */
 /* Abstract, decorative skeletons only — never real data or captures. */
 
-function InputVisual() {
+function InputVisual({ words }: { words: string[] }) {
   const scatter = [
     { l: "10%", t: "18%", w: "w-16" },
     { l: "34%", t: "62%", w: "w-20" },
@@ -85,7 +151,6 @@ function InputVisual() {
     { l: "66%", t: "80%", w: "w-14" },
     { l: "44%", t: "10%", w: "w-12" },
   ];
-  const words = ["talepler", "siparişler", "içerik", "kullanıcılar"];
   return (
     <div aria-hidden className="relative h-full w-full">
       {scatter.map((s, i) => (
@@ -114,12 +179,18 @@ function InputVisual() {
   );
 }
 
-function LogicVisual({ active }: { active: boolean }) {
+function LogicVisual({
+  active,
+  labels,
+}: {
+  active: boolean;
+  labels: [string, string, string, string];
+}) {
   const nodes = [
-    { x: 22, y: 84, label: "Veri modeli" },
-    { x: 150, y: 24, label: "API" },
-    { x: 150, y: 144, label: "Auth" },
-    { x: 292, y: 84, label: "Yönlendirme" },
+    { x: 22, y: 84, label: labels[0] },
+    { x: 150, y: 24, label: labels[1] },
+    { x: 150, y: 144, label: labels[2] },
+    { x: 292, y: 84, label: labels[3] },
   ];
   const links = [
     "M106 92 L150 40",
@@ -232,8 +303,13 @@ function DashboardVisual() {
   );
 }
 
-function ResultVisual({ active }: { active: boolean }) {
-  const parts = ["Veritabanı", "Backend", "Arayüz"];
+function ResultVisual({
+  active,
+  parts,
+}: {
+  active: boolean;
+  parts: [string, string, string];
+}) {
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
       <div className="flex w-full max-w-[430px] items-center gap-2">
@@ -274,16 +350,24 @@ function ResultVisual({ active }: { active: boolean }) {
   );
 }
 
-function StageVisual({ index, active }: { index: number; active: boolean }) {
+function StageVisual({
+  index,
+  active,
+  copy,
+}: {
+  index: number;
+  active: boolean;
+  copy: StoryCopy;
+}) {
   switch (index) {
     case 0:
-      return <InputVisual />;
+      return <InputVisual words={copy.inputWords} />;
     case 1:
-      return <LogicVisual active={active} />;
+      return <LogicVisual active={active} labels={copy.logicNodes} />;
     case 2:
       return <DashboardVisual />;
     default:
-      return <ResultVisual active={active} />;
+      return <ResultVisual active={active} parts={copy.resultParts} />;
   }
 }
 
@@ -331,15 +415,15 @@ function HandoffConnector() {
   );
 }
 
-function StoryHeading() {
+function StoryHeading({ copy }: { copy: StoryCopy }) {
   return (
     <div>
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
         <span aria-hidden className="size-1.5 bg-accent/90" />
-        Bir sistem nasıl kurulur
+        {copy.eyebrow}
       </p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-        Ham girdiden çalışan ürüne.
+        {copy.heading}
       </h2>
     </div>
   );
@@ -347,7 +431,8 @@ function StoryHeading() {
 
 /* --------------------------- pinned (desktop) --------------------------- */
 
-function PinnedStory() {
+function PinnedStory({ copy }: { copy: StoryCopy }) {
+  const STAGES = copy.stages;
   const outerRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState(0);
   const { scrollYProgress } = useScroll({
@@ -390,7 +475,7 @@ function PinnedStory() {
         />
         <Container className="relative w-full">
           <div className="flex items-end justify-between gap-6">
-            <StoryHeading />
+            <StoryHeading copy={copy} />
             <p className="shrink-0 font-mono text-sm text-muted-foreground">
               <span className="relative inline-block h-[1.25em] w-[2ch] overflow-hidden align-bottom">
                 <AnimatePresence initial={false} mode="popLayout">
@@ -485,11 +570,11 @@ function PinnedStory() {
                   initial={false}
                   animate={stateFor(i)}
                 >
-                  <StageVisual index={i} active={i === stage} />
+                  <StageVisual index={i} active={i === stage} copy={copy} />
                 </motion.div>
               ))}
               <p className="absolute bottom-3 left-5 font-mono text-xs tracking-[0.2em] text-muted-foreground/60 uppercase">
-                sistem aşaması — {STAGES[stage].title.toLocaleLowerCase("tr-TR")}
+                {copy.stageFooter} — {copy.lower(STAGES[stage].title)}
               </p>
               <span
                 aria-hidden
@@ -546,12 +631,13 @@ function PinnedStory() {
 
 /* -------------------- stacked (mobile / reduced motion) ------------------ */
 
-function StackedStory() {
+function StackedStory({ copy }: { copy: StoryCopy }) {
+  const STAGES = copy.stages;
   const reduceMotion = useReducedMotion();
   return (
     <Container className="py-16 md:py-24">
       <Reveal>
-        <StoryHeading />
+        <StoryHeading copy={copy} />
       </Reveal>
       <div className="mt-10 space-y-6">
         {STAGES.map((s, i) => (
@@ -574,7 +660,7 @@ function StackedStory() {
                 viewport={{ once: true, margin: "-60px" }}
               >
                 <div aria-hidden className="scanlines absolute inset-0 opacity-50" />
-                <StageVisual index={i} active />
+                <StageVisual index={i} active copy={copy} />
               </motion.div>
               <p className="px-5 py-4 text-sm leading-relaxed text-muted-foreground">
                 {s.body}
@@ -589,21 +675,22 @@ function StackedStory() {
 
 /* -------------------------------- export -------------------------------- */
 
-export function FlagshipStory() {
+export function FlagshipStory({ locale = "tr" }: { locale?: "tr" | "en" }) {
   const reduceMotion = useReducedMotion();
+  const copy = STORY_COPY[locale];
 
   return (
     <section className="relative border-y border-border/60">
       <HandoffConnector />
       {reduceMotion ? (
-        <StackedStory />
+        <StackedStory copy={copy} />
       ) : (
         <>
           <div className="hidden lg:block">
-            <PinnedStory />
+            <PinnedStory copy={copy} />
           </div>
           <div className="lg:hidden">
-            <StackedStory />
+            <StackedStory copy={copy} />
           </div>
         </>
       )}

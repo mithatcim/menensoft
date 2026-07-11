@@ -5,8 +5,40 @@ import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
+import { solutionsEn } from "@/content/en/solutions";
+import { getSystemEn } from "@/content/en/systems";
 import { solutions } from "@/content/solutions";
 import { getSystem } from "@/content/systems";
+import { type Locale } from "@/lib/locale";
+
+const PREVIEW_COPY = {
+  tr: {
+    eyebrow: "Çözümler",
+    title: "Sizin için ne kurabiliriz?",
+    description:
+      "Altı sistem alanı — her biri gerçek bir işletme problemine karşılık gelir. Alanınızı bulun, ne kurulduğunu görün, görüşmeyi başlatın.",
+    all: "Tüm çözümler",
+    allHref: "/cozumler",
+    who: "kime",
+    quote: "Teklif al",
+    quoteHref: "/teklif-al",
+    detail: "Sistem detayı",
+    systemBase: "/sistemler",
+  },
+  en: {
+    eyebrow: "Solutions",
+    title: "What can we build for you?",
+    description:
+      "Six system areas — each mapped to a real business problem. Find yours, see what gets built, start the conversation.",
+    all: "All solutions",
+    allHref: "/en/solutions",
+    who: "for",
+    quote: "Start a project",
+    quoteHref: "/en/start-project",
+    detail: "System details",
+    systemBase: "/en/systems",
+  },
+} as const;
 
 /**
  * "Sizin için ne kurabiliriz?" — ana sayfanın satış bölümü. Her kart bir
@@ -14,29 +46,32 @@ import { getSystem } from "@/content/systems";
  * işine yarar. İçerik solutions.ts + systems.ts'ten türetilir; uydurma
  * kanıt yok, her kart gerçek sistem sayfasına ve teklife bağlanır.
  */
-export function ServicesPreviewSection() {
+export function ServicesPreviewSection({ locale = "tr" }: { locale?: Locale }) {
+  const copy = PREVIEW_COPY[locale];
+  const pool = locale === "en" ? solutionsEn : solutions;
+  const lookup = locale === "en" ? getSystemEn : getSystem;
   return (
     <section className="py-16 md:py-24">
       <Container>
         <Reveal>
           <div className="flex items-end justify-between gap-6">
             <SectionHeading
-              eyebrow="Çözümler"
-              title="Sizin için ne kurabiliriz?"
-              description="Altı sistem alanı — her biri gerçek bir işletme problemine karşılık gelir. Alanınızı bulun, ne kurulduğunu görün, görüşmeyi başlatın."
+              eyebrow={copy.eyebrow}
+              title={copy.title}
+              description={copy.description}
             />
             <Link
-              href="/cozumler"
+              href={copy.allHref}
               className="hidden shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground md:inline-flex"
             >
-              Tüm çözümler
+              {copy.all}
               <ArrowRight className="size-4" />
             </Link>
           </div>
         </Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {solutions.map((solution, index) => {
-            const system = getSystem(solution.systemSlug);
+          {pool.map((solution, index) => {
+            const system = lookup(solution.systemSlug);
             const whoNeeds = system?.whoNeeds[0];
             return (
               <Reveal
@@ -68,24 +103,24 @@ export function ServicesPreviewSection() {
                   {whoNeeds && (
                     <p className="mt-3 flex gap-2.5 text-xs leading-relaxed text-muted-foreground">
                       <span className="shrink-0 font-mono tracking-widest text-muted-foreground/60 uppercase">
-                        kime
+                        {copy.who}
                       </span>
                       {whoNeeds}
                     </p>
                   )}
                   <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5 text-sm">
                     <Link
-                      href="/teklif-al"
+                      href={copy.quoteHref}
                       className="group/cta inline-flex items-center gap-1.5 font-medium text-foreground/90 transition-colors hover:text-foreground"
                     >
-                      Teklif al
+                      {copy.quote}
                       <ArrowRight className="size-3.5 text-accent transition-transform group-hover/cta:translate-x-0.5" />
                     </Link>
                     <Link
-                      href={`/sistemler/${solution.systemSlug}`}
+                      href={`${copy.systemBase}/${solution.systemSlug}`}
                       className="group/sys inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      Sistem detayı
+                      {copy.detail}
                       <ArrowUpRight className="size-3.5 transition-transform group-hover/sys:-translate-y-0.5 group-hover/sys:translate-x-0.5" />
                     </Link>
                   </div>
@@ -96,10 +131,10 @@ export function ServicesPreviewSection() {
         </div>
         <div className="mt-8 md:hidden">
           <Link
-            href="/cozumler"
+            href={copy.allHref}
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            Tüm çözümler
+            {copy.all}
             <ArrowRight className="size-4" />
           </Link>
         </div>

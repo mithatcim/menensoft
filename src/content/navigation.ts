@@ -31,3 +31,30 @@ export const footerNav: NavItem[] = [
   { label: "İletişim", href: "/iletisim" },
   ctaItem,
 ];
+
+/* --------------------------- English navigation --------------------------- */
+
+export const mainNavEn: NavItem[] = [
+  { label: "Solutions", href: "/en/solutions" },
+  { label: "Projects", href: "/en/projects" },
+  { label: "Process", href: "/en/process" },
+  { label: "About", href: "/en/about" },
+  { label: "FAQ", href: "/en/faq" },
+];
+
+export const ctaItemEn: NavItem = {
+  label: "Start a project",
+  href: "/en/start-project",
+};
+
+export const footerNavEn: NavItem[] = [
+  { label: "Solutions", href: "/en/solutions" },
+  { label: "Systems", href: "/en/systems" },
+  { label: "Sectors", href: "/en/sectors" },
+  { label: "Projects", href: "/en/projects" },
+  { label: "Process", href: "/en/process" },
+  { label: "About", href: "/en/about" },
+  { label: "FAQ", href: "/en/faq" },
+  { label: "Contact", href: "/en/contact" },
+  ctaItemEn,
+];

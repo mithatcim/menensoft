@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
 import { type Project } from "@/content/projects";
+import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
 function StatusBadge({ project }: { project: Project }) {
@@ -52,14 +53,20 @@ function FlowOverlay({ flow }: { flow: string[] }) {
   );
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  locale = "tr",
+}: {
+  project: Project;
+  locale?: Locale;
+}) {
   // İç/önceki çalışmalar bilinçli olarak daha sakin; teslim edilmiş işler
   // hafif vurgu kenarı ve daha canlı hover taşır.
   const quiet = project.tier === "internal";
 
   return (
     <SpotlightCard
-      href={`/projeler/${project.slug}`}
+      href={`${locale === "en" ? "/en/projects" : "/projeler"}/${project.slug}`}
       className={cn(
         "flex h-full flex-col rounded-xl border bg-card/70 p-6 backdrop-blur-sm",
         quiet
