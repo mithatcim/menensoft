@@ -13,6 +13,8 @@ export interface SolutionCategory {
   builds: string[];
   /** Bu yetkinliği kanıtlayan gerçek proje slug'ları. */
   relatedSlugs: string[];
+  /** Detaylı sistem sayfası (src/content/systems.ts slug'ı). */
+  systemSlug: string;
 }
 
 export const solutions: SolutionCategory[] = [
@@ -28,6 +30,7 @@ export const solutions: SolutionCategory[] = [
       "Yönetim paneliyle bütünleşik, sahip olduğunuz bir e-ticaret sistemi",
     ],
     relatedSlugs: ["ecommerce-cms"],
+    systemSlug: "e-ticaret-sistemi",
   },
   {
     id: "yonetim-paneli",
@@ -41,6 +44,7 @@ export const solutions: SolutionCategory[] = [
       "Doğrulamalı formlar ve tutarlı kayıt akışı",
     ],
     relatedSlugs: ["ecommerce-cms", "orva-psychology"],
+    systemSlug: "admin-panel",
   },
   {
     id: "dashboard-raporlama",
@@ -54,6 +58,7 @@ export const solutions: SolutionCategory[] = [
       "Log ve kayıt inceleme ekranları",
     ],
     relatedSlugs: ["restaurant-qr-system", "log-management-platform"],
+    systemSlug: "dashboard-raporlama",
   },
   {
     id: "is-akisi-otomasyonu",
@@ -67,6 +72,7 @@ export const solutions: SolutionCategory[] = [
       "Sipariş yönlendirme, randevu talebi gibi uçtan uca akışlar",
     ],
     relatedSlugs: ["restaurant-qr-system", "cendovar"],
+    systemSlug: "is-akisi-otomasyonu",
   },
   {
     id: "kurumsal-site-panel",
@@ -80,6 +86,7 @@ export const solutions: SolutionCategory[] = [
       "Arama motorlarına uygun semantik yapı",
     ],
     relatedSlugs: ["orva-psychology"],
+    systemSlug: "kurumsal-web-sitesi",
   },
   {
     id: "operasyon-sistemleri",
@@ -93,6 +100,7 @@ export const solutions: SolutionCategory[] = [
       "Bir iş gününü taşıyacak şekilde kurulan altyapı",
     ],
     relatedSlugs: ["restaurant-qr-system", "log-management-platform"],
+    systemSlug: "operasyon-sistemi",
   },
 ];
 

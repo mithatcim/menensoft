@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Container } from "@/components/layout/container";
 import { QuoteBuilder } from "@/components/quote/quote-builder";
 import { Reveal } from "@/components/shared/reveal";
@@ -134,6 +136,39 @@ export default function QuotePage() {
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* karar aşaması: teklif öncesi keşif bağlantıları */}
+        <Reveal delay={0.05} className="mt-12">
+          <div className="rounded-xl border border-dashed border-border bg-card/50 p-5">
+            <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
+              <span
+                aria-hidden
+                className="size-1.5 rotate-45 border border-muted-foreground/50"
+              />
+              Henüz karar aşamasında mısınız?
+            </p>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+              <Link
+                href="/hazir-site-mi-ozel-sistem-mi"
+                className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Hazır site mi, özel sistem mi?
+              </Link>
+              <Link
+                href="/neden-menensoft"
+                className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Neden Menensoft?
+              </Link>
+              <Link
+                href="/sektorler"
+                className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Sektörünüze göre inceleyin
+              </Link>
             </div>
           </div>
         </Reveal>

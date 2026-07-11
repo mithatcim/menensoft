@@ -144,13 +144,20 @@ export default function SolutionsPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-border bg-background/30 px-6 py-4 md:px-8">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border bg-background/30 px-6 py-4 md:px-8">
                       <Link
                         href="/teklif-al"
                         className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
                       >
                         Bu sistem için teklif al
                         <ArrowRight className="size-4 text-accent transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+                      <Link
+                        href={`/sistemler/${solution.systemSlug}`}
+                        className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        Sistem detayını incele
+                        <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </Link>
                     </div>
                   </SpotlightCard>

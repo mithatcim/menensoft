@@ -1,4 +1,5 @@
 import { CapabilityConsole } from "@/components/home/capability-console";
+import { ExploreHubs } from "@/components/home/explore-hubs";
 import { FeaturedProjectsSection } from "@/components/home/featured-projects-section";
 import { FlagshipStory } from "@/components/home/flagship-story";
 import { HeroSection } from "@/components/home/hero-section";
@@ -19,6 +20,8 @@ export default function HomePage() {
       <FeaturedProjectsSection />
       <TelemetryDivider code="SYS·04" label="çözümler" />
       <ServicesPreviewSection />
+      <TelemetryDivider code="SYS·05" label="keşif" />
+      <ExploreHubs />
       <ContactCTA />
     </>
   );
