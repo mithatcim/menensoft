@@ -34,8 +34,11 @@ NEXT_PUBLIC_SITE_URL=https://<birincil-domain>   # sonda / OLMADAN
 
 ## 4. Build beklentisi
 
-`pnpm build` → TypeScript temiz, sıfır uyarı, 29 kanonik sayfa + metadata
-rotaları (toplam ~44 statik rota). Yeni bir uyarı = regresyon.
+`pnpm build` → TypeScript temiz, sıfır uyarı, **58 kanonik sayfa** (29 TR +
+29 EN) + metadata rotaları. Rota tablosunda **2 dinamik (ƒ) rota normaldir**:
+`(tr)/[...rest]` ve `en/[...rest]` — iki kök layout'lu yapıda markalı 404'ü
+sağlayan yakala-hepsi rotalarıdır; Vercel'de sorunsuz çalışır. Yeni bir
+uyarı = regresyon.
 
 ## 5. Yayın sonrası doğrulama (aynı gün)
 
@@ -50,29 +53,47 @@ Ek elle kontroller:
 
 - [ ] `view-source` ile canonical'lar gerçek domainde (ana sayfa + 1 proje +
       1 sektör + 1 sistem).
-- [ ] `/sitemap.xml` 29 URL, hepsi gerçek domainde.
+- [ ] `/sitemap.xml` **58 URL** (29 TR + 29 EN), hepsi gerçek domainde.
 - [ ] `/robots.txt` Sitemap/Host satırları gerçek domainde.
 - [ ] `/opengraph-image` ve `/twitter-image` 200; bir sosyal kart
       doğrulayıcısında önizleme kontrolü.
-- [ ] JSON-LD: `/`, `/sss` ve bir sektör sayfası Google Rich Results
-      testinden geçer (FAQPage yalnızca /sss'te).
+- [ ] JSON-LD: `/`, `/en`, `/sss` ve `/en/faq` Google Rich Results
+      testinden geçer (FAQPage yalnızca /sss ve /en/faq'ta).
 - [ ] Yönlendirmeler: `/projects`, `/services`, `/about`, `/contact` → 308.
 - [ ] Metadata rotaları: favicon.ico, icon, apple-icon, og/twitter image,
       robots.txt, sitemap.xml, manifest.webmanifest → 200.
 - [ ] HTTPS sertifikası apex + www'de geçerli; karışık içerik yok.
 
+İki dilli kontroller:
+
+- [ ] `/en` rotaları canlıda 200 (en azından /en, /en/projects,
+      /en/start-project, /en/faq elle gezilir).
+- [ ] hreflang şu sayfalarda karşılıklı ve gerçek domainde: `/`, `/en`,
+      `/projeler/ecommerce-cms`, `/en/projects/ecommerce-cms`,
+      `/teklif-al`, `/en/start-project` (tr + en + x-default).
+- [ ] Dil değiştirici canlıda eşdeğer sayfaya gidiyor (TR proje →
+      EN proje, EN sistem → TR sistem örnekleriyle).
+- [ ] `/en` sayfaları Türkçeye YÖNLENMİYOR (200 dönmeli, 308 değil).
+
 ## 6. Gerçek cihaz kontrolleri
 
-- [ ] Android Chrome + iPhone Safari: mobil menü, dokunma hedefleri.
+- [ ] Android Chrome + iPhone Safari: mobil menü, dokunma hedefleri
+      (TR ve EN menü ayrı ayrı).
 - [ ] `mailto:` bağlantısı Türkçe karakterli gövdeyle doğru açılıyor.
+- [ ] `/en/start-project` sihirbazı gerçek cihazda İngilizce konu
+      ("Menensoft project inquiry") ve İngilizce gövdeyle açılıyor;
+      WhatsApp önyüklemesi İngilizce.
 - [ ] `wa.me` bağlantısı önceden doldurulmuş metinle WhatsApp'ı açıyor.
-- [ ] Sabitlenmiş sahneler (ana sayfa, /surec) mobilde yığın düzene düşüyor.
+- [ ] Sabitlenmiş sahneler (ana sayfa, /surec, /en, /en/process) mobilde
+      yığın düzene düşüyor.
 
 ## 7. Arama motoru kaydı
 
 - [ ] Search Console'da mülk doğrulama.
 - [ ] `/sitemap.xml` gönderimi.
-- [ ] Birkaç gün sonra kapsam raporunda 29 sayfanın durumunu kontrol et.
+- [ ] Birkaç gün sonra kapsam raporunda 58 sayfanın (Türkçe VE İngilizce
+      URL'lerin) durumunu kontrol et; /en sayfalarının "alternate page with
+      canonical" olarak değil, kendi başına dizinlendiğini doğrula.
 
 ## 8. Yayından önce DOKUNMA
 

@@ -64,7 +64,11 @@ const BANNED_TERMS = [
   "industry-leading",
   "award-winning",
   "trusted by",
-  "guaranteed",
+  "guarantee", // "guaranteed" ve "growth guarantee" dahil
+  "enterprise support",
+  "top-rated",
+  "number one",
+  "best-in-class",
 ];
 
 const issues = [];
@@ -157,6 +161,28 @@ async function main() {
     const selfLang = route.startsWith("/en") ? "en" : "tr";
     if (hreflangs[selfLang] && hreflangs[selfLang] !== route)
       fail(`${route}: kendi dili hreflang'i kendini göstermiyor`);
+
+    // dil değiştirici: her sayfada TR+EN bağlantısı olmalı, hedefler
+    // envanterde kalmalı ve hreflang alternates ile birebir örtüşmeli
+    const switchLinks = {};
+    for (const m of html.matchAll(/<a\s[^>]*data-lang-switch[^>]*>/g)) {
+      const tag = m[0];
+      const lang = (tag.match(/data-lang-switch="(tr|en)"/) || [])[1];
+      const href = (tag.match(/href="([^"#?]*)"/) || [])[1];
+      if (lang && href !== undefined)
+        switchLinks[lang] = href.replace(/\/$/, "") || "/";
+    }
+    for (const lang of ["tr", "en"]) {
+      if (!switchLinks[lang]) fail(`${route}: dil değiştirici ${lang} yok`);
+      else if (!paths.includes(switchLinks[lang]))
+        fail(
+          `${route}: değiştirici ${lang} envanter dışı: ${switchLinks[lang]}`,
+        );
+      else if (hreflangs[lang] && switchLinks[lang] !== hreflangs[lang])
+        fail(
+          `${route}: değiştirici ${lang} (${switchLinks[lang]}) hreflang ile örtüşmüyor (${hreflangs[lang]})`,
+        );
+    }
 
     const ldBlocks = [
       ...html.matchAll(
