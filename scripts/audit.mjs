@@ -140,9 +140,11 @@ async function main() {
 
     // hreflang: her kanonik sayfada tr + en alternates olmalı ve
     // gösterilen yollar envanterin içinde kalmalı (karşılıklılık kilidi)
+    // Next hrefLang'i camelCase serileştirir; HTML nitelikleri büyük/küçük
+    // harfe duyarsızdır — /i ile eşle
     const hreflangs = {};
     for (const m of html.matchAll(
-      /<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g,
+      /<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/gi,
     ))
       hreflangs[m[1]] = new URL(m[2], BASE).pathname;
     for (const lang of ["tr", "en"]) {
