@@ -43,7 +43,7 @@ export default function SystemsPage() {
               as="h1"
               eyebrow="Sistemler"
               title="Ne tür sistemler kurulur?"
-              description="Altı sistem türü, tek yaklaşım: veri modelinden yönetim paneline uçtan uca kurulum. Türü seçin; ne işe yaradığını, modüllerini ve mimarisini görün."
+              description="Her sistem türünün ayrıntılı alıcı sayfası: ne işe yarar, kimler için uygun, hangi modüller bulunur, mimari nasıl kurulur ve teslimde ne alınır."
             />
           </Reveal>
           <Reveal delay={0.06}>

@@ -44,7 +44,7 @@ export default function SectorsPage() {
               as="h1"
               eyebrow="Sektörler"
               title="Sektörünüze göre çalışan sistemler"
-              description="Aynı sistem mantığı, farklı işletme gerçekleri. Sektörünüzü seçin; tipik problemi, kurulan modülleri ve ilgili gerçek projeleri görün."
+              description="Sistem sayfaları işleyişi anlatır; burası aynı yapının sizin işletmenize nasıl uygulandığını gösterir. Sektörünüzü seçin: tipik problem, kurulan modüller ve ilgili gerçek projeler."
             />
           </Reveal>
           <Reveal delay={0.06}>

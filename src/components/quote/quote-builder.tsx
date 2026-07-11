@@ -182,10 +182,15 @@ export function QuoteBuilder() {
             </>
           ) : (
             <>
-              Sistem türünü seçmeseniz de olur — mesaj şablonu ihtiyacınızı
-              anlatmanız için hazır sorularla açılır.
+              Sistem türünü seçmeseniz de olur — şablon ihtiyacınızı anlatmanız
+              için hazır açılır.
             </>
-          )}
+          )}{" "}
+          Şablonda dört kısa başlık var:{" "}
+          <span className="text-foreground/85">
+            ihtiyaç, hedef, mevcut sistem, teslim beklentisi
+          </span>
+          . Birkaç cümle yeterli; şartname gerekmez.
         </p>
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <a

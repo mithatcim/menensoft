@@ -45,8 +45,8 @@ export default function SolutionsPage() {
             <SectionHeading
               as="h1"
               eyebrow="Çözümler"
-              title="İşletmeniz için çalışan web sistemleri"
-              description="Altı çözüm alanı, tek yaklaşım: veri modelinden yönetim paneline uçtan uca kurulan, teslimden sonra işletebileceğiniz sistemler. Her kategori gerçek projelerle kanıtlanır."
+              title="Hangi problemi çözmek istiyorsunuz?"
+              description="Altı çözüm alanının hızlı haritası: problemi tanıyın, ne kurulduğunu görün, kanıt için projeye gidin. Derine inmek isterseniz her alanın ayrıntılı sistem sayfası var."
             />
           </Reveal>
           <Reveal delay={0.06}>

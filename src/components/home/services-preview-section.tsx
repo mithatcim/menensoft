@@ -16,7 +16,7 @@ export function ServicesPreviewSection() {
             <SectionHeading
               eyebrow="Çözümler"
               title="Çözüm alanları"
-              description="Altı çözüm alanı, tek yaklaşım: teslimden sonra gerçekten işletebileceğiniz sistemler."
+              description="Problemden sisteme: altı çözüm alanı ve her birinin arkasında teslimden sonra işletebileceğiniz çalışır bir yapı."
             />
             <Link
               href="/cozumler"
