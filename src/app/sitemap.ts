@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { projects } from "@/content/projects";
+import { sectors } from "@/content/sectors";
 import { siteUrl } from "@/content/site";
 
 // Yalnızca kanonik Türkçe rotalar; eski İngilizce rotalar 308 ile yönlenir.
@@ -13,6 +14,7 @@ const staticRoutes = [
   "/sss",
   "/hakkimda",
   "/iletisim",
+  "/sektorler",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -28,5 +30,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...pages, ...projectPages];
+  const sectorPages: MetadataRoute.Sitemap = sectors.map((sector) => ({
+    url: `${siteUrl}/sektorler/${sector.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...pages, ...projectPages, ...sectorPages];
 }

@@ -81,6 +81,70 @@ export function servicesSchema() {
   }));
 }
 
+/** Genel breadcrumb — iç içe sayfalar (sektör/sistem detayları) için. */
+export function breadcrumbSchema(items: { name: string; path: string }[]) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${siteUrl}${item.path || "/"}`,
+    })),
+  };
+}
+
+/** Hub sayfaları (/sektorler, /sistemler) için CollectionPage + ItemList. */
+export function collectionPageSchema({
+  name,
+  description,
+  path,
+  items,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  items: { name: string; path: string }[];
+}) {
+  return {
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: `${siteUrl}${path}`,
+    inLanguage: "tr",
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: items.map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: item.name,
+        url: `${siteUrl}${item.path}`,
+      })),
+    },
+  };
+}
+
+/** Tekil hizmet şeması — sektör/sistem detay sayfaları için. */
+export function serviceSchema({
+  name,
+  description,
+  path,
+}: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@type": "Service",
+    name,
+    description,
+    url: `${siteUrl}${path}`,
+    provider: { "@id": ORG_ID },
+    areaServed: "TR",
+  };
+}
+
 export function projectBreadcrumbSchema(project: Project) {
   return {
     "@type": "BreadcrumbList",
