@@ -23,30 +23,6 @@ const SCOPE_FACTORS = [
   "İçerik yönetimi ve panel ihtiyacı",
 ];
 
-/** Teklif öncesi tipik itirazlar — kısa cevap + /sss'teki tam cevaba bağ. */
-const OBJECTIONS = [
-  {
-    q: "Tek kişiyle çalışmak riskli mi?",
-    a: "Riski kalabalık değil yapı azaltır: yazılı kapsam, dokümantasyon, devredilebilir kod tabanı.",
-    href: "/sss#tek-kisi-riski",
-  },
-  {
-    q: "Fiyat nasıl çıkar?",
-    a: "Sabit liste yok; fiyat, kapsam ve modüllere göre belirlenir — kapsam netleşince net teklif.",
-    href: "/sss#fiyat",
-  },
-  {
-    q: "Ne kadar sürer?",
-    a: "Kapsam netleşmeden tarih verilmez; gerçekçi çerçeve kapsamla birlikte konuşulur.",
-    href: "/sss#sure",
-  },
-  {
-    q: "Sonunda elimde ne olur?",
-    a: "Çalışır sistem, yönetilebilir panel, dokümantasyon ve temiz devir.",
-    href: "/sss#teslimde-ne-alinir",
-  },
-];
-
 /** Mesaj sonrası ne olur — güven veren üç adım. */
 const NEXT_STEPS = [
   {
@@ -69,6 +45,55 @@ const NEXT_STEPS = [
   },
 ];
 
+/**
+ * Teklif öncesi tipik itirazlar. İlk dördü kurulu cevaplara bağlanır; son
+ * dördü Phase 22'de eklendi — ziyaretçinin göndermeden önce gerçekten sorduğu,
+ * ama sayfanın hiçbir yerinde cevaplanmayan sorular. Hepsi gerçek bir sayfaya
+ * gider; garanti, sabit fiyat ya da aciliyet yok.
+ */
+const OBJECTIONS = [
+  {
+    q: "Tek kişiyle çalışmak riskli mi?",
+    a: "Riski kalabalık değil yapı azaltır: yazılı kapsam, dokümantasyon, devredilebilir kod tabanı.",
+    href: "/sss#tek-kisi-riski",
+  },
+  {
+    q: "Fiyat nasıl çıkar?",
+    a: "Sabit liste yok; fiyat, kapsam ve modüllere göre belirlenir — kapsam netleşince net teklif.",
+    href: "/sss#fiyat",
+  },
+  {
+    q: "Ne kadar sürer?",
+    a: "Kapsam netleşmeden tarih verilmez; gerçekçi çerçeve kapsamla birlikte konuşulur.",
+    href: "/sss#sure",
+  },
+  {
+    q: "Sonunda elimde ne olur?",
+    a: "Çalışır sistem, yönetilebilir panel, dokümantasyon ve temiz devir.",
+    href: "/sss#teslimde-ne-alinir",
+  },
+  {
+    q: "Teknik detay bilmem gerekiyor mu?",
+    a: "Hayır. İşin nasıl yürüdüğünü anlatmanız yeterli; teknik kararlar görüşmede birlikte netleşir.",
+    href: "/surec",
+  },
+  {
+    q: "Ne istediğimden emin değilsem?",
+    a: "“Emin değilim” de geçerli bir başlangıç. İlk görüşmenin işi zaten ihtiyacı netleştirmek.",
+    href: "/hazir-site-mi-ozel-sistem-mi",
+  },
+  {
+    q: "İlk temas için WhatsApp yeterli mi?",
+    a: "Yeterli. E-posta yalnızca daha fazla ayrıntı taşır; ikisi de doğrudan kurucuya ulaşır.",
+    href: "/sss#iletisim",
+  },
+  {
+    q: "Projem küçükse?",
+    a: "Kapsam küçükse küçük kalır, şişirilmez. Uygun değilse bu da açıkça söylenir.",
+    href: "/sss#fiyat",
+  },
+];
+
 export default function QuotePage() {
   return (
     <section className="py-16 md:py-24">
@@ -78,27 +103,85 @@ export default function QuotePage() {
             as="h1"
             eyebrow="Teklif al"
             title="Proje görüşmesi başlatın"
-            description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. İki kısa seçim size uygun çözümü gösterir ve mesajınızı hazırlar; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
+            description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. Sistem türünü seçtiğiniz anda mesajınız hazırlanır; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
           />
         </Reveal>
 
+        {/* Sihirbaz artık kendi güven katmanını yanında taşıyor: gönder butonu
+            ve fiyat/kapsam açıklaması seçim yapılırken ekranda kalır. */}
         <Reveal delay={0.06} className="mt-12">
           <QuoteBuilder />
         </Reveal>
 
+        {/* mesajdan sonra ne olur */}
+        <Reveal delay={0.05} className="mt-20">
+          <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            <span aria-hidden className="size-1.5 bg-accent/90" />
+            Mesajdan sonra ne olur?
+          </h2>
+          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-border">
+            <div className="grid gap-px sm:grid-cols-3">
+              {NEXT_STEPS.map((item) => (
+                <div key={item.step} className="bg-card p-5">
+                  <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                    <span
+                      aria-hidden
+                      className="size-1.5 rounded-full bg-accent/80"
+                    />
+                    {item.step}
+                  </p>
+                  <h3 className="mt-3 text-sm font-semibold tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* tipik itirazlar — kısa cevap, tam cevap ilgili sayfada */}
+        <Reveal delay={0.05} className="mt-12">
+          <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            <span aria-hidden className="size-1.5 bg-accent/90" />
+            Göndermeden önce merak edilenler
+          </h2>
+          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-border">
+            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
+              {OBJECTIONS.map((item) => (
+                <Link
+                  key={item.q}
+                  href={item.href}
+                  className="group bg-card p-4 transition-colors hover:bg-muted/20 md:p-5"
+                >
+                  <h3 className="flex items-start justify-between gap-3 text-sm font-semibold tracking-tight">
+                    {item.q}
+                    <ArrowRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {item.a}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
         {/* fiyat / kapsam eğitimi — rakam yok, dürüst çerçeve var */}
-        <Reveal delay={0.05} className="mt-16">
+        <Reveal delay={0.05} className="mt-12">
           <div className="overflow-hidden rounded-xl border border-border bg-border">
             <div className="grid gap-px md:grid-cols-2">
               <div className="bg-card p-6">
                 <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                   <span aria-hidden className="size-1.5 bg-accent/90" />
-                  Fiyat nasıl belirlenir?
+                  Kapsamı ne belirler?
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-foreground/90">
                   Fiyat, kapsam ve modüllere göre belirlenir. Sabit bir liste
-                  fiyatı yoktur; kapsam yazılı olarak netleştikten sonra net
-                  bir teklif sunulur.
+                  fiyatı yoktur; kapsam yazılı olarak netleştikten sonra net bir
+                  teklif sunulur.
                 </p>
                 <ul className="mt-4 space-y-2">
                   {SCOPE_FACTORS.map((factor) => (
@@ -128,62 +211,13 @@ export default function QuotePage() {
                     “Önce kapsam netleşir, sonra çözüm önerilir.”
                   </p>
                   <p className="text-sm leading-relaxed text-foreground/90">
-                    “Belirsiz işi şişirmek yerine netleştirmeyi tercih
-                    ederim.”
+                    “Belirsiz işi şişirmek yerine netleştirmeyi tercih ederim.”
                   </p>
                   <footer className="font-mono text-xs text-muted-foreground">
                     — {site.founder}, kurucu
                   </footer>
                 </blockquote>
               </div>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* mesajdan sonra ne olur */}
-        <Reveal delay={0.05} className="mt-16">
-          <div className="overflow-hidden rounded-xl border border-border bg-border">
-            <div className="grid gap-px sm:grid-cols-3">
-              {NEXT_STEPS.map((item) => (
-                <div key={item.step} className="bg-card p-5">
-                  <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                    <span
-                      aria-hidden
-                      className="size-1.5 rounded-full bg-accent/80"
-                    />
-                    {item.step}
-                  </p>
-                  <h2 className="mt-3 text-sm font-semibold tracking-tight">
-                    {item.title}
-                  </h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        {/* tipik itirazlar — kısa cevap, tam cevap /sss'te */}
-        <Reveal delay={0.05} className="mt-12">
-          <div className="overflow-hidden rounded-xl border border-border bg-border">
-            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
-              {OBJECTIONS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="group bg-card p-5 transition-colors hover:bg-muted/20"
-                >
-                  <h2 className="flex items-start justify-between gap-3 text-sm font-semibold tracking-tight">
-                    {item.q}
-                    <ArrowRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
-                  </h2>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    {item.a}
-                  </p>
-                </Link>
-              ))}
             </div>
           </div>
         </Reveal>

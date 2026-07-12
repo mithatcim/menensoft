@@ -43,6 +43,11 @@ const NEXT_STEPS = [
   },
 ];
 
+/**
+ * The last four were added in Phase 22 — the questions a visitor actually asks
+ * themselves before sending, which the page answered nowhere. Every card points
+ * at a real page. No guarantees, no fixed price, no urgency.
+ */
 const OBJECTIONS = [
   {
     q: "Is a one-person brand risky?",
@@ -64,6 +69,26 @@ const OBJECTIONS = [
     a: "A working system, a manageable panel, documentation and a clean handoff.",
     href: "/en/faq#deliverables",
   },
+  {
+    q: "Do I need to know the technical details?",
+    a: "No. Explaining how the work runs is enough; the technical decisions get settled together in the conversation.",
+    href: "/en/process",
+  },
+  {
+    q: "What if I'm not sure what I need?",
+    a: "“Not sure yet” is a valid starting point. Clarifying the need is what the first conversation is for.",
+    href: "/en/custom-system-vs-template",
+  },
+  {
+    q: "Is WhatsApp enough for first contact?",
+    a: "It is. Email just carries more detail; both land directly with the founder.",
+    href: "/en/faq#contact",
+  },
+  {
+    q: "What if my project is small?",
+    a: "A small scope stays small — it doesn't get inflated. And if it isn't a fit, that's said plainly.",
+    href: "/en/faq#pricing",
+  },
 ];
 
 export default function EnStartProjectPage() {
@@ -75,26 +100,82 @@ export default function EnStartProjectPage() {
             as="h1"
             eyebrow="Start a project"
             title="Start a project conversation"
-            description="Tell me what you need and we'll clarify the scope together. Two short selections show your closest starting point and prepare your message; it goes by email or WhatsApp, straight to the founder."
+            description="Tell me what you need and we'll clarify the scope together. Your message is prepared the moment you pick a system type; it goes by email or WhatsApp, straight to the founder."
           />
         </Reveal>
 
+        {/* The wizard now carries its own confidence layer: the send button and
+            the price/scope explanation stay on screen while you choose. */}
         <Reveal delay={0.06} className="mt-12">
           <QuoteBuilder locale="en" />
         </Reveal>
 
-        <Reveal delay={0.05} className="mt-16">
+        <Reveal delay={0.05} className="mt-20">
+          <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            <span aria-hidden className="size-1.5 bg-accent/90" />
+            What happens after you send?
+          </h2>
+          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-border">
+            <div className="grid gap-px sm:grid-cols-3">
+              {NEXT_STEPS.map((item) => (
+                <div key={item.step} className="bg-card p-5">
+                  <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                    <span
+                      aria-hidden
+                      className="size-1.5 rounded-full bg-accent/80"
+                    />
+                    {item.step}
+                  </p>
+                  <h3 className="mt-3 text-sm font-semibold tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.05} className="mt-12">
+          <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            <span aria-hidden className="size-1.5 bg-accent/90" />
+            Before you send
+          </h2>
+          <div className="mt-4 overflow-hidden rounded-xl border border-border bg-border">
+            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
+              {OBJECTIONS.map((item) => (
+                <Link
+                  key={item.q}
+                  href={item.href}
+                  className="group bg-card p-4 transition-colors hover:bg-muted/20 md:p-5"
+                >
+                  <h3 className="flex items-start justify-between gap-3 text-sm font-semibold tracking-tight">
+                    {item.q}
+                    <ArrowRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {item.a}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.05} className="mt-12">
           <div className="overflow-hidden rounded-xl border border-border bg-border">
             <div className="grid gap-px md:grid-cols-2">
               <div className="bg-card p-6">
                 <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                   <span aria-hidden className="size-1.5 bg-accent/90" />
-                  How is the price determined?
+                  What sets the scope?
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-foreground/90">
                   Price is determined by scope and modules. There is no fixed
-                  price list; once the scope is agreed in writing you get a
-                  clear quote.
+                  price list; once the scope is agreed in writing you get a clear
+                  quote.
                 </p>
                 <ul className="mt-4 space-y-2">
                   {SCOPE_FACTORS.map((factor) => (
@@ -117,66 +198,21 @@ export default function EnStartProjectPage() {
                     aria-hidden
                     className="size-1.5 rotate-45 border border-muted-foreground/50"
                   />
-                  Working promise
+                  How I work
                 </h2>
                 <blockquote className="mt-4 space-y-3 border-l-2 border-accent/40 pl-4">
                   <p className="text-sm leading-relaxed text-foreground/90">
-                    “Scope gets clear first; the solution comes second.”
+                    “Scope gets clear first; the solution is proposed after
+                    that.”
                   </p>
                   <p className="text-sm leading-relaxed text-foreground/90">
-                    “I&apos;d rather clarify unclear work than inflate it.”
+                    “I&apos;d rather clarify vague work than inflate it.”
                   </p>
                   <footer className="font-mono text-xs text-muted-foreground">
                     — {site.founder}, founder
                   </footer>
                 </blockquote>
               </div>
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.05} className="mt-16">
-          <div className="overflow-hidden rounded-xl border border-border bg-border">
-            <div className="grid gap-px sm:grid-cols-3">
-              {NEXT_STEPS.map((item) => (
-                <div key={item.step} className="bg-card p-5">
-                  <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                    <span
-                      aria-hidden
-                      className="size-1.5 rounded-full bg-accent/80"
-                    />
-                    {item.step}
-                  </p>
-                  <h2 className="mt-3 text-sm font-semibold tracking-tight">
-                    {item.title}
-                  </h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.05} className="mt-12">
-          <div className="overflow-hidden rounded-xl border border-border bg-border">
-            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
-              {OBJECTIONS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="group bg-card p-5 transition-colors hover:bg-muted/20"
-                >
-                  <h2 className="flex items-start justify-between gap-3 text-sm font-semibold tracking-tight">
-                    {item.q}
-                    <ArrowRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
-                  </h2>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    {item.a}
-                  </p>
-                </Link>
-              ))}
             </div>
           </div>
         </Reveal>
@@ -195,7 +231,7 @@ export default function EnStartProjectPage() {
                 href="/en/custom-system-vs-template"
                 className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
               >
-                Ready-made site or custom system?
+                Template or custom system?
               </Link>
               <Link
                 href="/en/why-menensoft"
@@ -207,7 +243,7 @@ export default function EnStartProjectPage() {
                 href="/en/sectors"
                 className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
               >
-                Browse by your sector
+                Explore by sector
               </Link>
             </div>
           </div>
