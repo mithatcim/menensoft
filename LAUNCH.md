@@ -11,6 +11,16 @@ olarak localhost'a düşer.
 - [ ] Görünür Türkçe kopya için son bir ana-dil okuması yapıldı.
 - [ ] Proje ekran görüntüleri stratejisi netleşti (rezerve çerçeveler bilinçli
       olarak boş — gerçek görseller ayrı bir fazda eklenecek).
+- [ ] **Yönlendirme kararı verildi.** `next.config.ts` içindeki 5 eski
+      yönlendirme (`/projects`, `/projects/:slug`, `/services`, `/about`,
+      `/contact`) bugün Türkçe sayfalara gidiyor. Site hiç yayınlanmadığı için
+      korunacak eski bağlantı yok; bu yollara gelecek tek kitle İngilizce kelime
+      deneyen ziyaretçi/crawler. Karar yayından ÖNCE verilmeli: dizine
+      girdikten sonra hedef değiştirmek yönlendirme zinciri üretir.
+- [ ] **Build guard kararı verildi.** Yayında `NEXT_PUBLIC_SITE_URL` unutulursa
+      build sessizce localhost ile geçer. Vercel'e özel bir guard eklemek
+      (`process.env.VERCEL` varsa değişken yoksa build'i düşür) opsiyoneldir;
+      eklenmediyse §5 doğrulaması bunu yakalamak zorundadır.
 
 ## 2. Ortam değişkeni
 
@@ -20,9 +30,29 @@ Tek zorunlu değişken:
 NEXT_PUBLIC_SITE_URL=https://<birincil-domain>   # sonda / OLMADAN
 ```
 
-- Vercel'de **Production** ortamına eklenir; build ANINDA okunur.
+- Vercel'de **Production** ortamına eklenir; build ANINDA okunur (`NEXT_PUBLIC_*`
+  değeri derlenmiş çıktıya gömülür — çalışma anında okunmaz).
 - Domain sonradan değişirse "Redeploy without build cache" gerekir.
 - `.env.example` şablondur; gerçek `.env*` dosyaları commit edilmez.
+- **Şema zorunlu.** `https://` olmadan yazılan değer `new URL()` içinde
+  patlar ve build kök layout'ta kırılır. `menensoft.com` geçersiz,
+  `https://menensoft.com` geçerli.
+- Sondaki `/` kod tarafında kırpılır (`replace(/\/+$/, "")`), yani zararsız —
+  ama yazmayın.
+
+Değişken yoksa (bugünkü durum) kod `http://localhost:3000` fallback'ine düşer.
+Bunun etki alanı **tek bir etiket değil**; localhost bu üretimlere sızar:
+
+| Üretim | Kaynak |
+| --- | --- |
+| `<link rel="canonical">`, `og:url` | `metadataBase` (iki kök layout) |
+| hreflang üçlüsü (tr / en / x-default) | `src/lib/seo.ts` |
+| `/sitemap.xml` — 58 URL'nin tamamı | `src/app/sitemap.ts` |
+| `/robots.txt` `Host:` + `Sitemap:` | `src/app/robots.ts` |
+| JSON-LD `@id` ve `url` alanları (organization, website, founder, breadcrumb, proje) | `src/lib/schema.ts` |
+
+Yani değişkeni ayarlamamak kozmetik değil: sitemap ve JSON-LD kimlikleri dahil
+tüm mutlak URL yüzeyi yanlış olur.
 
 ## 3. Vercel proje ayarları
 
@@ -47,6 +77,16 @@ Tek komutla site denetimi:
 ```
 BASE=https://<domain> pnpm audit:site
 BASE=https://<domain> pnpm audit:browser   # yerel makineden, opsiyonel
+```
+
+**Önce şunu çalıştırın** — `NEXT_PUBLIC_SITE_URL` unutulduysa tek komutla belli
+olur. Beklenen çıktı: her satır `0`. Sıfırdan büyük tek bir sayı bile
+"değişken build'e girmemiş" demektir:
+
+```
+curl -s https://<domain>/            | grep -c localhost   # canonical + og:url + JSON-LD
+curl -s https://<domain>/sitemap.xml | grep -c localhost   # 58 URL
+curl -s https://<domain>/robots.txt  | grep -c localhost   # Host + Sitemap
 ```
 
 Ek elle kontroller:
