@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AnswerSection, BulletPanel, CtaBand } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import {
@@ -68,6 +69,17 @@ export default function ComparisonPage() {
                 </div>
               </AnswerSection>
             </Reveal>
+
+            {/* Faz 30: ilk CTA 3989px'te duruyordu. Ayrımı gördükten sonra
+                harekete geçilebilmeli. Her iki tarafa da dürüst davranır:
+                hazır site yetiyorsa özel sistem gerekmez, bunu söylemek de
+                işin parçası. */}
+            <EarlyCta
+              eyebrow="Hangisine yakınsınız?"
+              text="Hazır site tarafındaysanız özel sistem gerekmiyor olabilir — bunu açıkça söylemek de işin parçası. Özel sistem tarafındaysanız, kapsamı birlikte netleştirelim."
+              ctaLabel="Kapsamı netleştirelim"
+              ctaHref="/teklif-al"
+            />
 
             <Reveal delay={0.04}>
               <AnswerSection

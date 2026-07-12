@@ -1,5 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { GrowLine } from "@/components/shared/grow-line";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -89,6 +90,23 @@ export default function EnAboutPage() {
               </div>
             </Reveal>
           </div>
+
+          {/* Phase 30: this page's only CTA sat at 5344px (6.3 screens) and it
+              linked to not one real project -- while its own intro names three
+              of them in prose. The proof now sits right under that text. */}
+          <EarlyCta
+            locale="en"
+            className="mt-12"
+            eyebrow="Systems built"
+            text="The work described above is real: a restaurant operations system, a clinic site with its own panel, and an e-commerce infrastructure. Each one has its own page, with what was actually built."
+            proofSlugs={[
+              "restaurant-qr-system",
+              "orva-psychology",
+              "ecommerce-cms",
+            ]}
+            ctaLabel="Start a project"
+            ctaHref="/en/start-project"
+          />
 
           <GrowLine className="mt-20" />
 

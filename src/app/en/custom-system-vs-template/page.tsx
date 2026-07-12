@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AnswerSection, BulletPanel, CtaBand } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import {
@@ -64,6 +65,17 @@ export default function EnComparisonPage() {
                 </div>
               </AnswerSection>
             </Reveal>
+
+            {/* Phase 30: the first CTA sat at 4084px. A visitor should be able
+                to act once they've seen the distinction. Honest to both sides:
+                if a template is enough, saying so is part of the job. */}
+            <EarlyCta
+              locale="en"
+              eyebrow="Which side are you closer to?"
+              text="If you're on the ready-made side, you may not need a custom system — saying that plainly is part of the job. If you're on the custom side, let's clarify the scope together."
+              ctaLabel="Let's define the scope"
+              ctaHref="/en/start-project"
+            />
 
             <Reveal delay={0.04}>
               <AnswerSection

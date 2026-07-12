@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { RequestScene } from "@/components/services/request-scene";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { buttonVariants } from "@/components/ui/button";
@@ -51,6 +52,20 @@ export default function ProcessPage() {
 
       {/* sinematik altı aşamalı akış */}
       <RequestScene />
+
+      {/* Faz 30: ilk CTA 4428px'te (5.2 ekran) duruyordu. Ziyaretçi altı aşamayı
+          gördükten sonra harekete geçebilmeli — sayfanın sonunu beklemeden.
+          Bilinçli olarak jenerik: bu sayfa bir sistem türü hakkında değil. */}
+      <section className="pb-4">
+        <Container>
+          <EarlyCta
+            eyebrow="Süreci gördünüz"
+            text="Akış her projede aynı işler. Sizin girdiniz farklı olabilir — birkaç cümleyle yazın, kapsamı beraber netleştirelim."
+            ctaLabel="Proje görüşmesi başlat"
+            ctaHref="/teklif-al"
+          />
+        </Container>
+      </section>
 
       <section className="py-16 md:py-24">
         <Container>

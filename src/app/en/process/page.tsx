@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { RequestScene } from "@/components/services/request-scene";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { buttonVariants } from "@/components/ui/button";
@@ -71,6 +72,21 @@ export default function EnProcessPage() {
       </section>
 
       <RequestScene locale="en" />
+
+      {/* Phase 30: the first CTA sat at 4483px (5.2 screens). Once a visitor has
+          seen the six stages they should be able to act, without waiting for the
+          end of the page. Generic on purpose: this page is not about one system. */}
+      <section className="pb-4">
+        <Container>
+          <EarlyCta
+            locale="en"
+            eyebrow="You've seen the process"
+            text="The flow plays out the same in every project. Your input will be different — write a few sentences and we'll clarify the scope together."
+            ctaLabel="Start a project"
+            ctaHref="/en/start-project"
+          />
+        </Container>
+      </section>
 
       <section className="py-16 md:py-24">
         <Container>

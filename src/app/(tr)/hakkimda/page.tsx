@@ -1,5 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { ContactCTA } from "@/components/shared/contact-cta";
+import { EarlyCta } from "@/components/shared/early-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { GrowLine } from "@/components/shared/grow-line";
 import { Reveal } from "@/components/shared/reveal";
@@ -63,6 +64,22 @@ export default function AboutPage() {
               </div>
             </Reveal>
           </div>
+
+          {/* Faz 30: bu sayfada tek CTA 5304px'te (6.3 ekran) duruyordu ve tek
+              bir gerçek projeye bağlantı yoktu — üstelik giriş paragrafı üç
+              tanesini adıyla anlatıyor. Kanıt burada, metnin hemen altında. */}
+          <EarlyCta
+            className="mt-12"
+            eyebrow="Kurulan sistemler"
+            text="Yukarıda anlatılan işler gerçek: restoran operasyon sistemi, klinik sitesi + panel ve e-ticaret altyapısı. Her biri kendi sayfasında, ne kurulduğuyla birlikte duruyor."
+            proofSlugs={[
+              "restaurant-qr-system",
+              "orva-psychology",
+              "ecommerce-cms",
+            ]}
+            ctaLabel="Proje görüşmesi başlat"
+            ctaHref="/teklif-al"
+          />
 
           <GrowLine className="mt-20" />
 
