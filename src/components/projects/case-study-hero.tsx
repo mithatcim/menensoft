@@ -74,7 +74,12 @@ export function CaseStudyHero({
   const fit = fitId ? fitPool.find((f) => f.id === fitId) : undefined;
   const system = fit?.systemSlug ? lookupSystem(fit.systemSlug) : undefined;
 
-  const ctaHref = fitId ? `${copy.quoteBase}?tur=${fitId}` : copy.quoteBase;
+  // ?proje= lets the inquiry page confirm where the visitor came from, and puts
+  // one honest reference line in the message so the founder knows which project
+  // triggered it. Falls back cleanly when there is no fit id.
+  const ctaHref = fitId
+    ? `${copy.quoteBase}?tur=${fitId}&proje=${project.slug}`
+    : `${copy.quoteBase}?proje=${project.slug}`;
   const ctaLabel = project.similarCta ?? copy.fallbackCta;
   const lead = project.dossierSummary ?? project.oneLiner;
 

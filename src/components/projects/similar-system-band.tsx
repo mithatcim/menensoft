@@ -52,9 +52,10 @@ export function SimilarSystemBand({
 }) {
   const copy = BAND_COPY[locale];
   const fitType = projectToFitType[project.slug];
+  // carries the project through to the inquiry page (see CaseStudyHero)
   const quoteHref = fitType
-    ? `${copy.quoteBase}?tur=${fitType}`
-    : copy.quoteBase;
+    ? `${copy.quoteBase}?tur=${fitType}&proje=${project.slug}`
+    : `${copy.quoteBase}?proje=${project.slug}`;
 
   const systemPool = locale === "en" ? systemsEn : systems;
   const sectorPool = locale === "en" ? sectorsEn : sectors;
