@@ -84,7 +84,7 @@ export default function EnSolutionsPage() {
 
       <section className="py-8 md:py-12">
         <Container>
-          <div className="grid gap-6">
+          <div className="grid gap-5 md:gap-6">
             {solutionsEn.map((solution) => {
               const related = solution.relatedSlugs
                 .map((slug) => getProjectEn(slug))
@@ -95,11 +95,11 @@ export default function EnSolutionsPage() {
                     id={solution.id}
                     className="scroll-mt-24 rounded-xl border border-border bg-card/70 ring-1 ring-white/5 backdrop-blur-sm transition-all duration-300 hover:border-accent/25 hover:ring-accent/10"
                   >
-                    <div className="p-6 md:p-8">
+                    <div className="p-5 md:p-8">
                       <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
                         {solution.title}
                       </h2>
-                      <div className="mt-6 grid gap-8 md:grid-cols-2">
+                      <div className="mt-5 grid gap-6 md:mt-6 md:grid-cols-2 md:gap-8">
                         <div>
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                             The problem it solves
@@ -108,7 +108,7 @@ export default function EnSolutionsPage() {
                             {solution.problem}
                           </p>
                           {related.length > 0 && (
-                            <div className="mt-5">
+                            <div className="mt-4 md:mt-5">
                               <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                                 Proven in
                               </h3>
@@ -137,7 +137,7 @@ export default function EnSolutionsPage() {
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                             What gets built
                           </h3>
-                          <ul className="mt-3 space-y-2">
+                          <ul className="mt-3 space-y-1.5 md:space-y-2">
                             {solution.builds.map((item) => (
                               <li
                                 key={item}
@@ -154,7 +154,7 @@ export default function EnSolutionsPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border bg-background/30 px-6 py-4 md:px-8">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border bg-background/30 px-5 py-3.5 md:px-8 md:py-4">
                       <Link
                         href={inquiryHref({
                           locale: "en",
@@ -179,7 +179,7 @@ export default function EnSolutionsPage() {
             })}
           </div>
 
-          <div className="mt-20 md:mt-24">
+          <div className="mt-14 md:mt-24">
             <Reveal>
               <SectionHeading
                 eyebrow="Clear scope"
@@ -187,13 +187,16 @@ export default function EnSolutionsPage() {
                 description="Working facts, not sales polish: who these systems serve, when they're needed, what delivery includes — and what gets a plain no."
               />
             </Reveal>
-            <Reveal delay={0.08} className="mt-10">
+            <Reveal delay={0.08} className="mt-8 md:mt-10">
               <div className="overflow-hidden rounded-xl border border-border bg-border">
                 <div className="grid gap-px sm:grid-cols-2">
                   {CONVERSION_BLOCKS.map((block) => (
                     <div
                       key={block.title}
-                      className={cn("p-6", block.quiet ? "bg-card/60" : "bg-card")}
+                      className={cn(
+                        "p-5 md:p-6",
+                        block.quiet ? "bg-card/60" : "bg-card",
+                      )}
                     >
                       <h3
                         className={cn(
@@ -214,7 +217,7 @@ export default function EnSolutionsPage() {
                         />
                         {block.title}
                       </h3>
-                      <ul className="mt-4 space-y-2.5">
+                      <ul className="mt-3.5 space-y-2 md:mt-4 md:space-y-2.5">
                         {block.items.map((item) => (
                           <li
                             key={item}
