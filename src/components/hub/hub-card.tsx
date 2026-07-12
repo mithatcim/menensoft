@@ -100,17 +100,26 @@ export function HubCard({
 
   return (
     <Reveal delay={delay} className="h-full min-w-0">
-      <SpotlightCard className="flex h-full flex-col rounded-xl border border-border bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-[0_28px_56px_-24px_rgba(0,0,0,0.85)]">
+      <SpotlightCard className="flex h-full flex-col rounded-xl border border-border bg-card/70 p-5 ring-1 ring-white/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-[0_28px_56px_-24px_rgba(0,0,0,0.85)] md:p-6">
+        {/* The title IS the detail link and the arrow says so — the same
+            affordance the card had before Phase 26, when the whole card was one
+            <a>. A separate "view detail" link in the CTA row linked the same
+            page a second time and wrapped onto its own line on mobile. */}
         <div className="flex items-start justify-between gap-4">
           <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
             <span aria-hidden className="size-1.5 bg-accent/90" />
             {eyebrow}
           </p>
+          <ArrowUpRight
+            aria-hidden
+            className="size-4 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+          />
         </div>
 
-        <h2 className="mt-4 text-lg font-semibold tracking-tight text-balance">
+        <h2 className="mt-3.5 text-lg font-semibold tracking-tight text-balance md:mt-4">
           <Link
             href={detailHref}
+            aria-label={detailLabel}
             className="transition-colors hover:text-accent"
           >
             {title}
@@ -120,7 +129,7 @@ export function HubCard({
           {description}
         </p>
 
-        <div className="mt-auto pt-5">
+        <div className="mt-auto pt-4 md:pt-5">
           {/* the count this replaces said proof existed; this shows it */}
           {proof && (
             <Link
@@ -149,20 +158,13 @@ export function HubCard({
             </Link>
           )}
 
-          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-2 md:mt-3">
             <Link
               href={inquiryHref({ locale, systemSlug })}
               className="group/cta inline-flex items-center justify-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-accent/60 hover:bg-accent/15"
             >
               {copy.inquiry}
               <ArrowRight className="size-3.5 shrink-0 text-accent transition-transform group-hover/cta:translate-x-0.5" />
-            </Link>
-            <Link
-              href={detailHref}
-              className="group/detail inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {detailLabel}
-              <ArrowUpRight className="size-3.5 shrink-0 transition-transform group-hover/detail:-translate-y-0.5 group-hover/detail:translate-x-0.5" />
             </Link>
           </div>
         </div>
