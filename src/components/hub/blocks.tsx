@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { getProjectEn } from "@/content/en/projects";
+import { siteEn } from "@/content/en/site";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
 import { type Locale } from "@/lib/locale";
@@ -201,9 +202,20 @@ export function ChipLinks({
   );
 }
 
-/** The direct-contact escape hatch, for pages that close with CtaBand alone. */
+/**
+ * Copy for pages that close with CtaBand alone — the system and sector detail
+ * pages, which dropped ContactCTA in Phase 27.
+ *
+ * `availability` reuses site.availability rather than inventing a new phrase, so
+ * the signal reads identically to the pill ContactCTA still shows everywhere
+ * else. `noSpec` is the site's own standing promise ("birkaç cümle yeterli —
+ * şartname gerekmez"), not a capacity claim: no slots, no response time, no
+ * guarantee of acceptance.
+ */
 const FALLBACK_COPY = {
   tr: {
+    availability: site.availability,
+    noSpec: "Şartname gerekmez",
     pre: "Sihirbazsız yazmayı tercih ederseniz",
     email: "doğrudan e-posta gönderin",
     or: "ya da",
@@ -211,6 +223,8 @@ const FALLBACK_COPY = {
     contactHref: "/iletisim",
   },
   en: {
+    availability: siteEn.availability,
+    noSpec: "No spec required",
     pre: "Prefer to write without the wizard?",
     email: "send an email directly",
     or: "or",
@@ -260,6 +274,28 @@ export function CtaBand({
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_20%_0%,rgba(139,140,248,0.08),transparent)]"
       />
       <div className="relative">
+        {/* The availability signal ContactCTA used to carry on these pages. It
+            is a supporting line, not a third CTA, and it is gated on the same
+            flag that means "this band is the page's only close" — so it can
+            never double up with ContactCTA's pill on the pages that keep it. */}
+        {contactFallback && (
+          <p className="mb-3.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-2">
+              <span
+                aria-hidden
+                className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
+              />
+              {fb.availability}
+            </span>
+            {/* the separator only reads as one when the row is on one line;
+                below sm it wrapped and left a "·" dangling at the end of a line */}
+            <span aria-hidden className="hidden text-muted-foreground/40 sm:inline">
+              ·
+            </span>
+            <span>{fb.noSpec}</span>
+          </p>
+        )}
+
         <h2 className="text-xl font-semibold tracking-tight text-balance md:text-2xl">
           {title}
         </h2>
