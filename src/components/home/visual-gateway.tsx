@@ -135,14 +135,14 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
   const reduceMotion = useReducedMotion() ?? false;
 
   return (
-    <section className="relative overflow-hidden border-b border-border/60 py-14 md:py-16">
+    <section className="relative overflow-hidden border-b border-border/60 py-12 md:py-16">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-grid mask-radial-faded absolute inset-0 opacity-40" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_0%,rgba(139,140,248,0.06),transparent)]" />
       </div>
 
       <Container className="relative">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="grid gap-7 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-12">
           {/* left: the question this band answers */}
           <div className="lg:sticky lg:top-28">
             <Reveal>
@@ -214,8 +214,11 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                 />
               </div>
 
-              {/* the four layers, read top to bottom, wired together */}
-              <ol className="relative p-5 md:p-6">
+              {/* the four layers, read top to bottom, wired together.
+                  Tightened on mobile: four stacked layers with body copy are
+                  inherently tall, and the desktop rhythm pushed this section
+                  past 1.3 screens on a phone. */}
+              <ol className="relative p-4 md:p-6">
                 {copy.layers.map((layer, i) => {
                   const last = i === copy.layers.length - 1;
                   return (
@@ -226,7 +229,7 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                       initial={reduceMotion ? false : "hidden"}
                       whileInView="show"
                       viewport={{ once: true, margin: "-60px" }}
-                      className="relative flex gap-4 pb-6 last:pb-0"
+                      className="relative flex gap-3.5 pb-5 last:pb-0 md:gap-4 md:pb-6"
                     >
                       {/* connector rail between layers */}
                       <div className="relative flex shrink-0 flex-col items-center">
@@ -268,7 +271,7 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                             {layer.title}
                           </h3>
                         </div>
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground md:mt-2">
                           {layer.body}
                         </p>
                       </div>
