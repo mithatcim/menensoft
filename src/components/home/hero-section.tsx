@@ -161,7 +161,9 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(139,140,248,0.10),transparent)]" />
       </div>
-      <Container className="relative grid gap-16 pt-24 pb-24 md:pt-36 md:pb-32 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
+      {/* tightened top padding: the hero now follows the opening showcase
+          instead of carrying the first impression on its own */}
+      <Container className="relative grid gap-16 pt-16 pb-24 md:pt-24 md:pb-32 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
         <div>
           <Entrance delay={0}>
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
@@ -173,12 +175,14 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
             </p>
           </Entrance>
           <Entrance delay={0.06}>
-            <h1 className="mt-7 max-w-4xl text-5xl font-semibold tracking-tight text-balance md:text-7xl lg:text-[5.5rem] lg:leading-[0.98]">
+            {/* h2, not h1: the opening sales showcase now carries the page's
+                single h1, and this brand statement follows it. */}
+            <h2 className="mt-7 max-w-4xl text-5xl font-semibold tracking-tight text-balance md:text-7xl lg:text-[5.5rem] lg:leading-[0.98]">
               {headline}
               <span className="text-accent [text-shadow:0_0_24px_rgba(139,140,248,0.5)]">
                 .
               </span>
-            </h1>
+            </h2>
           </Entrance>
           <Entrance delay={0.12}>
             <p className="mt-7 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground md:text-xl">

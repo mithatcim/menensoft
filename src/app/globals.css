@@ -221,6 +221,16 @@
   .page-enter {
     animation: page-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
+  /* Snap rails keep their own arrow controls and swipe affordance, so the
+     native scrollbar is redundant chrome. Scrolling itself stays intact. */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes ambient-drift-a {

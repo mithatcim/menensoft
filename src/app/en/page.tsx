@@ -3,6 +3,7 @@ import { ExploreHubs } from "@/components/home/explore-hubs";
 import { FeaturedProjectsSection } from "@/components/home/featured-projects-section";
 import { FlagshipStory } from "@/components/home/flagship-story";
 import { HeroSection } from "@/components/home/hero-section";
+import { OpeningShowcase } from "@/components/home/opening-showcase";
 import { ServicesPreviewSection } from "@/components/home/services-preview-section";
 import { SystemLayers } from "@/components/home/system-layers";
 import { VisualGateway } from "@/components/home/visual-gateway";
@@ -20,6 +21,7 @@ export const metadata = pageMeta({
 export default function EnHomePage() {
   return (
     <>
+      <OpeningShowcase locale="en" />
       <HeroSection locale="en" />
       <VisualGateway locale="en" />
       <FlagshipStory locale="en" />
