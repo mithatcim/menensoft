@@ -63,6 +63,7 @@ const FLAGSHIP_FITS = new Set(["e-ticaret", "operasyon"]);
 const PREFERRED_PROOF: Record<string, string> = {
   "yonetim-paneli": "orva-psychology",
   dashboard: "log-management-platform",
+  otomasyon: "cendovar",
 };
 
 const COPY = {

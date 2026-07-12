@@ -240,7 +240,9 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
             />
             {copy.eyebrow}
           </p>
-          <h1 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight text-balance md:text-5xl md:leading-[1.08]">
+          {/* the page's largest heading, so the first section also reads as the
+              loudest one (the hero below deliberately steps down a size) */}
+          <h1 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight text-balance md:text-5xl md:leading-[1.08] lg:text-6xl lg:leading-[1.06]">
             {copy.title}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">

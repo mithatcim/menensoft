@@ -14,11 +14,23 @@ import { type Locale } from "@/lib/locale";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-/** Kahraman bölümünün dil sözlüğü — TR varsayılan, EN /en sayfalarından gelir. */
+/**
+ * Kahraman bölümünün dil sözlüğü — TR varsayılan, EN /en sayfalarından gelir.
+ *
+ * Phase 19B: the hero now follows the opening sales showcase, so it stops
+ * acting as a second first-impression and becomes a brand reinforcement band.
+ * `bridge` ties it back to the showcase above, and `intro` replaces the
+ * displayed site.subheadline — which listed the same six system types the
+ * showcase had just walked through. site.subheadline itself is untouched: it
+ * still carries the page metadata description.
+ */
 const HERO_COPY = {
   tr: {
     site,
     projects,
+    bridge: "Bu sistemleri kuran marka",
+    intro:
+      "Vitrin, panel, veri modeli ve teslim tek elden ilerler. Menensoft'un arkasında, her katmanı uçtan uca tasarlayıp geliştiren kurucu geliştirici var: Mithat Yılmaz.",
     primaryCta: "Proje görüşmesi başlat",
     primaryHref: "/teklif-al",
     secondaryCta: "Projeleri incele",
@@ -34,6 +46,9 @@ const HERO_COPY = {
   en: {
     site: siteEn,
     projects: projectsEn,
+    bridge: "The brand behind these systems",
+    intro:
+      "Storefront, panel, data model and handoff move as one. Behind Menensoft is a founder-developer who designs and builds every layer end to end: Mithat Yılmaz.",
     primaryCta: "Start a project conversation",
     primaryHref: "/en/start-project",
     secondaryCta: "View projects",
@@ -125,21 +140,29 @@ function BuildStatusCard({ locale }: { locale: Locale }) {
             className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
           />
         </div>
+        {/* slug and status each get their own line: side by side, a 23-char slug
+            and a 43-char status label cannot share one monospace row at this
+            width, and the shared row silently truncated the slug away entirely
+            (log-management-platform and cendovar rendered at 0px on /en). The
+            card is lg-only and the grid is items-center against a taller left
+            column, so the extra line costs no section height. */}
         <ul className="relative divide-y divide-border/60">
           {copy.projects.map((project) => (
             <li
               key={project.slug}
-              className="flex items-center justify-between gap-6 px-4 py-2.5 font-mono text-xs"
+              className="flex flex-col gap-1 px-4 py-2.5 font-mono text-xs"
             >
               <span className="truncate text-foreground/80">
                 {project.slug}
               </span>
-              <span className="flex shrink-0 items-center gap-2 text-muted-foreground">
+              <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
                 <span
                   aria-hidden
-                  className="size-1 rounded-full bg-accent/80"
+                  className="size-1 shrink-0 rounded-full bg-accent/80"
                 />
-                {copy.lower(project.statusLabel)}
+                <span className="min-w-0 flex-1 truncate">
+                  {copy.lower(project.statusLabel)}
+                </span>
               </span>
             </li>
           ))}
@@ -161,23 +184,35 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(139,140,248,0.10),transparent)]" />
       </div>
-      {/* tightened top padding: the hero now follows the opening showcase
-          instead of carrying the first impression on its own */}
-      <Container className="relative grid gap-16 pt-16 pb-24 md:pt-24 md:pb-32 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
+      {/* Compacted for slot 2 (Phase 19B): the showcase above carries the first
+          impression, so this band reinforces the brand instead of competing for
+          it. Every structural element is kept — pill, headline, both CTAs, the
+          undecided path, the stack line, the status card — only the scale and
+          rhythm come down. */}
+      <Container className="relative grid gap-12 pt-14 pb-16 md:pt-16 md:pb-20 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
         <div>
           <Entrance delay={0}>
-            <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
-              <span
-                aria-hidden
-                className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
-              />
-              {copy.site.availability}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+              {/* copy bridge from the showcase: names what this band is for, so
+                  the hero reads as a continuation rather than a restart */}
+              <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                <span aria-hidden className="h-px w-6 bg-accent/60" />
+                {copy.bridge}
+              </p>
+              <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
+                <span
+                  aria-hidden
+                  className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]"
+                />
+                {copy.site.availability}
+              </p>
+            </div>
           </Entrance>
           <Entrance delay={0.06}>
             {/* h2, not h1: the opening sales showcase now carries the page's
-                single h1, and this brand statement follows it. */}
-            <h2 className="mt-7 max-w-4xl text-5xl font-semibold tracking-tight text-balance md:text-7xl lg:text-[5.5rem] lg:leading-[0.98]">
+                single h1. Its type scale stays below the showcase h1 so the
+                page's largest heading is also its first one. */}
+            <h2 className="mt-6 max-w-3xl text-3xl font-semibold tracking-tight text-balance md:text-4xl lg:text-5xl lg:leading-[1.05]">
               {headline}
               <span className="text-accent [text-shadow:0_0_24px_rgba(139,140,248,0.5)]">
                 .
@@ -185,18 +220,17 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
             </h2>
           </Entrance>
           <Entrance delay={0.12}>
-            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground md:text-xl">
-              {copy.site.subheadline}
+            {/* supports the showcase (who builds it, how) instead of repeating
+                its list of system types */}
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">
+              {copy.intro}
             </p>
           </Entrance>
           <Entrance delay={0.18}>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href={copy.primaryHref}
-                className={cn(
-                  buttonVariants({ variant: "cta" }),
-                  "h-12 px-7 text-base",
-                )}
+                className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
               >
                 {copy.primaryCta}
                 <ArrowRight className="size-4 transition-transform group-hover/button:translate-x-0.5" />
@@ -205,7 +239,7 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
                 href={copy.secondaryHref}
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "h-12 px-7 text-base backdrop-blur",
+                  "h-11 px-6 backdrop-blur",
                 )}
               >
                 {copy.secondaryCta}
@@ -223,7 +257,7 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
             </p>
           </Entrance>
           <Entrance delay={0.24}>
-            <p className="mt-16 font-mono text-xs text-muted-foreground">
+            <p className="mt-10 font-mono text-xs text-muted-foreground">
               <span className="tracking-widest uppercase">{copy.stackLabel}</span>
               <span aria-hidden className="mx-2">
                 —

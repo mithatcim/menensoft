@@ -69,24 +69,28 @@ interface GatewayCopy {
   panelHint: string;
   proofLabel: string;
   systemLink: string;
-  secondary: string;
-  secondaryHref: string;
   quoteBase: string;
   systemBase: string;
   projectBase: string;
   intents: GatewayIntent[];
 }
 
+/**
+ * Phase 19B: the opening showcase now owns "recognize your problem → see the
+ * system that solves it", so this band stopped restating that promise and
+ * points at what its console has always actually shown: the layers a system is
+ * built from, input to handoff. Its duplicate "view projects" CTA (the hero one
+ * screen above already carries it) was dropped so the band has one clear
+ * primary action.
+ */
 const GATEWAY: Record<Locale, GatewayCopy> = {
   tr: {
-    eyebrow: "İhtiyaçtan sisteme — görsel geçiş",
-    title: "İhtiyacınızı çalışan bir sisteme bağlayın.",
-    sub: "Neye ihtiyacınız olduğunu seçin; bir fikir veri, arayüz, panel ve teslim akışına dönüşür.",
+    eyebrow: "Sistemin içi",
+    title: "Peki bu sistem içeride nasıl kuruluyor?",
+    sub: "Bir sistem seçin; girdiden teslime kadar hangi katmanların kurulduğunu adım adım izleyin.",
     panelHint: "Sadece görünen sayfa değil, yönetilebilir yapı kurulur.",
     proofLabel: "Kanıt",
-    systemLink: "Sistem detayını gör",
-    secondary: "Projeleri incele",
-    secondaryHref: "/projeler",
+    systemLink: "Sistem detayını incele",
     quoteBase: "/teklif-al",
     systemBase: "/sistemler",
     projectBase: "/projeler",
@@ -148,14 +152,12 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
     ],
   },
   en: {
-    eyebrow: "From need to system — visual gateway",
-    title: "Connect a business need to a working system.",
-    sub: "Choose what you need; a request becomes data, interface, admin flow and handoff.",
+    eyebrow: "Inside the system",
+    title: "So how does a system actually get built?",
+    sub: "Pick a system; follow the layers that get built underneath — from input to handoff.",
     panelHint: "Not just the visible page — the manageable structure behind it.",
     proofLabel: "Proof",
     systemLink: "View system detail",
-    secondary: "View projects",
-    secondaryHref: "/en/projects",
     quoteBase: "/en/start-project",
     systemBase: "/en/systems",
     projectBase: "/en/projects",
@@ -421,8 +423,12 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                   <span className="size-2.5 rounded-full border border-border bg-muted/60" />
                   <span className="size-2.5 rounded-full border border-border bg-muted/60" />
                 </span>
+                {/* display only — the locale-correct system slug. intent.id is
+                    the wizard fit id (always Turkish), so it rendered as
+                    "gateway://e-ticaret" on the English page. ?tur= still uses
+                    intent.id; only the console label is localized. */}
                 <p className="min-w-0 flex-1 truncate text-center font-mono text-xs text-muted-foreground">
-                  gateway://{intent.id}
+                  gateway://{fit?.systemSlug ?? intent.id}
                 </p>
                 <span
                   aria-hidden
@@ -476,9 +482,12 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                 </AnimatePresence>
               </div>
 
-              {/* CTA footer — dynamic primary reflects the selected intent */}
+              {/* CTA footer — one primary that reflects the selected intent,
+                  plus the system-detail path. The old "view projects" outline
+                  button was a duplicate of the hero's secondary CTA one screen
+                  above; dropping it leaves a single, unambiguous action here. */}
               <div className="relative border-t border-border bg-background/30 px-5 py-4 md:px-6">
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
                   <Link
                     href={ctaHref}
                     onClick={engage}
@@ -490,21 +499,11 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                     {intent.cta}
                     <ArrowRight className="size-4" />
                   </Link>
-                  <Link
-                    href={copy.secondaryHref}
-                    onClick={engage}
-                    className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "h-11 px-5",
-                    )}
-                  >
-                    {copy.secondary}
-                  </Link>
                   {systemHref && (
                     <Link
                       href={systemHref}
                       onClick={engage}
-                      className="group ml-auto hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:ml-auto"
                     >
                       {copy.systemLink}
                       <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
