@@ -86,12 +86,10 @@ const WIZARD_COPY = {
       needs: "Ek ihtiyaçlar",
       reference: "Referans aldığım proje",
       goal: "Hedef",
-      notes: "Ek not",
     },
     unset: "(henüz seçilmedi)",
     unsure: "Henüz net değil",
     waIntro: "Merhaba, Menensoft proje görüşmesi talep ediyorum.",
-    waGoal: "Hedef",
     // Step 03 is "Öneri", not "Öneri & mesaj": since Phase 22 the message is
     // ready the moment a system is picked, so promising it at step 3 was stale.
     stepLabels: ["Sistem türü", "Mevcut durum", "Öneri"],
@@ -113,10 +111,12 @@ const WIZARD_COPY = {
     // summary panel
     summaryTitle: "Mesajınız",
     summaryEmpty:
-      "Sistem türünü seçin — mesajınız burada oluşur ve göndermeden önce aynen görünür.",
+      "Sistem türünü seçin — mesajınız burada oluşur, dilediğiniz gibi düzenleyip gönderirsiniz.",
     situationPrompt:
       "Durumunuzu da seçerseniz size en yakın başlangıç noktasını görürsünüz.",
-    previewTitle: "Göndermeden önce düzenleyebilirsiniz",
+    previewTitle: "Mesajınız — göndermeden önce düzenleyebilirsiniz",
+    stale: "Seçimler değişti",
+    regenerate: "Mesajı yeniden oluştur",
     copyIdle: "Mesajı kopyala",
     copyDone: "Kopyalandı",
     ctaMail: "E-posta ile gönder",
@@ -153,12 +153,10 @@ const WIZARD_COPY = {
       needs: "Additional needs",
       reference: "Reference project",
       goal: "Goal",
-      notes: "Extra notes",
     },
     unset: "(not selected yet)",
     unsure: "Not sure yet",
     waIntro: "Hello, I'd like to request a Menensoft project review.",
-    waGoal: "Goal",
     stepLabels: ["System type", "Current situation", "Recommendation"],
     q1: "01 — What do you want to build?",
     q2: "02 — Which is closest to your current situation?",
@@ -174,10 +172,12 @@ const WIZARD_COPY = {
     arrivalChange: "Change selection",
     summaryTitle: "Your message",
     summaryEmpty:
-      "Pick a system type — your message gets built here, and you see it as-is before sending.",
+      "Pick a system type — your message gets built here, and you can edit it however you like before sending.",
     situationPrompt:
       "Pick your situation too and you'll also get your closest starting point.",
-    previewTitle: "You can edit it before sending",
+    previewTitle: "Your message — edit it before sending",
+    stale: "Selections changed",
+    regenerate: "Regenerate message",
     copyIdle: "Copy message",
     copyDone: "Copied",
     ctaMail: "Send by email",
@@ -211,12 +211,32 @@ interface MessageInput {
 }
 
 /**
- * Two blanks, not four. "Existing site/system" and "delivery expectation" used
- * to ship as empty fields here — but those are exactly the scope questions the
- * page promises the founder will ask back. Requiring them up front contradicts
- * "a few sentences are enough, no spec required".
+ * ONE message, not two (Phase 33B).
+ *
+ * Until now email and WhatsApp carried deliberately different payloads — an
+ * 8-line body with two blanks for email, a leaner 5-line greeting for WhatsApp.
+ * That only worked while the text was generated and read-only. Now the visitor
+ * owns the text, so there is exactly one message and every channel sends what
+ * they actually see: email, WhatsApp, copy.
+ *
+ * The default is tuned to WhatsApp length rather than email length. A message
+ * short enough to paste into a chat window reads fine in an inbox; the reverse
+ * is not true, and prefilling a chat with a form was the thing to avoid. The
+ * old "Ek not:" blank is gone — the whole field is editable now, so a labelled
+ * placeholder for "anything else" was asking the visitor to fill in a form
+ * inside a textarea they can already type in.
  */
-function buildMailBody({
+/**
+ * Soft ceiling on the message. Not arbitrary: several mail clients truncate or
+ * refuse a `mailto:` URL past roughly 2,000 characters, and the body is
+ * percent-encoded before it gets there — Turkish characters cost 6 bytes each
+ * once encoded. 1,500 leaves headroom for a fully non-ASCII message.
+ */
+const MESSAGE_MAX = 1500;
+
+const draftKey = (locale: Locale) => `menensoft:inquiry-draft:${locale}`;
+
+function buildMessage({
   copy,
   systemLabel,
   situationLabel,
@@ -225,38 +245,14 @@ function buildMailBody({
 }: MessageInput) {
   const L = copy.bodyLabels;
   return [
+    copy.waIntro,
+    "",
     `${L.system}: ${systemLabel}`,
     `${L.situation}: ${situationLabel}`,
     ...(needLabels.length ? [`${L.needs}: ${needLabels.join(", ")}`] : []),
     ...(referenceName ? [`${L.reference}: ${referenceName}`] : []),
     "",
-    `${L.goal}:`,
-    "",
-    `${L.notes}:`,
-    "",
-  ].join("\n");
-}
-
-/**
- * WhatsApp stays leaner than email: a greeting, the selection, and one open
- * line. It deliberately drops the optional needs list — the panel promises
- * "WhatsApp is enough for first contact; email just carries more detail", and
- * the payload should keep that promise rather than dump a form into a chat.
- * The email body is a strict superset of this.
- */
-function buildWhatsappText({
-  copy,
-  systemLabel,
-  situationLabel,
-  referenceName,
-}: MessageInput) {
-  const L = copy.bodyLabels;
-  return [
-    copy.waIntro,
-    `${L.system}: ${systemLabel}`,
-    `${L.situation}: ${situationLabel}`,
-    ...(referenceName ? [`${L.reference}: ${referenceName}`] : []),
-    `${copy.waGoal}: `,
+    `${L.goal}: `,
   ].join("\n");
 }
 
@@ -304,6 +300,19 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
   /** Set only from a valid ?proje= — the project page the visitor came from. */
   const [referenceSlug, setReferenceSlug] = useState<string | null>(null);
 
+  /**
+   * The visitor's own text. `null` means "hasn't typed yet", which is not the
+   * same as an empty string — while it is null the textarea simply mirrors the
+   * generated message and keeps following the selections.
+   */
+  const [draft, setDraft] = useState<string | null>(null);
+  /**
+   * The generated text the visitor started editing from. Used to tell "they
+   * changed a selection after editing" (offer to regenerate) apart from "they
+   * only reworded it" (say nothing — their text is still current).
+   */
+  const [baseline, setBaseline] = useState<string>("");
+
   // ?tur= / ?durum= / ?proje= preselection. The URL is deliberately read once
   // on mount: useSearchParams + Suspense would drop this page's static HTML to
   // a fallback, and a no-JS visitor would never see step 1 at all. Every param
@@ -323,8 +332,24 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
       setSituationId(durum);
     }
     if (proje && copy.lookupProject(proje)) setReferenceSlug(proje);
+
+    // Restore an edit-in-progress. Typing a project brief and losing it to a
+    // stray back-navigation is the kind of thing you only forgive once.
+    // sessionStorage, not localStorage: it belongs to this tab and this visit.
+    try {
+      const saved = window.sessionStorage.getItem(draftKey(locale));
+      if (saved) {
+        const { d, b } = JSON.parse(saved) as { d: string; b: string };
+        if (typeof d === "string" && typeof b === "string") {
+          setBaseline(b);
+          setDraft(d);
+        }
+      }
+    } catch {
+      // private mode / quota / malformed value — the generated message still works
+    }
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, [copy]);
+  }, [copy, locale]);
 
   const system = copy.systems.find((s) => s.id === systemId);
   const situation = copy.situations.find((s) => s.id === situationId);
@@ -354,7 +379,44 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
     needLabels,
     referenceName: referenceProject?.name,
   };
-  const body = buildMailBody(message);
+
+  const generated = buildMessage(message);
+  const edited = draft !== null;
+  /** What every channel sends. There is no second version of this text. */
+  const body = edited ? draft : generated;
+  /**
+   * Selections moved on after the visitor made the text their own. Their words
+   * stay untouched; they get offered the regenerate, they don't get overruled
+   * by it.
+   */
+  const stale = edited && generated !== baseline;
+
+  const persist = (next: { d: string; b: string } | null) => {
+    try {
+      if (next) {
+        window.sessionStorage.setItem(draftKey(locale), JSON.stringify(next));
+      } else {
+        window.sessionStorage.removeItem(draftKey(locale));
+      }
+    } catch {
+      // storage unavailable — editing still works, it just won't survive a reload
+    }
+  };
+
+  const editMessage = (value: string) => {
+    // First keystroke: remember what they started from, so a later selection
+    // change is detectable without diffing against a moving target.
+    const base = edited ? baseline : generated;
+    setBaseline(base);
+    setDraft(value);
+    persist({ d: value, b: base });
+  };
+
+  const regenerate = () => {
+    setDraft(null);
+    setBaseline("");
+    persist(null);
+  };
 
   const subject =
     system && system.id !== UNSURE_ID
@@ -365,7 +427,7 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
     subject,
   )}&body=${encodeURIComponent(body)}`;
   const whatsappHref = site.whatsappUrl
-    ? `${site.whatsappUrl}?text=${encodeURIComponent(buildWhatsappText(message))}`
+    ? `${site.whatsappUrl}?text=${encodeURIComponent(body)}`
     : undefined;
 
   /** The send action unlocks on the first choice, not the second. */
@@ -537,9 +599,12 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                   <>
                     <div className="rounded-lg border border-border bg-background/50 p-3.5">
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
+                        <label
+                          htmlFor="inquiry-message"
+                          className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase"
+                        >
                           {copy.previewTitle}
-                        </p>
+                        </label>
                         <button
                           type="button"
                           onClick={copyMessage}
@@ -559,15 +624,58 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                           {copied ? copy.copyDone : copy.copyIdle}
                         </button>
                       </div>
-                      <pre
-                        aria-live="polite"
-                        className="mt-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-foreground/80"
-                      >
-                        {body}
-                      </pre>
+
+                      {/* The page has always said "you can edit this before you
+                          send it". Until now that was a read-only <pre>. */}
+                      <textarea
+                        id="inquiry-message"
+                        value={body}
+                        onChange={(e) => editMessage(e.target.value)}
+                        maxLength={MESSAGE_MAX}
+                        spellCheck={false}
+                        rows={9}
+                        className={cn(
+                          "mt-3 field-sizing-content max-h-72 min-h-44 w-full resize-y rounded-md border border-border/70 bg-background/70 p-3 font-mono text-xs leading-relaxed text-foreground/90 transition-colors",
+                          "hover:border-foreground/20 focus-visible:border-accent/50 focus-visible:ring-1 focus-visible:ring-accent/30 focus-visible:outline-none",
+                        )}
+                      />
+
+                      <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+                        {/* Only speaks up when the visitor's text has actually
+                            fallen out of step with their selections. Their words
+                            are never overwritten — regenerating is their call. */}
+                        {stale ? (
+                          <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 font-mono text-xs text-muted-foreground">
+                            <span className="text-accent">{copy.stale}</span>
+                            <span aria-hidden>·</span>
+                            <button
+                              type="button"
+                              onClick={regenerate}
+                              className={cn(
+                                "rounded-sm text-foreground/85 underline underline-offset-4 transition-colors hover:text-foreground",
+                                optionFocus,
+                              )}
+                            >
+                              {copy.regenerate}
+                            </button>
+                          </p>
+                        ) : (
+                          <span />
+                        )}
+                        <span
+                          className={cn(
+                            "shrink-0 font-mono text-xs tabular-nums",
+                            body.length >= MESSAGE_MAX
+                              ? "text-accent"
+                              : "text-muted-foreground/50",
+                          )}
+                        >
+                          {body.length}/{MESSAGE_MAX}
+                        </span>
+                      </div>
                     </div>
 
-                    {!situation && (
+                    {!situation && !edited && (
                       <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                         {copy.situationPrompt}
                       </p>
