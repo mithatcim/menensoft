@@ -20,6 +20,7 @@ import { getSector, sectors } from "@/content/sectors";
 import { getSystem } from "@/content/systems";
 import { breadcrumbSchema, graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
+import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
 
 interface SectorPageProps {
@@ -47,6 +48,15 @@ export default async function SectorPage({ params }: SectorPageProps) {
   const { slug } = await params;
   const sector = getSector(slug);
   if (!sector) notFound();
+
+  // A sector page is about the system that fits it: relatedSystems[0] is that
+  // primary system, so the CTA prefills the wizard with it. The project (if any)
+  // anchors the arrival confirmation. Both derived from existing content.
+  const prefilledInquiry = inquiryHref({
+    locale: "tr",
+    systemSlug: sector.relatedSystems[0],
+    projectSlug: sector.relatedProjects[0]?.slug,
+  });
 
   const systemLinks = sector.relatedSystems
     .map((s) => getSystem(s))
@@ -93,7 +103,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/teklif-al"
+                  href={prefilledInquiry}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
                 >
                   Proje görüşmesi başlat
@@ -180,7 +190,11 @@ export default async function SectorPage({ params }: SectorPageProps) {
               </Reveal>
 
               <Reveal delay={0.04}>
-                <CtaBand title={sector.ctaTitle} text={sector.ctaText} />
+                <CtaBand
+                  primaryHref={prefilledInquiry}
+                  title={sector.ctaTitle}
+                  text={sector.ctaText}
+                />
               </Reveal>
             </div>
 
@@ -214,7 +228,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA />
+      <ContactCTA inquiryHref={prefilledInquiry} />
     </>
   );
 }

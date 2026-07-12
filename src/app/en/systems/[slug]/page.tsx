@@ -21,6 +21,7 @@ import { getSectorEn } from "@/content/en/sectors";
 import { getSystemEn, systemsEn } from "@/content/en/systems";
 import { breadcrumbSchema, graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
+import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
 
 /** English mirror of the four-step engagement facts. */
@@ -73,6 +74,15 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
   const system = getSystemEn(slug);
   if (!system) notFound();
 
+  // Every inquiry CTA on this page is about THIS system, so it prefills the
+  // wizard instead of dropping the visitor on an empty one. The project (if
+  // any) anchors the arrival confirmation. Both derived from existing content.
+  const prefilledInquiry = inquiryHref({
+    locale: "en",
+    systemSlug: system.slug,
+    projectSlug: system.relatedProjects[0]?.slug,
+  });
+
   const sectorLinks = system.relatedSectors
     .map((s) => getSectorEn(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s))
@@ -118,7 +128,7 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/en/start-project"
+                  href={prefilledInquiry}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
                 >
                   Start a project conversation
@@ -229,7 +239,7 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
                   title={system.ctaTitle}
                   text={system.ctaText}
                   primaryLabel="Start a project"
-                  primaryHref="/en/start-project"
+                  primaryHref={prefilledInquiry}
                   secondaryLabel="View projects"
                   secondaryHref="/en/projects"
                 />
@@ -265,7 +275,7 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA locale="en" />
+      <ContactCTA locale="en" inquiryHref={prefilledInquiry} />
     </>
   );
 }

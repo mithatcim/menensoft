@@ -18,6 +18,7 @@ import {
 } from "@/content/en/solutions";
 import { graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
+import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
 
 export const metadata = pageMeta({
@@ -155,7 +156,10 @@ export default function EnSolutionsPage() {
                     </div>
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border bg-background/30 px-6 py-4 md:px-8">
                       <Link
-                        href="/en/start-project"
+                        href={inquiryHref({
+                          locale: "en",
+                          systemSlug: solution.systemSlug,
+                        })}
                         className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
                       >
                         Discuss this system

@@ -22,6 +22,7 @@ import { workflow } from "@/content/services";
 import { getSystem, systems } from "@/content/systems";
 import { breadcrumbSchema, graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
+import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
 
 interface SystemPageProps {
@@ -49,6 +50,15 @@ export default async function SystemPage({ params }: SystemPageProps) {
   const { slug } = await params;
   const system = getSystem(slug);
   if (!system) notFound();
+
+  // Every inquiry CTA on this page is about THIS system, so it prefills the
+  // wizard instead of dropping the visitor on an empty one. The project (if
+  // any) anchors the arrival confirmation. Both derived from existing content.
+  const prefilledInquiry = inquiryHref({
+    locale: "tr",
+    systemSlug: system.slug,
+    projectSlug: system.relatedProjects[0]?.slug,
+  });
 
   const sectorLinks = system.relatedSectors
     .map((s) => getSector(s))
@@ -95,7 +105,7 @@ export default async function SystemPage({ params }: SystemPageProps) {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/teklif-al"
+                  href={prefilledInquiry}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
                 >
                   Proje görüşmesi başlat
@@ -204,6 +214,7 @@ export default async function SystemPage({ params }: SystemPageProps) {
 
               <Reveal delay={0.04}>
                 <CtaBand
+                  primaryHref={prefilledInquiry}
                   title={system.ctaTitle}
                   text={system.ctaText}
                   secondaryLabel="Projeleri incele"
@@ -241,7 +252,7 @@ export default async function SystemPage({ params }: SystemPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA />
+      <ContactCTA inquiryHref={prefilledInquiry} />
     </>
   );
 }

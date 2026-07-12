@@ -37,8 +37,21 @@ const COPY = {
   },
 } as const;
 
-export function ContactCTA({ locale = "tr" }: { locale?: Locale }) {
+export function ContactCTA({
+  locale = "tr",
+  inquiryHref,
+}: {
+  locale?: Locale;
+  /**
+   * Prefilled inquiry link, passed by pages that are genuinely about one
+   * system (system/sector detail). Everywhere else this band is a generic
+   * closer and keeps the bare route — a `?tur=` guessed from a hub or an
+   * about page would be a lie about what the visitor asked for.
+   */
+  inquiryHref?: string;
+}) {
   const copy = COPY[locale];
+  const primaryHref = inquiryHref ?? copy.primaryHref;
   return (
     <section className="pt-4 pb-20 md:pt-6 md:pb-28">
       <Container>
@@ -62,7 +75,7 @@ export function ContactCTA({ locale = "tr" }: { locale?: Locale }) {
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <Link
-                  href={copy.primaryHref}
+                  href={primaryHref}
                   className={cn(
                     buttonVariants({ variant: "cta" }),
                     "h-12 px-7 text-base",

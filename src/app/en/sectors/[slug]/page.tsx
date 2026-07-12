@@ -20,6 +20,7 @@ import { getSectorEn, sectorsEn } from "@/content/en/sectors";
 import { getSystemEn } from "@/content/en/systems";
 import { breadcrumbSchema, graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
+import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
 
 interface SectorPageProps {
@@ -47,6 +48,15 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
   const { slug } = await params;
   const sector = getSectorEn(slug);
   if (!sector) notFound();
+
+  // A sector page is about the system that fits it: relatedSystems[0] is that
+  // primary system, so the CTA prefills the wizard with it. The project (if any)
+  // anchors the arrival confirmation. Both derived from existing content.
+  const prefilledInquiry = inquiryHref({
+    locale: "en",
+    systemSlug: sector.relatedSystems[0],
+    projectSlug: sector.relatedProjects[0]?.slug,
+  });
 
   const systemLinks = sector.relatedSystems
     .map((s) => getSystemEn(s))
@@ -93,7 +103,7 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/en/start-project"
+                  href={prefilledInquiry}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
                 >
                   Start a project conversation
@@ -180,7 +190,7 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
                   title={sector.ctaTitle}
                   text={sector.ctaText}
                   primaryLabel="Start a project"
-                  primaryHref="/en/start-project"
+                  primaryHref={prefilledInquiry}
                   secondaryLabel="See the process"
                   secondaryHref="/en/process"
                 />
@@ -216,7 +226,7 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA locale="en" />
+      <ContactCTA locale="en" inquiryHref={prefilledInquiry} />
     </>
   );
 }
