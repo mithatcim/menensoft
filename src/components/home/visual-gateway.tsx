@@ -1,336 +1,150 @@
 "use client";
 
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Building2,
-  CircuitBoard,
-  Gauge,
-  LayoutDashboard,
-  ShoppingCart,
-  Workflow,
-  type LucideIcon,
-} from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
-import { fitSystemsEn } from "@/content/en/fit";
-import { getProjectEn } from "@/content/en/projects";
-import { fitSystems } from "@/content/fit";
-import { getProject } from "@/content/projects";
 import { type Locale } from "@/lib/locale";
 import { DECOR_PULSES, EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Visual Gateway Band — compact interactive bridge between the hero and the
- * flagship story. The visitor picks a business intent; the console panel
- * animates a system flow (input → structure → surface → handoff), shows a
- * short honest line and a real proof project, and the primary CTA rewrites
- * itself to preselect the project-fit wizard (?tur=<fit id>).
+ * Build explainer — the passive counterpart to the opening kinetic stage
+ * (Phase 20).
  *
- * Everything shown is derived from real content (src/content/fit.ts and its
- * English mirror + real projects) — no invented metrics, telemetry, or proof.
- * Intent ids match the wizard's recognized fit ids so the ?tur= prefill
- * actually lands on a preselected step.
+ * This section used to be an interactive gateway with its own six-intent
+ * selector. Once the opening stage became a six-problem kinetic stage over
+ * the *same six wizard fit ids*, the two were the same interaction one screen
+ * apart, and the smaller one read as a weaker echo of the larger.
+ *
+ * So the selector is gone. The stage above now owns "recognize your problem →
+ * see the system that solves it, and start a conversation". This band owns the
+ * one question the stage does not answer: what actually gets built, in what
+ * order, when you say yes. It is deliberately passive — no controls, nothing
+ * to choose, nothing competing with the stage.
+ *
+ * The four layers are the real shape of the work (they match the process page).
+ * No invented metrics, no telemetry, no fake dashboards.
  */
 
-const ICONS: Record<string, LucideIcon> = {
-  "e-ticaret": ShoppingCart,
-  "yonetim-paneli": LayoutDashboard,
-  dashboard: Gauge,
-  operasyon: CircuitBoard,
-  otomasyon: Workflow,
-  "kurumsal-site": Building2,
-};
-
-interface GatewayIntent {
-  /** Matches a src/content/fit.ts id → drives ?tur=, system + proof lookup. */
-  id: string;
-  label: string;
-  /** Compact label for the mobile chip grid; full label stays the aria-label. */
-  short: string;
-  /** Panel title (the system name). */
+interface BuildLayer {
+  /** Short node label — also used in the flow rail. */
+  node: string;
   title: string;
-  /** Four flow nodes: input → structure → surface → handoff. */
-  nodes: [string, string, string, string];
-  line: string;
-  cta: string;
+  body: string;
 }
 
-interface GatewayCopy {
+interface ExplainerCopy {
   eyebrow: string;
   title: string;
   sub: string;
+  panelTitle: string;
   panelHint: string;
-  proofLabel: string;
-  systemLink: string;
-  quoteBase: string;
-  systemBase: string;
-  projectBase: string;
-  intents: GatewayIntent[];
+  primary: string;
+  primaryHref: string;
+  secondary: string;
+  secondaryHref: string;
+  layers: BuildLayer[];
 }
 
-/**
- * Phase 19B: the opening showcase now owns "recognize your problem → see the
- * system that solves it", so this band stopped restating that promise and
- * points at what its console has always actually shown: the layers a system is
- * built from, input to handoff. Its duplicate "view projects" CTA (the hero one
- * screen above already carries it) was dropped so the band has one clear
- * primary action.
- */
-const GATEWAY: Record<Locale, GatewayCopy> = {
+const EXPLAINER: Record<Locale, ExplainerCopy> = {
   tr: {
     eyebrow: "Sistemin içi",
     title: "Peki bu sistem içeride nasıl kuruluyor?",
-    sub: "Bir sistem seçin; girdiden teslime kadar hangi katmanların kurulduğunu adım adım izleyin.",
-    panelHint: "Sadece görünen sayfa değil, yönetilebilir yapı kurulur.",
-    proofLabel: "Kanıt",
-    systemLink: "Sistem detayını incele",
-    quoteBase: "/teklif-al",
-    systemBase: "/sistemler",
-    projectBase: "/projeler",
-    intents: [
+    sub: "Yukarıdaki problemlerden hangisini seçerseniz seçin, kurulan sistem aynı dört katmandan geçer. Görünen sayfa en sonda gelir.",
+    panelTitle: "build://sistem",
+    panelHint:
+      "Sadece görünen sayfa değil; arkasındaki yönetilebilir yapı kurulur.",
+    primary: "Proje görüşmesi başlat",
+    primaryHref: "/teklif-al",
+    secondary: "Süreci ayrıntılı incele",
+    secondaryHref: "/surec",
+    layers: [
       {
-        id: "e-ticaret",
-        label: "E-ticaret kurmak istiyorum",
-        short: "E-ticaret",
-        title: "E-ticaret sistemi",
-        nodes: ["Ürün girişi", "Veri modeli", "Vitrin + Panel", "Teslim"],
-        line: "Vitrin ve yönetim katmanı tek altyapıda: ürünleri yöneten panel, onları satan sayfaları da yönetir.",
-        cta: "E-ticaret sistemi için görüşme başlat",
+        node: "Talep",
+        title: "Girdi kaynağında yakalanır",
+        body: "Sipariş, randevu ya da başvuru; nereden gelirse gelsin sistemde bir kez kaydedilir. Elle taşıma burada biter.",
       },
       {
-        id: "yonetim-paneli",
-        label: "Yönetim paneli istiyorum",
-        short: "Yönetim paneli",
-        title: "Yönetim paneli",
-        nodes: ["Veri", "Roller", "Yönetim ekranları", "Teslim"],
-        line: "Tablolarda ve mesajlarda yaşayan veri, rol bazlı yetkili ekranlara taşınır.",
-        cta: "Yönetim paneli için görüşme başlat",
+        node: "Veri",
+        title: "Yapı ve ilişkiler kurulur",
+        body: "Yakalanan her şey, ilişkileri tanımlı bir veri modeline oturur: neyin neye bağlı olduğu baştan bellidir.",
       },
       {
-        id: "dashboard",
-        label: "İşleri takip etmek istiyorum",
-        short: "İş takibi",
-        title: "Dashboard / raporlama",
-        nodes: ["Olaylar", "Veri katmanı", "Canlı ekran", "Teslim"],
-        line: "İşin anlık durumu, sormadan tek bakışta görünür hale gelir.",
-        cta: "Dashboard için görüşme başlat",
+        node: "Arayüz + Panel",
+        title: "Her rol kendi ekranını görür",
+        body: "Ekipler işlerini kendi ekranından yürütür; yönetim paneli veriyi kod yazmadan yönetir.",
       },
       {
-        id: "operasyon",
-        label: "Randevu / sipariş akışı istiyorum",
-        short: "Sipariş & randevu",
-        title: "Operasyon sistemi",
-        nodes: ["Sipariş / talep", "Yönlendirme", "İstasyon ekranları", "Teslim"],
-        line: "Tek girdi ihtiyacı olan her istasyona kendi ekranıyla ulaşır; durum herkes için aynıdır.",
-        cta: "Operasyon akışı için görüşme başlat",
-      },
-      {
-        id: "otomasyon",
-        label: "Manuel işi otomatikleştirmek istiyorum",
-        short: "Otomasyon",
-        title: "İş akışı otomasyonu",
-        nodes: ["Girdi", "Kurallar", "Otomatik akış", "Teslim"],
-        line: "Elle dönen iş kaynağında bir kez yakalanır, kurala göre yönlenir.",
-        cta: "Otomasyon için görüşme başlat",
-      },
-      {
-        id: "kurumsal-site",
-        label: "Kurumsal site + panel istiyorum",
-        short: "Kurumsal site",
-        title: "Kurumsal site + panel",
-        nodes: ["İçerik", "Panel", "Site + Talep", "Teslim"],
-        line: "Donmuş vitrin yerine panelden güncellenen, talepleri sistemde toplayan bir site.",
-        cta: "Kurumsal site için görüşme başlat",
+        node: "Teslim",
+        title: "Çalışır sistem devredilir",
+        body: "Sistem çalışır halde, dokümantasyonla ve temiz bir devirle teslim edilir. Kara kutu bırakılmaz.",
       },
     ],
   },
   en: {
     eyebrow: "Inside the system",
     title: "So how does a system actually get built?",
-    sub: "Pick a system; follow the layers that get built underneath — from input to handoff.",
-    panelHint: "Not just the visible page — the manageable structure behind it.",
-    proofLabel: "Proof",
-    systemLink: "View system detail",
-    quoteBase: "/en/start-project",
-    systemBase: "/en/systems",
-    projectBase: "/en/projects",
-    intents: [
+    sub: "Whichever problem above is yours, the system that solves it passes through the same four layers. The visible page comes last.",
+    panelTitle: "build://system",
+    panelHint:
+      "Not just the visible page — the manageable structure behind it.",
+    primary: "Start a project conversation",
+    primaryHref: "/en/start-project",
+    secondary: "See the process in detail",
+    secondaryHref: "/en/process",
+    layers: [
       {
-        id: "e-ticaret",
-        label: "I need an e-commerce system",
-        short: "E-commerce",
-        title: "E-commerce system",
-        nodes: ["Product input", "Data model", "Storefront + Panel", "Handoff"],
-        line: "Storefront and management layer in one infrastructure: the panel that manages products also manages the pages that sell them.",
-        cta: "Start an e-commerce system conversation",
+        node: "Request",
+        title: "Input is captured at the source",
+        body: "An order, a booking or an application — wherever it arrives from, it is recorded once, in the system. Moving it by hand ends here.",
       },
       {
-        id: "yonetim-paneli",
-        label: "I need an admin panel",
-        short: "Admin panel",
-        title: "Admin panel",
-        nodes: ["Data", "Roles", "Admin screens", "Handoff"],
-        line: "Data living in spreadsheets and chats moves into role-based, authorized screens.",
-        cta: "Start an admin panel conversation",
+        node: "Data",
+        title: "Structure and relationships are set",
+        body: "Everything captured lands in a data model with defined relationships: what belongs to what is settled up front.",
       },
       {
-        id: "dashboard",
-        label: "I need to track operations",
-        short: "Ops tracking",
-        title: "Dashboard / reporting",
-        nodes: ["Events", "Data layer", "Live screen", "Handoff"],
-        line: "The state of the work becomes visible at a glance — without asking.",
-        cta: "Start a dashboard conversation",
+        node: "Interface + panel",
+        title: "Each role gets its own screen",
+        body: "Teams do their work on their own screen; the admin panel manages the data without touching code.",
       },
       {
-        id: "operasyon",
-        label: "I need an appointment / order flow",
-        short: "Orders & bookings",
-        title: "Operations system",
-        nodes: ["Order / request", "Routing", "Station screens", "Handoff"],
-        line: "One input reaches every station on its own screen; status is the same for everyone.",
-        cta: "Start an operations system conversation",
-      },
-      {
-        id: "otomasyon",
-        label: "I want to automate manual work",
-        short: "Automation",
-        title: "Workflow automation",
-        nodes: ["Input", "Rules", "Automated flow", "Handoff"],
-        line: "A flow running by hand is captured once at the source and routed by rule.",
-        cta: "Start an automation conversation",
-      },
-      {
-        id: "kurumsal-site",
-        label: "I need a website with a panel",
-        short: "Website + panel",
-        title: "Corporate website + panel",
-        nodes: ["Content", "Panel", "Site + inquiries", "Handoff"],
-        line: "Instead of a frozen brochure, a site updated from a panel that collects inquiries in a system.",
-        cta: "Start a corporate website conversation",
+        node: "Handoff",
+        title: "A working system is handed over",
+        body: "The system ships working, with documentation and a clean handoff. No black box left behind.",
       },
     ],
   },
 };
 
-const nodeVariants = {
-  hidden: { opacity: 0, y: 8 },
+const layerVariants = {
+  hidden: { opacity: 0, y: 12 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, delay: 0.12 + i * 0.1, ease: EASE_OUT },
+    transition: { duration: 0.5, delay: 0.1 + i * 0.12, ease: EASE_OUT },
   }),
 };
 
-/** The animated system-flow rail for the selected intent. */
-function FlowRail({
-  nodes,
-  reduceMotion,
-}: {
-  nodes: readonly string[];
-  reduceMotion: boolean;
-}) {
-  return (
-    <div>
-      {/* travelling pulse rail — decorative, gated by DECOR_PULSES + reduced-motion */}
-      <div className="relative mb-3 h-px w-full bg-gradient-to-r from-border via-accent/40 to-border">
-        {DECOR_PULSES && (
-          <span className="animate-flow-x absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]" />
-        )}
-      </div>
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-        {nodes.map((node, i) => (
-          <div key={node} className="flex items-center gap-2">
-            {i > 0 && (
-              <ArrowRight
-                aria-hidden
-                className="size-3 shrink-0 text-accent/50"
-              />
-            )}
-            <motion.span
-              custom={i}
-              variants={nodeVariants}
-              initial={reduceMotion ? false : "hidden"}
-              animate="show"
-              className={cn(
-                "rounded-md border bg-background/50 px-2.5 py-1 font-mono text-xs text-foreground/85",
-                i === nodes.length - 1
-                  ? "border-accent/40 text-accent"
-                  : "border-border",
-              )}
-            >
-              {node}
-            </motion.span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
-  const copy = GATEWAY[locale];
+  const copy = EXPLAINER[locale];
   const reduceMotion = useReducedMotion() ?? false;
-  const [selected, setSelected] = useState(0);
-  const [interacted, setInteracted] = useState(false);
-
-  const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
-  const lookupProject = locale === "en" ? getProjectEn : getProject;
-
-  const intent = copy.intents[selected];
-  const fit = fitPool.find((f) => f.id === intent.id);
-  const proof = fit?.projectSlug ? lookupProject(fit.projectSlug) : null;
-  const ctaHref = `${copy.quoteBase}?tur=${intent.id}`;
-  const systemHref = fit?.systemSlug
-    ? `${copy.systemBase}/${fit.systemSlug}`
-    : undefined;
-  const proofHref = proof ? `${copy.projectBase}/${proof.slug}` : undefined;
-
-  // Gentle auto-cycle before first interaction; never under reduced motion,
-  // stops permanently once the visitor engages (click or keyboard focus).
-  useEffect(() => {
-    if (reduceMotion || interacted) return;
-    const timer = setInterval(() => {
-      setSelected((s) => (s + 1) % copy.intents.length);
-    }, 4200);
-    return () => clearInterval(timer);
-  }, [reduceMotion, interacted, copy.intents.length]);
-
-  const engage = () => setInteracted(true);
-  const choose = (i: number) => {
-    setInteracted(true);
-    setSelected(i);
-  };
 
   return (
-    <section
-      onFocusCapture={engage}
-      onPointerEnter={engage}
-      className="relative overflow-hidden border-b border-border/60 py-14 md:py-16"
-    >
+    <section className="relative overflow-hidden border-b border-border/60 py-14 md:py-16">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-grid mask-radial-faded absolute inset-0 opacity-40" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_0%,rgba(139,140,248,0.06),transparent)]" />
       </div>
 
-      {/* Concise status for screen readers: announces only the selected system,
-          and only after the visitor engages — so the pre-interaction auto-cycle
-          never spams assistive tech. */}
-      <p className="sr-only" role="status">
-        {interacted ? intent.title : ""}
-      </p>
-
       <Container className="relative">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
-          {/* left: heading + intent selector */}
-          <div>
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-12">
+          {/* left: the question this band answers */}
+          <div className="lg:sticky lg:top-28">
             <Reveal>
               <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="size-1.5 bg-accent/90" />
@@ -344,61 +158,30 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
               </p>
             </Reveal>
 
-            <Reveal delay={0.06}>
-              {/* Mobile: compact two-column chips (short labels, tap-friendly).
-                  Desktop: the full-sentence intent list. The full label stays
-                  the accessible name in both cases. */}
-              <div
-                role="group"
-                aria-label={copy.eyebrow}
-                className="mt-6 grid grid-cols-2 gap-2 lg:flex lg:flex-col"
-              >
-                {copy.intents.map((it, i) => {
-                  const Icon = ICONS[it.id] ?? ShoppingCart;
-                  const isSel = selected === i;
-                  return (
-                    <button
-                      key={it.id}
-                      type="button"
-                      onClick={() => choose(i)}
-                      aria-pressed={isSel}
-                      aria-label={it.label}
-                      className={cn(
-                        "group flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:gap-3 lg:px-3.5",
-                        isSel
-                          ? "border-accent/50 bg-card/80 ring-1 ring-accent/20"
-                          : "border-border bg-card/40 text-foreground/80 hover:border-foreground/20 hover:bg-card/60",
-                      )}
-                    >
-                      <Icon
-                        className={cn(
-                          "size-4 shrink-0 transition-colors",
-                          isSel ? "text-accent" : "text-muted-foreground",
-                        )}
-                      />
-                      <span aria-hidden className="min-w-0 flex-1 truncate">
-                        <span className="lg:hidden">{it.short}</span>
-                        <span className="hidden lg:inline">{it.label}</span>
-                      </span>
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "hidden size-1.5 shrink-0 rounded-full transition-colors lg:block",
-                          isSel ? "bg-accent" : "bg-muted-foreground/25",
-                        )}
-                      />
-                    </button>
-                  );
-                })}
+            <Reveal delay={0.08}>
+              <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <Link
+                  href={copy.primaryHref}
+                  className={cn(buttonVariants({ variant: "cta" }), "h-11 px-5")}
+                >
+                  {copy.primary}
+                  <ArrowRight className="size-4" />
+                </Link>
+                <Link
+                  href={copy.secondaryHref}
+                  className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {copy.secondary}
+                  <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </Link>
               </div>
             </Reveal>
           </div>
 
-          {/* right: console panel */}
-          <Reveal delay={0.1} className="h-full">
-            <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm">
+          {/* right: the console — now a static read, not a selector */}
+          <Reveal delay={0.1}>
+            <div className="relative overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm">
               <div aria-hidden className="scanlines absolute inset-0 opacity-30" />
-              {/* corner brackets */}
               <span
                 aria-hidden
                 className="absolute top-3 left-3 size-4 border-t border-l border-accent/40"
@@ -416,19 +199,14 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                 className="absolute right-3 bottom-3 size-4 border-r border-b border-accent/40"
               />
 
-              {/* console header strip */}
               <div className="relative flex items-center gap-3 border-b border-border bg-background/40 px-4 py-2.5">
                 <span aria-hidden className="flex gap-1.5">
                   <span className="size-2.5 rounded-full border border-border bg-muted/60" />
                   <span className="size-2.5 rounded-full border border-border bg-muted/60" />
                   <span className="size-2.5 rounded-full border border-border bg-muted/60" />
                 </span>
-                {/* display only — the locale-correct system slug. intent.id is
-                    the wizard fit id (always Turkish), so it rendered as
-                    "gateway://e-ticaret" on the English page. ?tur= still uses
-                    intent.id; only the console label is localized. */}
                 <p className="min-w-0 flex-1 truncate text-center font-mono text-xs text-muted-foreground">
-                  gateway://{fit?.systemSlug ?? intent.id}
+                  {copy.panelTitle}
                 </p>
                 <span
                   aria-hidden
@@ -436,84 +214,72 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                 />
               </div>
 
-              {/* animated console body — grows to fill the panel so the console
-                  reads as one solid block beside the intent list */}
-              <div className="relative flex flex-1 flex-col justify-center p-5 md:p-6">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={intent.id}
-                    initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                    transition={{
-                      duration: reduceMotion ? 0 : 0.3,
-                      ease: EASE_OUT,
-                    }}
-                  >
-                    <h3 className="text-lg font-semibold tracking-tight md:text-xl">
-                      {intent.title}
-                    </h3>
-                    <div className="mt-4">
-                      <FlowRail nodes={intent.nodes} reduceMotion={reduceMotion} />
-                    </div>
-                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                      {intent.line}
-                    </p>
-                    <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-                      {proof && proofHref && (
-                        <Link
-                          href={proofHref}
-                          onClick={engage}
-                          className="group inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-1.5 text-xs transition-colors hover:border-accent/40 hover:bg-card"
+              {/* the four layers, read top to bottom, wired together */}
+              <ol className="relative p-5 md:p-6">
+                {copy.layers.map((layer, i) => {
+                  const last = i === copy.layers.length - 1;
+                  return (
+                    <motion.li
+                      key={layer.node}
+                      custom={i}
+                      variants={layerVariants}
+                      initial={reduceMotion ? false : "hidden"}
+                      whileInView="show"
+                      viewport={{ once: true, margin: "-60px" }}
+                      className="relative flex gap-4 pb-6 last:pb-0"
+                    >
+                      {/* connector rail between layers */}
+                      <div className="relative flex shrink-0 flex-col items-center">
+                        <span
+                          className={cn(
+                            "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-lg border font-mono text-xs",
+                            last
+                              ? "border-accent/50 bg-accent/10 text-accent"
+                              : "border-border bg-background/60 text-muted-foreground",
+                          )}
                         >
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        {!last && (
                           <span
                             aria-hidden
-                            className="size-1.5 rounded-full bg-accent/80"
-                          />
-                          <span className="font-mono tracking-widest text-muted-foreground/70 uppercase">
-                            {copy.proofLabel}
+                            className="relative mt-1 w-px flex-1 bg-gradient-to-b from-accent/40 to-border"
+                          >
+                            {DECOR_PULSES && (
+                              <span className="animate-flow-y absolute left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent shadow-[0_0_8px_1px_rgba(139,140,248,0.6)]" />
+                            )}
                           </span>
-                          <span className="text-foreground/85">{proof.name}</span>
-                          <ArrowUpRight className="size-3.5 text-muted-foreground transition-colors group-hover:text-foreground" />
-                        </Link>
-                      )}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                        )}
+                      </div>
 
-              {/* CTA footer — one primary that reflects the selected intent,
-                  plus the system-detail path. The old "view projects" outline
-                  button was a duplicate of the hero's secondary CTA one screen
-                  above; dropping it leaves a single, unambiguous action here. */}
-              <div className="relative border-t border-border bg-background/30 px-5 py-4 md:px-6">
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-                  <Link
-                    href={ctaHref}
-                    onClick={engage}
-                    className={cn(
-                      buttonVariants({ variant: "cta" }),
-                      "h-11 px-5",
-                    )}
-                  >
-                    {intent.cta}
-                    <ArrowRight className="size-4" />
-                  </Link>
-                  {systemHref && (
-                    <Link
-                      href={systemHref}
-                      onClick={engage}
-                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:ml-auto"
-                    >
-                      {copy.systemLink}
-                      <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </Link>
-                  )}
-                </div>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground/70">
-                  {copy.panelHint}
-                </p>
-              </div>
+                      <div className="min-w-0 flex-1 pt-0.5">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <span
+                            className={cn(
+                              "rounded-md border px-2 py-0.5 font-mono text-xs",
+                              last
+                                ? "border-accent/40 bg-accent/5 text-accent"
+                                : "border-border bg-background/50 text-foreground/85",
+                            )}
+                          >
+                            {layer.node}
+                          </span>
+                          <h3 className="text-sm font-semibold tracking-tight">
+                            {layer.title}
+                          </h3>
+                        </div>
+                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                          {layer.body}
+                        </p>
+                      </div>
+                    </motion.li>
+                  );
+                })}
+              </ol>
+
+              <p className="relative border-t border-border bg-background/30 px-5 py-4 text-xs leading-relaxed text-muted-foreground/70 md:px-6">
+                {copy.panelHint}
+              </p>
             </div>
           </Reveal>
         </div>
