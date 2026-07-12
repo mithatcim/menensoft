@@ -115,7 +115,7 @@ const WIZARD_COPY = {
       "Sistem türünü seçin — mesajınız burada oluşur, dilediğiniz gibi düzenleyip gönderirsiniz.",
     situationPrompt:
       "Durumunuzu da seçerseniz size en yakın başlangıç noktasını görürsünüz.",
-    previewTitle: "Mesajınız — göndermeden önce düzenleyebilirsiniz",
+    previewTitle: "Göndermeden önce düzenleyebilirsiniz",
     stale: "Seçimler değişti",
     regenerate: "Mesajı yeniden oluştur",
     copyIdle: "Mesajı kopyala",
@@ -176,7 +176,7 @@ const WIZARD_COPY = {
       "Pick a system type — your message gets built here, and you can edit it however you like before sending.",
     situationPrompt:
       "Pick your situation too and you'll also get your closest starting point.",
-    previewTitle: "Your message — edit it before sending",
+    previewTitle: "You can edit it before sending",
     stale: "Selections changed",
     regenerate: "Regenerate message",
     copyIdle: "Copy message",
@@ -648,10 +648,13 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                 ) : (
                   <>
                     <div className="rounded-lg border border-border bg-background/50 p-3.5">
-                      <div className="flex items-center justify-between gap-3">
+                      {/* flex-wrap, not a plain row: the Turkish label's longest
+                          word plus a shrink-0 button is wider than the panel at
+                          390px, and the button was being clipped by the card. */}
+                      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
                         <label
                           htmlFor="inquiry-message"
-                          className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase"
+                          className="min-w-0 font-mono text-xs tracking-widest text-muted-foreground/70 uppercase"
                         >
                           {copy.previewTitle}
                         </label>
