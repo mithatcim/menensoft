@@ -33,67 +33,35 @@ export function isCompactDossier(project: Project) {
   return project.tier === "internal";
 }
 
-export function DossierSummary({
-  project,
-  locale = "tr",
-}: {
-  project: Project;
-  locale?: Locale;
-}) {
-  if (!project.dossierSummary) return null;
-  const compact = isCompactDossier(project);
-  const copy = DOSSIER_COPY[locale];
-
-  return (
-    <div className="relative overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5">
-      <div aria-hidden className="scanlines absolute inset-0 opacity-30" />
-      <div className="relative p-5 md:p-6">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-            <span aria-hidden className="size-1.5 bg-accent/90" />
-            {copy.dossier}
-          </p>
-          {compact && (
-            <p className="rounded-md border border-border/60 bg-background/50 px-2 py-0.5 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-              {copy.compact}
-            </p>
-          )}
-          <p className="ml-auto hidden font-mono text-xs text-muted-foreground/60 sm:block">
-            {copy.lower(project.statusLabel)}
-          </p>
-        </div>
-        <p
-          className={cn(
-            "mt-3 leading-relaxed text-pretty",
-            compact
-              ? "text-sm text-muted-foreground"
-              : "text-base text-foreground/90 md:text-lg",
-          )}
-        >
-          {project.dossierSummary}
-        </p>
-      </div>
-    </div>
-  );
-}
+/**
+ * Phase 21: DossierSummary is gone. The case-study hero now leads with
+ * `dossierSummary` itself, so a second panel repeating it a screen later was
+ * pure duplication. The compact-dossier distinction it used to carry lives on
+ * in the hero's tier-aware status badge.
+ */
 
 export function DossierConstraints({
   project,
   locale = "tr",
+  showLabel = true,
 }: {
   project: Project;
   locale?: Locale;
+  /** Off when the surrounding stage heading already names this block. */
+  showLabel?: boolean;
 }) {
   if (!project.constraints || project.constraints.length === 0) return null;
   const compact = isCompactDossier(project);
   const copy = DOSSIER_COPY[locale];
 
   return (
-    <div className="mt-5 rounded-xl border border-border/60 bg-background/40 p-4">
-      <p className="font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-        {compact ? copy.explored : copy.constraints}
-      </p>
-      <ul className="mt-3 space-y-2">
+    <div className="rounded-xl border border-border/60 bg-background/40 p-4">
+      {showLabel && (
+        <p className="mb-3 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
+          {compact ? copy.explored : copy.constraints}
+        </p>
+      )}
+      <ul className="space-y-2">
         {project.constraints.map((c) => (
           <li
             key={c}

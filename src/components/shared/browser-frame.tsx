@@ -72,6 +72,48 @@ function CornerBracket({ className }: { className?: string }) {
   );
 }
 
+/**
+ * Slim reserved capture strip (Phase 21).
+ *
+ * The full ScreenshotSlot renders a 16:10 frame — roughly 530px of empty box —
+ * which on a project page was outweighing the real module proof sitting below
+ * it. An empty rectangle should not be the visual centre of "what was built".
+ *
+ * So where no real capture exists yet, project pages render this instead: the
+ * same honest reservation, stated once, at a fraction of the height. The
+ * promise is unchanged, it just stops shouting. The moment a real image lands
+ * in the project record, the caller renders the full BrowserFrame again.
+ */
+export function ReservedCaptureStrip({
+  label = "Ekran görüntüsü alanı ayrıldı — arayüz görseli eklenecek",
+  cornerLabel = "arayüz önizleme",
+}: {
+  label?: string;
+  cornerLabel?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-xl border border-dashed border-border bg-background/30 px-5 py-4">
+      <div aria-hidden className="bg-grid absolute inset-0 opacity-30" />
+      <div aria-hidden className="scanlines absolute inset-0 opacity-40" />
+      <CornerBracket className="top-2 left-2 border-t border-l" />
+      <CornerBracket className="right-2 bottom-2 border-r border-b" />
+
+      <div className="relative flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span
+          aria-hidden
+          className="size-1.5 shrink-0 rounded-full bg-accent/60"
+        />
+        <span className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
+          {cornerLabel}
+        </span>
+        <span className="min-w-0 font-mono text-xs text-muted-foreground">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function ScreenshotSlot({
   label = "Ekran görüntüsü alanı ayrıldı — arayüz görseli eklenecek",
   cornerLabel = "arayüz önizleme",

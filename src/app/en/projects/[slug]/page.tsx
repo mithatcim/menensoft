@@ -1,15 +1,13 @@
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
+import { CaseStudyHero } from "@/components/projects/case-study-hero";
 import { SimilarSystemBand } from "@/components/projects/similar-system-band";
 import { CapabilityMatrix } from "@/components/projects/system-map";
 import {
   DossierConstraints,
   DossierModules,
-  DossierSummary,
   isCompactDossier,
 } from "@/components/projects/system-dossier";
 import {
@@ -18,19 +16,16 @@ import {
 } from "@/components/projects/teardown-rail";
 import {
   BrowserFrame,
-  ScreenshotSlot,
+  ReservedCaptureStrip,
 } from "@/components/shared/browser-frame";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
-import { TechTag } from "@/components/shared/tech-tag";
-import { buttonVariants } from "@/components/ui/button";
 import { getProjectEn, projectsEn } from "@/content/en/projects";
 import { projectImage } from "@/content/projects";
 import { breadcrumbSchema, graph, projectSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
-import { cn } from "@/lib/utils";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -53,8 +48,9 @@ export async function generateMetadata({
   });
 }
 
+/** Stage 01 covers constraints; the case-study hero above states the problem. */
 const TEARDOWN_STAGES: TeardownStage[] = [
-  { id: "input", num: "01", label: "Input", sub: "The problem" },
+  { id: "input", num: "01", label: "Input", sub: "Constraints" },
   { id: "architecture", num: "02", label: "Architecture", sub: "System flow" },
   { id: "interface", num: "03", label: "Interface", sub: "What was built" },
   { id: "scope", num: "04", label: "Scope", sub: "Current status" },
@@ -71,10 +67,18 @@ function StageChip({ num, label }: { num: string; label: string }) {
   );
 }
 
+function StageHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="mt-4 text-xl font-semibold tracking-tight">{children}</h2>
+  );
+}
+
 export default async function EnProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const project = getProjectEn(slug);
   if (!project) notFound();
+
+  const capture = projectImage(project);
 
   return (
     <>
@@ -91,80 +95,13 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
           }),
         )}
       />
-      <section className="py-16 md:py-24">
+
+      <CaseStudyHero project={project} locale="en" />
+
+      <section className="py-14 md:py-20">
         <Container>
           <article className="max-w-3xl xl:max-w-[62rem]">
-            <Link
-              href="/en/projects"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="size-4" />
-              All projects
-            </Link>
-
-            <div className="max-w-3xl">
-              <h1 className="mt-8 text-4xl font-semibold tracking-tight text-balance md:text-5xl">
-                {project.name}
-              </h1>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                {project.oneLiner}
-              </p>
-
-              <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
-                <dl className="grid gap-px sm:grid-cols-3">
-                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Status
-                    </dt>
-                    <dd className="mt-3 flex items-center gap-2 text-sm">
-                      <span
-                        aria-hidden
-                        className="size-1.5 rounded-full bg-accent/90"
-                      />
-                      {project.statusLabel}
-                      {project.year && (
-                        <span className="text-muted-foreground">
-                          {project.year}
-                        </span>
-                      )}
-                    </dd>
-                  </div>
-                  {project.role ? (
-                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Role
-                      </dt>
-                      <dd className="mt-3 text-sm">{project.role}</dd>
-                    </div>
-                  ) : (
-                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Case file
-                      </dt>
-                      <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                        Details get added as the project matures.
-                      </dd>
-                    </div>
-                  )}
-                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Stack
-                    </dt>
-                    <dd className="mt-3 flex flex-wrap gap-2">
-                      {project.stack.map((tech) => (
-                        <TechTag key={tech}>{tech}</TechTag>
-                      ))}
-                    </dd>
-                  </div>
-                </dl>
-              </Reveal>
-
-              <Reveal delay={0.05} className="mt-6">
-                <DossierSummary project={project} locale="en" />
-              </Reveal>
-            </div>
-
-            <div className="mt-14 xl:grid xl:grid-cols-[180px_minmax(0,1fr)] xl:gap-12">
+            <div className="xl:grid xl:grid-cols-[180px_minmax(0,1fr)] xl:gap-12">
               <div className="hidden xl:block">
                 <div className="sticky top-28">
                   <TeardownRail
@@ -181,14 +118,16 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                     data-teardown="input"
                     className="scroll-mt-28"
                   >
-                    <StageChip num="01" label="Input — the problem" />
-                    <h2 className="mt-4 text-xl font-semibold tracking-tight">
-                      The problem it handles
-                    </h2>
-                    <p className="mt-3 leading-relaxed text-muted-foreground">
-                      {project.problem}
+                    <StageChip num="01" label="Input — constraints" />
+                    <StageHeading>Constraints and design decisions</StageHeading>
+                    <p className="mt-3 mb-5 leading-relaxed text-muted-foreground">
+                      The system was built against these constraints.
                     </p>
-                    <DossierConstraints project={project} locale="en" />
+                    <DossierConstraints
+                      project={project}
+                      locale="en"
+                      showLabel={false}
+                    />
                   </section>
                 </Reveal>
 
@@ -200,6 +139,7 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                       className="scroll-mt-28"
                     >
                       <StageChip num="02" label="Architecture — system flow" />
+                      <StageHeading>System flow</StageHeading>
                       <FlowPanel
                         label="System flow"
                         nodes={project.flow}
@@ -216,21 +156,16 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                     className="scroll-mt-28"
                   >
                     <StageChip num="03" label="Interface — what was built" />
-                    <div className="mt-4">
-                      <BrowserFrame
-                        title={`/${project.slug}`}
-                        image={projectImage(project)}
-                      >
-                        <ScreenshotSlot
-                          label="Screenshot slot reserved — interface capture to be added"
-                          cornerLabel="interface preview"
-                        />
-                      </BrowserFrame>
-                    </div>
+                    <StageHeading>What was built</StageHeading>
+
+                    {/* Modules lead; the reserved capture follows as a slim
+                        strip. Real structure outweighs an empty frame. */}
                     {project.modules ? (
-                      <DossierModules project={project} />
+                      <div className="mt-4">
+                        <DossierModules project={project} />
+                      </div>
                     ) : (
-                      <div className="mt-5 overflow-hidden rounded-xl border border-border">
+                      <div className="mt-4 overflow-hidden rounded-xl border border-border">
                         <ul className="divide-y divide-border/60">
                           {project.built.map((item) => (
                             <li
@@ -247,6 +182,20 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                         </ul>
                       </div>
                     )}
+
+                    <div className="mt-4">
+                      {capture ? (
+                        <BrowserFrame
+                          title={`/${project.slug}`}
+                          image={capture}
+                        />
+                      ) : (
+                        <ReservedCaptureStrip
+                          label="Screenshot slot reserved — interface capture to be added"
+                          cornerLabel="interface preview"
+                        />
+                      )}
+                    </div>
                   </section>
                 </Reveal>
 
@@ -257,6 +206,7 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                     className="scroll-mt-28"
                   >
                     <StageChip num="04" label="Scope — current status" />
+                    <StageHeading>Scope and current status</StageHeading>
                     <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
                       <CapabilityMatrix
                         slug={project.slug}
@@ -276,41 +226,6 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                         {project.statusNote ??
                           `${project.statusLabel}. Details get added as the project matures.`}
                       </p>
-                      {project.outcome && (
-                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          {project.outcome}
-                        </p>
-                      )}
-                      {(project.liveUrl || project.repoUrl) && (
-                        <div className="mt-5 flex flex-wrap gap-3">
-                          {project.liveUrl && (
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={cn(
-                                buttonVariants({ variant: "outline" }),
-                              )}
-                            >
-                              Visit live site
-                              <ArrowUpRight className="size-4" />
-                            </a>
-                          )}
-                          {project.repoUrl && (
-                            <a
-                              href={project.repoUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={cn(
-                                buttonVariants({ variant: "outline" }),
-                              )}
-                            >
-                              View repository
-                              <ArrowUpRight className="size-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
                     </div>
                   </section>
                 </Reveal>
@@ -319,6 +234,7 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
           </article>
         </Container>
       </section>
+
       <SimilarSystemBand project={project} locale="en" />
       <ContactCTA locale="en" />
     </>

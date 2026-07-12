@@ -1,15 +1,13 @@
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
+import { CaseStudyHero } from "@/components/projects/case-study-hero";
 import { SimilarSystemBand } from "@/components/projects/similar-system-band";
 import { CapabilityMatrix } from "@/components/projects/system-map";
 import {
   DossierConstraints,
   DossierModules,
-  DossierSummary,
   isCompactDossier,
 } from "@/components/projects/system-dossier";
 import {
@@ -18,22 +16,15 @@ import {
 } from "@/components/projects/teardown-rail";
 import {
   BrowserFrame,
-  ScreenshotSlot,
+  ReservedCaptureStrip,
 } from "@/components/shared/browser-frame";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
-import { TechTag } from "@/components/shared/tech-tag";
-import { buttonVariants } from "@/components/ui/button";
 import { getProject, projectImage, projects } from "@/content/projects";
-import {
-  graph,
-  projectBreadcrumbSchema,
-  projectSchema,
-} from "@/lib/schema";
+import { graph, projectBreadcrumbSchema, projectSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
-import { cn } from "@/lib/utils";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -56,9 +47,13 @@ export async function generateMetadata({
   });
 }
 
-/** Teardown progression — presentation labels only, content stays real. */
+/**
+ * Teardown progression. Stage 01 now covers the constraints, not the problem:
+ * the case-study hero above states the problem, and repeating that paragraph a
+ * screen later was the page's clearest piece of duplication.
+ */
 const TEARDOWN_STAGES: TeardownStage[] = [
-  { id: "input", num: "01", label: "Girdi", sub: "Problem" },
+  { id: "input", num: "01", label: "Girdi", sub: "Kısıtlar" },
   { id: "architecture", num: "02", label: "Mimari", sub: "Sistem akışı" },
   { id: "interface", num: "03", label: "Arayüz", sub: "Neler kuruldu" },
   { id: "scope", num: "04", label: "Kapsam", sub: "Güncel durum" },
@@ -75,91 +70,32 @@ function StageChip({ num, label }: { num: string; label: string }) {
   );
 }
 
+/** Every teardown stage owns a real h2 — the outline was h1 → one h2 before. */
+function StageHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="mt-4 text-xl font-semibold tracking-tight">{children}</h2>
+  );
+}
+
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) notFound();
+
+  const capture = projectImage(project);
 
   return (
     <>
       <JsonLd
         data={graph(projectBreadcrumbSchema(project), projectSchema(project))}
       />
-      <section className="py-16 md:py-24">
+
+      <CaseStudyHero project={project} />
+
+      <section className="py-14 md:py-20">
         <Container>
           <article className="max-w-3xl xl:max-w-[62rem]">
-            <Link
-              href="/projeler"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="size-4" />
-              Tüm projeler
-            </Link>
-
-            <div className="max-w-3xl">
-              <h1 className="mt-8 text-4xl font-semibold tracking-tight text-balance md:text-5xl">
-                {project.name}
-              </h1>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                {project.oneLiner}
-              </p>
-
-              <Reveal className="mt-12 overflow-hidden rounded-xl border border-border bg-border">
-                <dl className="grid gap-px sm:grid-cols-3">
-                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Durum
-                    </dt>
-                    <dd className="mt-3 flex items-center gap-2 text-sm">
-                      <span
-                        aria-hidden
-                        className="size-1.5 rounded-full bg-accent/90"
-                      />
-                      {project.statusLabel}
-                      {project.year && (
-                        <span className="text-muted-foreground">
-                          {project.year}
-                        </span>
-                      )}
-                    </dd>
-                  </div>
-                  {project.role ? (
-                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Rol
-                      </dt>
-                      <dd className="mt-3 text-sm">{project.role}</dd>
-                    </div>
-                  ) : (
-                    <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                      <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                        Proje dosyası
-                      </dt>
-                      <dd className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                        Detaylar proje olgunlaştıkça eklenir.
-                      </dd>
-                    </div>
-                  )}
-                  <div className="bg-card p-5 transition-colors hover:bg-muted/20">
-                    <dt className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-                      Teknoloji
-                    </dt>
-                    <dd className="mt-3 flex flex-wrap gap-2">
-                      {project.stack.map((tech) => (
-                        <TechTag key={tech}>{tech}</TechTag>
-                      ))}
-                    </dd>
-                  </div>
-                </dl>
-              </Reveal>
-
-              <Reveal delay={0.05} className="mt-6">
-                <DossierSummary project={project} />
-              </Reveal>
-            </div>
-
-            {/* system teardown: sticky rail on xl, stage chips everywhere */}
-            <div className="mt-14 xl:grid xl:grid-cols-[180px_minmax(0,1fr)] xl:gap-12">
+            <div className="xl:grid xl:grid-cols-[180px_minmax(0,1fr)] xl:gap-12">
               <div className="hidden xl:block">
                 <div className="sticky top-28">
                   <TeardownRail stages={TEARDOWN_STAGES} />
@@ -173,14 +109,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     data-teardown="input"
                     className="scroll-mt-28"
                   >
-                    <StageChip num="01" label="Girdi — problem" />
-                    <h2 className="mt-4 text-xl font-semibold tracking-tight">
-                      Çözdüğü problem
-                    </h2>
-                    <p className="mt-3 leading-relaxed text-muted-foreground">
-                      {project.problem}
+                    <StageChip num="01" label="Girdi — kısıtlar" />
+                    <StageHeading>Kısıtlar ve tasarım kararları</StageHeading>
+                    <p className="mt-3 mb-5 leading-relaxed text-muted-foreground">
+                      Sistem bu kısıtlara göre kuruldu.
                     </p>
-                    <DossierConstraints project={project} />
+                    <DossierConstraints project={project} showLabel={false} />
                   </section>
                 </Reveal>
 
@@ -192,6 +126,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       className="scroll-mt-28"
                     >
                       <StageChip num="02" label="Mimari — sistem akışı" />
+                      <StageHeading>Sistem akışı</StageHeading>
                       <FlowPanel
                         label="Sistem akışı"
                         nodes={project.flow}
@@ -208,18 +143,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     className="scroll-mt-28"
                   >
                     <StageChip num="03" label="Arayüz — neler kuruldu" />
-                    <div className="mt-4">
-                      <BrowserFrame
-                        title={`/${project.slug}`}
-                        image={projectImage(project)}
-                      >
-                        <ScreenshotSlot />
-                      </BrowserFrame>
-                    </div>
+                    <StageHeading>Neler kuruldu</StageHeading>
+
+                    {/* The real modules lead. Until interface captures exist,
+                        the built structure IS the proof — so it gets the visual
+                        weight, and the reserved capture sits under it as a slim
+                        strip instead of a 530px empty frame above it. */}
                     {project.modules ? (
-                      <DossierModules project={project} />
+                      <div className="mt-4">
+                        <DossierModules project={project} />
+                      </div>
                     ) : (
-                      <div className="mt-5 overflow-hidden rounded-xl border border-border">
+                      <div className="mt-4 overflow-hidden rounded-xl border border-border">
                         <ul className="divide-y divide-border/60">
                           {project.built.map((item) => (
                             <li
@@ -236,6 +171,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </ul>
                       </div>
                     )}
+
+                    <div className="mt-4">
+                      {capture ? (
+                        <BrowserFrame
+                          title={`/${project.slug}`}
+                          image={capture}
+                        />
+                      ) : (
+                        <ReservedCaptureStrip />
+                      )}
+                    </div>
                   </section>
                 </Reveal>
 
@@ -246,6 +192,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     className="scroll-mt-28"
                   >
                     <StageChip num="04" label="Kapsam — güncel durum" />
+                    <StageHeading>Kapsam ve güncel durum</StageHeading>
                     <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
                       <CapabilityMatrix
                         slug={project.slug}
@@ -264,41 +211,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         {project.statusNote ??
                           `${project.statusLabel}. Detaylar proje olgunlaştıkça eklenir.`}
                       </p>
-                      {project.outcome && (
-                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          {project.outcome}
-                        </p>
-                      )}
-                      {(project.liveUrl || project.repoUrl) && (
-                        <div className="mt-5 flex flex-wrap gap-3">
-                          {project.liveUrl && (
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={cn(
-                                buttonVariants({ variant: "outline" }),
-                              )}
-                            >
-                              Canlı siteyi gör
-                              <ArrowUpRight className="size-4" />
-                            </a>
-                          )}
-                          {project.repoUrl && (
-                            <a
-                              href={project.repoUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={cn(
-                                buttonVariants({ variant: "outline" }),
-                              )}
-                            >
-                              Kod deposunu görüntüle
-                              <ArrowUpRight className="size-4" />
-                            </a>
-                          )}
-                        </div>
-                      )}
                     </div>
                   </section>
                 </Reveal>
@@ -307,6 +219,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </article>
         </Container>
       </section>
+
       <SimilarSystemBand project={project} />
       <ContactCTA />
     </>

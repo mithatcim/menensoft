@@ -38,7 +38,6 @@ export interface Project {
   dossierSummary?: string;
   constraints?: string[];
   modules?: { name: string; note: string }[];
-  outcome?: string;
   liveUrl?: string;
   repoUrl?: string;
   /** /public altındaki gerçek arayüz görseli; yoksa dürüst alan gösterilir. */
