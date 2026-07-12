@@ -100,12 +100,12 @@ const EXPLAINER: Record<Locale, ExplainerCopy> = {
       {
         node: "Request",
         title: "Input is captured at the source",
-        body: "An order, a booking or an application — wherever it arrives from, it is recorded once, in the system. Moving it by hand ends here.",
+        body: "An order, booking or application is recorded once, wherever it arrives from. Moving work by hand ends here.",
       },
       {
         node: "Data",
         title: "Structure and relationships are set",
-        body: "Everything captured lands in a data model with defined relationships: what belongs to what is settled up front.",
+        body: "Captured data lands in a model with defined relationships: what belongs to what is settled up front.",
       },
       {
         node: "Interface + panel",
@@ -135,14 +135,14 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
   const reduceMotion = useReducedMotion() ?? false;
 
   return (
-    <section className="relative overflow-hidden border-b border-border/60 py-12 md:py-16">
+    <section className="relative overflow-hidden border-b border-border/60 py-10 md:py-16">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-grid mask-radial-faded absolute inset-0 opacity-40" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_0%,rgba(139,140,248,0.06),transparent)]" />
       </div>
 
       <Container className="relative">
-        <div className="grid gap-7 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-12">
           {/* left: the question this band answers */}
           <div className="lg:sticky lg:top-28">
             <Reveal>
@@ -159,7 +159,7 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
             </Reveal>
 
             <Reveal delay={0.08}>
-              <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 md:mt-7">
                 <Link
                   href={copy.primaryHref}
                   className={cn(buttonVariants({ variant: "cta" }), "h-11 px-5")}
@@ -229,7 +229,7 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                       initial={reduceMotion ? false : "hidden"}
                       whileInView="show"
                       viewport={{ once: true, margin: "-60px" }}
-                      className="relative flex gap-3.5 pb-5 last:pb-0 md:gap-4 md:pb-6"
+                      className="relative flex gap-3.5 pb-4 last:pb-0 md:gap-4 md:pb-6"
                     >
                       {/* connector rail between layers */}
                       <div className="relative flex shrink-0 flex-col items-center">
@@ -271,7 +271,14 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                             {layer.title}
                           </h3>
                         </div>
-                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground md:mt-2">
+                        {/* Desktop only. On a phone these four paragraphs were
+                            the entire problem: 272px (TR) / 295px (EN) of pure
+                            body copy, over half the layer stack. Each layer's
+                            title is already a complete one-line statement of
+                            what that layer does, so mobile keeps chip + title
+                            and reads as a tighter flow diagram; the elaboration
+                            stays on desktop where there is room for it. */}
+                        <p className="mt-1.5 hidden text-sm leading-relaxed text-muted-foreground md:mt-2 md:block">
                           {layer.body}
                         </p>
                       </div>
