@@ -84,7 +84,7 @@ const OBJECTIONS = [
   },
   {
     q: "İlk temas için WhatsApp yeterli mi?",
-    a: "Yeterli. E-posta yalnızca daha fazla ayrıntı taşır; ikisi de doğrudan kurucuya ulaşır.",
+    a: "Yeterli. Kısa bir mesajla başlayın; ayrıntı gerekirse e-postaya geçeriz. İkisi de aynı yere düşer.",
     href: "/sss#iletisim",
   },
   {
@@ -178,10 +178,15 @@ export default function QuotePage() {
                   <span aria-hidden className="size-1.5 bg-accent/90" />
                   Kapsamı ne belirler?
                 </h2>
+                {/* Bu paragraf artık fiyat cümlesini tekrar etmiyor: aynı cümle
+                    zaten yan paneldeki güven bloğunda ve "Fiyat nasıl çıkar?"
+                    kartında geçiyordu. Başlık kapsamı soruyor — cevap da kapsamı
+                    anlatıyor. */}
                 <p className="mt-3 text-sm leading-relaxed text-foreground/90">
-                  Fiyat, kapsam ve modüllere göre belirlenir. Sabit bir liste
-                  fiyatı yoktur; kapsam yazılı olarak netleştikten sonra net bir
-                  teklif sunulur.
+                  Kapsamı, kaç ekranın ve kaç modülün kurulacağı çizer. Aşağıdaki
+                  dört etken kapsamı — dolayısıyla bedeli — doğrudan belirler;
+                  hangilerinin gerçekten gerektiği ilk görüşmede yazılı olarak
+                  netleşir.
                 </p>
                 <ul className="mt-4 space-y-2">
                   {SCOPE_FACTORS.map((factor) => (

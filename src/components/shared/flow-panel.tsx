@@ -10,9 +10,13 @@ import { cn } from "@/lib/utils";
 /**
  * Abstract system-flow strip: mono node chips joined by arrows.
  * Nodes light up sequentially as the panel scrolls into view.
+ *
+ * `label` is optional: on the project pages the stage chip and the h2 directly
+ * above already say "Sistem akışı", so printing it a third time inside the
+ * panel was pure noise. Pass a label only where nothing above names the panel.
  */
 export function FlowPanel({
-  label = "Sistem akışı",
+  label,
   nodes,
   className,
 }: {
@@ -24,11 +28,13 @@ export function FlowPanel({
 
   return (
     <div className={cn("rounded-xl border border-border bg-card p-5", className)}>
-      <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
-        <span aria-hidden className="size-1.5 bg-accent/90" />
-        {label}
-      </p>
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      {label && (
+        <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+          <span aria-hidden className="size-1.5 bg-accent/90" />
+          {label}
+        </p>
+      )}
+      <div className={cn("flex flex-wrap items-center gap-2", label && "mt-4")}>
         {nodes.map((node, index) => (
           <Fragment key={node}>
             {index > 0 && (

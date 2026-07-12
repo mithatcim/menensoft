@@ -19,7 +19,7 @@ const BAND_COPY = {
     title: "Benzer bir sisteme mi ihtiyacınız var?",
     text: "Bu sayfadaki modüller ve akış, gerçek bir ihtiyaç için kuruldu. Sizin işinizin girdisi farklı olabilir; teslim mantığı aynıdır: net kapsam, yönetilebilir panel, devredilebilir yapı.",
     primary: "Benzer sistem istiyorum",
-    secondary: "Süreci gör",
+    secondary: "Süreci incele",
     secondaryHref: "/surec",
     quoteBase: "/teklif-al",
     systemBase: "/sistemler",

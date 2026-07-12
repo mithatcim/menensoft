@@ -92,11 +92,15 @@ const WIZARD_COPY = {
     unsure: "Henüz net değil",
     waIntro: "Merhaba, Menensoft proje görüşmesi talep ediyorum.",
     waGoal: "Hedef",
-    stepLabels: ["Sistem türü", "Mevcut durum", "Öneri & mesaj"],
+    // Step 03 is "Öneri", not "Öneri & mesaj": since Phase 22 the message is
+    // ready the moment a system is picked, so promising it at step 3 was stale.
+    stepLabels: ["Sistem türü", "Mevcut durum", "Öneri"],
     q1: "01 — Ne yaptırmak istiyorsunuz?",
     q2: "02 — Şu an durumunuz hangisine daha yakın?",
     needsTitle: "İsteğe bağlı — ek ihtiyaçlar",
-    resultEyebrow: "03 — Sana en yakın başlangıç noktası",
+    // "Size", not "Sana": the rest of the site addresses the visitor formally,
+    // and the single informal slip read as a different writer.
+    resultEyebrow: "03 — Size en yakın başlangıç noktası",
     linkSystem: "Sistem detayını incele",
     linkSolutions: "Çözüm haritasına bak",
     linkSector: "Sektör örneğini gör",
@@ -111,7 +115,7 @@ const WIZARD_COPY = {
     summaryEmpty:
       "Sistem türünü seçin — mesajınız burada oluşur ve göndermeden önce aynen görünür.",
     situationPrompt:
-      "Durumunuzu da seçerseniz size en yakın başlangıç noktası da gelir.",
+      "Durumunuzu da seçerseniz size en yakın başlangıç noktasını görürsünüz.",
     previewTitle: "Göndermeden önce düzenleyebilirsiniz",
     copyIdle: "Mesajı kopyala",
     copyDone: "Kopyalandı",
@@ -120,9 +124,11 @@ const WIZARD_COPY = {
     footnote: "mesajınız doğrudan kurucuya ulaşır.",
     confidenceTitle: "İçiniz rahat olsun",
     confidence: [
-      "Fiyat kapsam ve modüllere göre belirlenir; kapsam netleşmeden fiyat ya da süre söylenmez.",
+      "Fiyat, kapsam ve modüllere göre belirlenir; kapsam netleşmeden fiyat ya da süre söylenmez.",
       "Şartname gerekmez — birkaç cümle ilk mesaj için yeterli.",
-      "Mesajınızı sistemi kuracak kişi okur; kapsamı netleştiren birkaç soruyla dönüş yapılır.",
+      // "who reads it" lives in the footnote right below this block and in the
+      // next-steps timeline; this line now covers what you get BACK instead.
+      "Dönüş, kapsamı netleştiren birkaç somut soruyla gelir; gerekirse kısa bir görüşme.",
       "İlk temas için WhatsApp da yeterli; e-posta sadece daha fazla ayrıntı taşır.",
     ],
     escapePre: "Seçim yapmadan yazmak isterseniz:",
@@ -153,7 +159,7 @@ const WIZARD_COPY = {
     unsure: "Not sure yet",
     waIntro: "Hello, I'd like to request a Menensoft project review.",
     waGoal: "Goal",
-    stepLabels: ["System type", "Current situation", "Recommendation & message"],
+    stepLabels: ["System type", "Current situation", "Recommendation"],
     q1: "01 — What do you want to build?",
     q2: "02 — Which is closest to your current situation?",
     needsTitle: "Optional — additional needs",
@@ -181,7 +187,7 @@ const WIZARD_COPY = {
     confidence: [
       "Price is set by scope and modules; no price or timeline is quoted before the scope is clear.",
       "No spec required — a few sentences are enough for a first message.",
-      "The person who would build the system reads it, and replies with a few questions that clarify the scope.",
+      "What comes back is a few concrete questions that clarify the scope — and a short call if useful.",
       "WhatsApp is enough for first contact; email just carries more detail.",
     ],
     escapePre: "Prefer to write without selecting?",

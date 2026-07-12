@@ -42,10 +42,12 @@ export default function EnContactPage() {
     <section className="py-16 md:py-24">
       <Container>
         <Reveal>
+          {/* No longer duplicates /en/start-project's h1. This is the direct
+              channel; that one is the guided flow. */}
           <SectionHeading
             as="h1"
             eyebrow="Contact"
-            title="Start a project conversation"
+            title="Write straight to the founder"
             description="Email is the fastest channel. Briefly describe what you want to build and where things stand today; you'll get an honest read on scope and approach."
           />
         </Reveal>
@@ -147,9 +149,11 @@ export default function EnContactPage() {
                   ))}
                 </ul>
               </div>
+              {/* The page intro already promises an honest read on scope and
+                  approach; repeating it a screen later added nothing. */}
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                You&apos;ll get a reply with an honest take on scope and
-                approach.
+                And if you have none of it yet, that&apos;s fine — a few
+                sentences are enough.
               </p>
             </div>
           </Reveal>

@@ -90,7 +90,10 @@ const COPY: Record<Locale, StageCopy> = {
     problemLabel: "Problem",
     buildsLabel: "Menensoft ne kurar",
     proofLabel: "Kanıt",
-    primary: "Benzer sistemi konuşalım",
+    // "Bu sistemi konuşalım", not "Benzer sistemi konuşalım": on the homepage the
+    // visitor hasn't seen a project yet, so "similar" has nothing to be similar
+    // to. This also matches ServicesPreview — one system-level CTA, one wording.
+    primary: "Bu sistemi konuşalım",
     systemLink: "Sistem detayını incele",
     dragHint: "Sürükleyin",
     quoteBase: "/teklif-al",
@@ -164,7 +167,7 @@ const COPY: Record<Locale, StageCopy> = {
     problemLabel: "Problem",
     buildsLabel: "What Menensoft builds",
     proofLabel: "Proof",
-    primary: "Discuss a similar system",
+    primary: "Discuss this system",
     systemLink: "View system detail",
     dragHint: "Drag to explore",
     quoteBase: "/en/start-project",

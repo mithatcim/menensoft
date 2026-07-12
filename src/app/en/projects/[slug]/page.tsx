@@ -121,7 +121,8 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                     <StageChip num="01" label="Input — constraints" />
                     <StageHeading>Constraints and design decisions</StageHeading>
                     <p className="mt-3 mb-5 leading-relaxed text-muted-foreground">
-                      The system was built against these constraints.
+                      The scope was drawn against these constraints — they are
+                      the decisions that gave the system its shape.
                     </p>
                     <DossierConstraints
                       project={project}
@@ -138,13 +139,11 @@ export default async function EnProjectPage({ params }: ProjectPageProps) {
                       data-teardown="architecture"
                       className="scroll-mt-28"
                     >
+                      {/* no FlowPanel label: the stage chip and h2 above already
+                          say "System flow" — it read three times */}
                       <StageChip num="02" label="Architecture — system flow" />
                       <StageHeading>System flow</StageHeading>
-                      <FlowPanel
-                        label="System flow"
-                        nodes={project.flow}
-                        className="mt-4"
-                      />
+                      <FlowPanel nodes={project.flow} className="mt-4" />
                     </section>
                   </Reveal>
                 )}

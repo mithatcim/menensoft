@@ -46,7 +46,11 @@ const COPY = {
       "Düzenlenebilir, devredilebilir yapı",
       "Görüşme sonrası yazılı kapsam notu",
     ],
-    primary: "Proje görüşmesi başlat",
+    // Deliberately NOT "Proje görüşmesi başlat": the hero and the gateway above
+    // already carry that exact label, and voice.ts asks for closings to vary by
+    // page. This band's own step 01 says "İhtiyacınızı yazın" — the CTA now
+    // simply keeps that promise. Same destination, one primary action per page.
+    primary: "İhtiyacınızı yazın",
     primaryHref: "/teklif-al",
     secondary: "Süreci incele",
     secondaryHref: "/surec",
@@ -82,7 +86,7 @@ const COPY = {
       "An editable, transferable structure",
       "A written scope note after the first call",
     ],
-    primary: "Start a project conversation",
+    primary: "Describe your need",
     primaryHref: "/en/start-project",
     secondary: "See the process",
     secondaryHref: "/en/process",

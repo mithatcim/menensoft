@@ -37,7 +37,9 @@ const HERO_COPY = {
     secondaryHref: "/projeler",
     undecided: "Hangi sistemi seçeceğinizden emin değil misiniz?",
     undecidedLink: "İki soruluk kısa akış size gösterir",
-    stackLabel: "Teknoloji yığını",
+    // "Teknoloji", not "Teknoloji yığını": "yığın" is a literal calque of
+    // "stack" and reads translated. Also matches the project case-study hero.
+    stackLabel: "Teknoloji",
     cardTitle: "~/projeler — sistem durumu",
     cardFooter: (n: number) =>
       `${n} sistem — uçtan uca tasarlandı ve geliştirildi`,

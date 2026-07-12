@@ -112,7 +112,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     <StageChip num="01" label="Girdi — kısıtlar" />
                     <StageHeading>Kısıtlar ve tasarım kararları</StageHeading>
                     <p className="mt-3 mb-5 leading-relaxed text-muted-foreground">
-                      Sistem bu kısıtlara göre kuruldu.
+                      Kapsam bu kısıtlara göre çizildi; sistemin şeklini
+                      belirleyen kararlar bunlar.
                     </p>
                     <DossierConstraints project={project} showLabel={false} />
                   </section>
@@ -125,13 +126,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       data-teardown="architecture"
                       className="scroll-mt-28"
                     >
+                      {/* no FlowPanel label: the stage chip and the h2 above
+                          already say "Sistem akışı" — it read three times */}
                       <StageChip num="02" label="Mimari — sistem akışı" />
                       <StageHeading>Sistem akışı</StageHeading>
-                      <FlowPanel
-                        label="Sistem akışı"
-                        nodes={project.flow}
-                        className="mt-4"
-                      />
+                      <FlowPanel nodes={project.flow} className="mt-4" />
                     </section>
                   </Reveal>
                 )}

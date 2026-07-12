@@ -81,7 +81,7 @@ const OBJECTIONS = [
   },
   {
     q: "Is WhatsApp enough for first contact?",
-    a: "It is. Email just carries more detail; both land directly with the founder.",
+    a: "It is. Start with a short message; if it needs detail we move to email. Both land in the same place.",
     href: "/en/faq#contact",
   },
   {
@@ -100,7 +100,7 @@ export default function EnStartProjectPage() {
             as="h1"
             eyebrow="Start a project"
             title="Start a project conversation"
-            description="Tell me what you need and we'll clarify the scope together. Your message is prepared the moment you pick a system type; it goes by email or WhatsApp, straight to the founder."
+            description="Describe what you need and the scope gets clarified together. Your message is prepared the moment you pick a system type; it goes by email or WhatsApp, straight to the founder."
           />
         </Reveal>
 
@@ -172,10 +172,14 @@ export default function EnStartProjectPage() {
                   <span aria-hidden className="size-1.5 bg-accent/90" />
                   What sets the scope?
                 </h2>
+                {/* No longer repeats the pricing sentence — it already appears in
+                    the confidence panel and the "How is the price set?" card.
+                    The heading asks about scope, so the answer is about scope. */}
                 <p className="mt-3 text-sm leading-relaxed text-foreground/90">
-                  Price is determined by scope and modules. There is no fixed
-                  price list; once the scope is agreed in writing you get a clear
-                  quote.
+                  Scope is drawn by how many screens and how many modules get
+                  built. The four factors below drive the scope — and with it the
+                  price. Which of them you actually need is agreed in writing in
+                  the first conversation.
                 </p>
                 <ul className="mt-4 space-y-2">
                   {SCOPE_FACTORS.map((factor) => (

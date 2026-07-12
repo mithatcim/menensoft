@@ -203,10 +203,9 @@ export function SystemBlueprint({
         </div>
       )}
 
-      {/* honest status, straight from the project record */}
-      <p className="relative mt-5 border-t border-border/60 pt-4 font-mono text-xs text-muted-foreground/70 md:mt-6">
-        {project.statusLabel}
-      </p>
+      {/* No status footer here: the case-study hero's status badge sits inches
+          away in the same fold and says exactly the same thing. One statement of
+          status per screen. */}
     </div>
   );
 }

@@ -134,8 +134,11 @@ function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
       <h3 className="mt-3 text-xl font-semibold tracking-tight text-balance md:text-2xl">
         {project.name}
       </h3>
+      {/* dossierSummary, not oneLiner: the project card in the list beside this
+          preview already prints oneLiner, so the selected project's one-liner
+          appeared twice on the page. The summary is the richer line anyway. */}
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        {project.oneLiner}
+        {project.dossierSummary ?? project.oneLiner}
       </p>
 
       {/* system map beside the honest reserved frame */}

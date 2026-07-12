@@ -44,10 +44,13 @@ export default function ContactPage() {
     <section className="py-16 md:py-24">
       <Container>
         <Reveal>
+          {/* Başlık artık /teklif-al ile aynı değil: iki ayrı sayfa aynı h1'i
+              ("Proje görüşmesi başlatın") taşıyordu. Burası doğrudan kanal,
+              orası yönlendirilmiş akış. */}
           <SectionHeading
             as="h1"
             eyebrow="İletişim"
-            title="Proje görüşmesi başlatın"
+            title="Doğrudan kurucuya yazın"
             description="En hızlı kanal e-posta. Ne kurmak istediğinizi ve işin bugünkü durumunu kısaca anlatın; kapsam ve yaklaşım hakkında dürüst bir değerlendirme alırsınız."
           />
         </Reveal>
@@ -149,9 +152,11 @@ export default function ContactPage() {
                   ))}
                 </ul>
               </div>
+              {/* Sayfanın giriş paragrafı zaten "kapsam ve yaklaşım hakkında
+                  dürüst bir değerlendirme alırsınız" diyor; aynı cümleyi bir
+                  ekran sonra tekrarlamak yerine buraya eksik olan bilgi geldi. */}
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Kapsam ve yaklaşım hakkında dürüst bir değerlendirmeyle yanıt
-                alırsınız.
+                Hiçbiri elinizde yoksa da sorun değil — birkaç cümle yeterli.
               </p>
             </div>
           </Reveal>

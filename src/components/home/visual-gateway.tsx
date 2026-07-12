@@ -60,7 +60,7 @@ const EXPLAINER: Record<Locale, ExplainerCopy> = {
       "Sadece görünen sayfa değil; arkasındaki yönetilebilir yapı kurulur.",
     primary: "Proje görüşmesi başlat",
     primaryHref: "/teklif-al",
-    secondary: "Süreci ayrıntılı incele",
+    secondary: "Süreci incele",
     secondaryHref: "/surec",
     layers: [
       {
@@ -94,7 +94,7 @@ const EXPLAINER: Record<Locale, ExplainerCopy> = {
       "Not just the visible page — the manageable structure behind it.",
     primary: "Start a project conversation",
     primaryHref: "/en/start-project",
-    secondary: "See the process in detail",
+    secondary: "See the process",
     secondaryHref: "/en/process",
     layers: [
       {
