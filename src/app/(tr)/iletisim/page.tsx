@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -48,21 +49,24 @@ export default function ContactPage() {
                       />
                       Doğrudan yazın
                     </h2>
-                    <Mail aria-hidden className="size-4 text-muted-foreground" />
+                    <Mail
+                      aria-hidden
+                      className="size-4 text-muted-foreground"
+                    />
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                     Ayrıntı taşımak istediğinizde e-posta en rahatı. Form yok,
                     destek kuyruğu yok.
                   </p>
-                  <a
-                    href={`mailto:${site.email}`}
+                  <ContactLink
+                    channel="email"
                     className="mt-4 inline-block font-mono text-sm break-all text-foreground/90 transition-colors hover:text-foreground"
                   >
                     {site.email}
-                  </a>
+                  </ContactLink>
                   <div className="mt-6 pt-1">
-                    <a
-                      href={`mailto:${site.email}`}
+                    <ContactLink
+                      channel="email"
                       className={cn(
                         buttonVariants({ variant: "cta" }),
                         "h-10 w-full px-5",
@@ -70,7 +74,7 @@ export default function ContactPage() {
                     >
                       <Mail className="size-4" />
                       E-posta gönder
-                    </a>
+                    </ContactLink>
                   </div>
                 </SpotlightCard>
               </Reveal>
@@ -97,10 +101,8 @@ export default function ContactPage() {
                     başına yeterli.
                   </p>
                   <div className="mt-auto pt-6">
-                    <a
-                      href={site.whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
+                    <ContactLink
+                      channel="whatsapp"
                       className={cn(
                         buttonVariants({ variant: "outline" }),
                         "h-10 w-full px-5",
@@ -108,7 +110,7 @@ export default function ContactPage() {
                     >
                       <MessageCircle className="size-4" />
                       WhatsApp&apos;tan yaz
-                    </a>
+                    </ContactLink>
                   </div>
                 </SpotlightCard>
               </Reveal>

@@ -4,6 +4,7 @@ import { Container } from "@/components/layout/container";
 import { siteEn } from "@/content/en/site";
 import { footerNav, footerNavEn } from "@/content/navigation";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
 
 export function Footer({ locale = "tr" }: { locale?: Locale }) {
@@ -53,12 +54,12 @@ export function Footer({ locale = "tr" }: { locale?: Locale }) {
                 GitHub
               </a>
             )}
-            <a
-              href={`mailto:${site.email}`}
+            <ContactLink
+              channel="email"
               className="inline-block py-1 transition-colors hover:text-foreground"
             >
               {site.email}
-            </a>
+            </ContactLink>
           </div>
         </div>
       </Container>

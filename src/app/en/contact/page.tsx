@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -48,21 +49,24 @@ export default function EnContactPage() {
                       />
                       Write directly
                     </h2>
-                    <Mail aria-hidden className="size-4 text-muted-foreground" />
+                    <Mail
+                      aria-hidden
+                      className="size-4 text-muted-foreground"
+                    />
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                    Email is the easiest way to carry detail. No forms, no ticket
-                    queue.
+                    Email is the easiest way to carry detail. No forms, no
+                    ticket queue.
                   </p>
-                  <a
-                    href={`mailto:${site.email}`}
+                  <ContactLink
+                    channel="email"
                     className="mt-4 inline-block font-mono text-sm break-all text-foreground/90 transition-colors hover:text-foreground"
                   >
                     {site.email}
-                  </a>
+                  </ContactLink>
                   <div className="mt-6 pt-1">
-                    <a
-                      href={`mailto:${site.email}`}
+                    <ContactLink
+                      channel="email"
                       className={cn(
                         buttonVariants({ variant: "cta" }),
                         "h-10 w-full px-5",
@@ -70,7 +74,7 @@ export default function EnContactPage() {
                     >
                       <Mail className="size-4" />
                       Send an email
-                    </a>
+                    </ContactLink>
                   </div>
                 </SpotlightCard>
               </Reveal>
@@ -93,14 +97,12 @@ export default function EnContactPage() {
                     />
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                    The fastest route if you have a short question. Enough on its
-                    own for a first contact.
+                    The fastest route if you have a short question. Enough on
+                    its own for a first contact.
                   </p>
                   <div className="mt-auto pt-6">
-                    <a
-                      href={site.whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
+                    <ContactLink
+                      channel="whatsapp"
                       className={cn(
                         buttonVariants({ variant: "outline" }),
                         "h-10 w-full px-5",
@@ -108,7 +110,7 @@ export default function EnContactPage() {
                     >
                       <MessageCircle className="size-4" />
                       Message on WhatsApp
-                    </a>
+                    </ContactLink>
                   </div>
                 </SpotlightCard>
               </Reveal>

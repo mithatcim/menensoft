@@ -34,6 +34,7 @@ import {
 } from "@/content/fit";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
@@ -423,13 +424,6 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
       ? copy.subjectFor(system.label)
       : copy.subjectGeneric;
 
-  const mailHref = `mailto:${site.email}?subject=${encodeURIComponent(
-    subject,
-  )}&body=${encodeURIComponent(body)}`;
-  const whatsappHref = site.whatsappUrl
-    ? `${site.whatsappUrl}?text=${encodeURIComponent(body)}`
-    : undefined;
-
   /** The send action unlocks on the first choice, not the second. */
   const canSend = Boolean(system);
 
@@ -451,7 +445,8 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
   const optionFocus =
     "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-  const showArrival = Boolean(referenceProject) || Boolean(system && !situation);
+  const showArrival =
+    Boolean(referenceProject) || Boolean(system && !situation);
 
   return (
     <div>
@@ -681,9 +676,13 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                       </p>
                     )}
 
+                    {/* Both channels send the visitor's text — the same text,
+                        the one they are looking at. */}
                     <div className="mt-4 flex flex-col gap-2.5">
-                      <a
-                        href={mailHref}
+                      <ContactLink
+                        channel="email"
+                        subject={subject}
+                        body={body}
                         className={cn(
                           buttonVariants({ variant: "cta" }),
                           "h-11 w-full px-5",
@@ -691,21 +690,18 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                       >
                         <Mail className="size-4" />
                         {copy.ctaMail}
-                      </a>
-                      {whatsappHref && (
-                        <a
-                          href={whatsappHref}
-                          target="_blank"
-                          rel="noreferrer"
-                          className={cn(
-                            buttonVariants({ variant: "outline" }),
-                            "h-11 w-full px-5",
-                          )}
-                        >
-                          <MessageCircle className="size-4" />
-                          {copy.ctaWa}
-                        </a>
-                      )}
+                      </ContactLink>
+                      <ContactLink
+                        channel="whatsapp"
+                        body={body}
+                        className={cn(
+                          buttonVariants({ variant: "outline" }),
+                          "h-11 w-full px-5",
+                        )}
+                      >
+                        <MessageCircle className="size-4" />
+                        {copy.ctaWa}
+                      </ContactLink>
                     </div>
                     {/* break-all only on the address: applied to the whole line
                         it chopped the Turkish mid-word ("kuruc / uya ulaşır") */}
@@ -900,12 +896,13 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
           {/* low-friction escape: for people who'd rather just write */}
           <p className="mt-6 text-sm text-muted-foreground">
             {copy.escapePre}{" "}
-            <a
-              href={`mailto:${site.email}?subject=${encodeURIComponent(copy.subjectGeneric)}`}
+            <ContactLink
+              channel="email"
+              subject={copy.subjectGeneric}
               className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
               {copy.escapeLink}
-            </a>
+            </ContactLink>
             .
           </p>
         </div>

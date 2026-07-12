@@ -7,6 +7,7 @@ import { getProjectEn } from "@/content/en/projects";
 import { siteEn } from "@/content/en/site";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
@@ -149,8 +150,12 @@ export function RelatedProjects({
   const resolved = items
     .map((item) => ({ project: lookup(item.slug), note: item.note }))
     .filter(
-      (x): x is { project: NonNullable<ReturnType<typeof lookup>>; note: string } =>
-        Boolean(x.project),
+      (
+        x,
+      ): x is {
+        project: NonNullable<ReturnType<typeof lookup>>;
+        note: string;
+      } => Boolean(x.project),
     );
   if (resolved.length === 0) return null;
   return (
@@ -289,7 +294,10 @@ export function CtaBand({
             </span>
             {/* the separator only reads as one when the row is on one line;
                 below sm it wrapped and left a "·" dangling at the end of a line */}
-            <span aria-hidden className="hidden text-muted-foreground/40 sm:inline">
+            <span
+              aria-hidden
+              className="hidden text-muted-foreground/40 sm:inline"
+            >
               ·
             </span>
             <span>{fb.noSpec}</span>
@@ -321,12 +329,12 @@ export function CtaBand({
         {contactFallback && site.email && (
           <p className="mt-5 text-sm text-muted-foreground">
             {fb.pre}{" "}
-            <a
-              href={`mailto:${site.email}`}
+            <ContactLink
+              channel="email"
               className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
               {fb.email}
-            </a>{" "}
+            </ContactLink>{" "}
             {fb.or}{" "}
             <Link
               href={fb.contactHref}

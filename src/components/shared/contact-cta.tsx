@@ -6,6 +6,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { siteEn } from "@/content/en/site";
 import { site } from "@/content/site";
+import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +62,10 @@ export function ContactCTA({
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(139,140,248,0.07),transparent)]"
             />
-            <div aria-hidden className="bg-noise absolute inset-0 opacity-[0.04]" />
+            <div
+              aria-hidden
+              className="bg-noise absolute inset-0 opacity-[0.04]"
+            />
             <div className="relative">
               <p className="inline-flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="size-1.5 rounded-full bg-accent" />
@@ -84,8 +88,8 @@ export function ContactCTA({
                   {copy.primary}
                   <ArrowRight className="size-4" />
                 </Link>
-                <a
-                  href={`mailto:${site.email}`}
+                <ContactLink
+                  channel="email"
                   className={cn(
                     buttonVariants({ variant: "outline" }),
                     "h-12 px-7 text-base",
@@ -93,7 +97,7 @@ export function ContactCTA({
                 >
                   <Mail className="size-4" />
                   {copy.secondary}
-                </a>
+                </ContactLink>
               </div>
               <p className="mt-5 text-sm text-muted-foreground">
                 {copy.footerPre}{" "}
