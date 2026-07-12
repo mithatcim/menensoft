@@ -13,14 +13,27 @@ export const mainNav: NavItem[] = [
 ];
 
 /**
- * Header call-to-action — the primary conversion path.
+ * Header call-to-action — the general front door.
  *
- * The label is "Proje görüşmesi", not "Teklif al": the page behind it
- * deliberately refuses to quote a price before the scope is clear, so a button
- * promising a quote set an expectation the page then had to walk back. The
- * route keeps /teklif-al — only the visible wording changed.
+ * "İletişim", not "Proje görüşmesi": the nav primary is the one button every
+ * visitor sees on every page, including the ones who just want to ask a
+ * question, and it should not force everyone through a guided brief to do that.
+ * The contact page carries all three channels (e-posta, WhatsApp, brief), so
+ * nothing is lost — the inquiry studio is one of the doors it opens.
+ *
+ * Contextual CTAs are untouched: "Bu sistemi konuşalım", "Proje görüşmesi
+ * başlat" and every hub/project CTA still go to /teklif-al with their ?tur=
+ * and ?proje= prefills intact. Those know what the visitor is looking at; the
+ * nav does not.
  */
 export const ctaItem: NavItem = {
+  label: "İletişim",
+  href: "/iletisim",
+};
+
+/** The guided brief. Not the nav primary any more, so the footer keeps it
+ *  reachable from every page — a page nobody can find is a page nobody uses. */
+export const inquiryItem: NavItem = {
   label: "Proje görüşmesi",
   href: "/teklif-al",
 };
@@ -39,7 +52,7 @@ export const footerNav: NavItem[] = [
   { label: "Hakkında", href: "/hakkimda" },
   { label: "SSS", href: "/sss" },
   { label: "İletişim", href: "/iletisim" },
-  ctaItem,
+  inquiryItem,
 ];
 
 /* --------------------------- English navigation --------------------------- */
@@ -53,6 +66,11 @@ export const mainNavEn: NavItem[] = [
 ];
 
 export const ctaItemEn: NavItem = {
+  label: "Contact",
+  href: "/en/contact",
+};
+
+export const inquiryItemEn: NavItem = {
   label: "Start a project",
   href: "/en/start-project",
 };
@@ -66,5 +84,5 @@ export const footerNavEn: NavItem[] = [
   { label: "About", href: "/en/about" },
   { label: "FAQ", href: "/en/faq" },
   { label: "Contact", href: "/en/contact" },
-  ctaItemEn,
+  inquiryItemEn,
 ];
