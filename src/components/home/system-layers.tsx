@@ -410,7 +410,7 @@ export function SystemLayers({ locale = "tr" }: { locale?: Locale }) {
                   {copy.layers.map((l, i) => {
                     const isSel = selected === i;
                     return (
-                      <li key={l.id} className="relative pl-7">
+                      <li key={l.id} className="relative pl-6 sm:pl-7">
                         <span aria-hidden className="absolute top-1/2 left-0">
                           <span
                             className={cn(
@@ -429,7 +429,7 @@ export function SystemLayers({ locale = "tr" }: { locale?: Locale }) {
                           onClick={() => setSelected(i)}
                           aria-pressed={isSel}
                           className={cn(
-                            "flex w-full items-center gap-3 rounded-lg border px-3.5 py-2.5 text-left transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                            "flex w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:gap-3 sm:px-3.5",
                             isSel
                               ? "border-accent/40 bg-card/80 ring-1 ring-accent/20"
                               : "border-transparent hover:border-border hover:bg-card/50",
@@ -437,15 +437,17 @@ export function SystemLayers({ locale = "tr" }: { locale?: Locale }) {
                         >
                           <span
                             className={cn(
-                              "font-mono text-xs tracking-widest",
+                              "shrink-0 font-mono text-xs tracking-widest",
                               isSel ? "text-accent" : "text-muted-foreground/60",
                             )}
                           >
                             {l.tag}
                           </span>
+                          {/* min-w-0 lets the long layer names wrap instead of
+                              forcing the row wider than a 360px viewport */}
                           <span
                             className={cn(
-                              "text-sm font-medium tracking-tight",
+                              "min-w-0 flex-1 text-sm font-medium tracking-tight",
                               isSel ? "text-foreground" : "text-muted-foreground",
                             )}
                           >
@@ -576,15 +578,18 @@ export function SystemLayers({ locale = "tr" }: { locale?: Locale }) {
 
                 {/* inquiry path — balanced against the proof path above */}
                 <div className="relative border-t border-border bg-background/30 px-5 py-4 md:px-6">
+                  {/* buttonVariants sets whitespace-nowrap; this CTA's label is
+                      long enough to force a 360px viewport wider than itself,
+                      so it wraps and goes full-width on small screens */}
                   <Link
                     href={copy.quoteHref}
                     className={cn(
                       buttonVariants({ variant: "cta" }),
-                      "h-11 px-5",
+                      "h-auto min-h-11 w-full justify-center px-5 py-2.5 text-center whitespace-normal sm:w-auto",
                     )}
                   >
                     {copy.primaryCta}
-                    <ArrowRight className="size-4" />
+                    <ArrowRight className="size-4 shrink-0" />
                   </Link>
                 </div>
               </div>
