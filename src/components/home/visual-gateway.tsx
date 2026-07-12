@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
@@ -52,6 +52,8 @@ interface GatewayIntent {
   /** Matches a src/content/fit.ts id → drives ?tur=, system + proof lookup. */
   id: string;
   label: string;
+  /** Compact label for the mobile chip grid; full label stays the aria-label. */
+  short: string;
   /** Panel title (the system name). */
   title: string;
   /** Four flow nodes: input → structure → surface → handoff. */
@@ -92,6 +94,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "e-ticaret",
         label: "E-ticaret kurmak istiyorum",
+        short: "E-ticaret",
         title: "E-ticaret sistemi",
         nodes: ["Ürün girişi", "Veri modeli", "Vitrin + Panel", "Teslim"],
         line: "Vitrin ve yönetim katmanı tek altyapıda: ürünleri yöneten panel, onları satan sayfaları da yönetir.",
@@ -100,6 +103,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "yonetim-paneli",
         label: "Yönetim paneli istiyorum",
+        short: "Yönetim paneli",
         title: "Yönetim paneli",
         nodes: ["Veri", "Roller", "Yönetim ekranları", "Teslim"],
         line: "Tablolarda ve mesajlarda yaşayan veri, rol bazlı yetkili ekranlara taşınır.",
@@ -108,6 +112,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "dashboard",
         label: "İşleri takip etmek istiyorum",
+        short: "İş takibi",
         title: "Dashboard / raporlama",
         nodes: ["Olaylar", "Veri katmanı", "Canlı ekran", "Teslim"],
         line: "İşin anlık durumu, sormadan tek bakışta görünür hale gelir.",
@@ -116,6 +121,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "operasyon",
         label: "Randevu / sipariş akışı istiyorum",
+        short: "Sipariş & randevu",
         title: "Operasyon sistemi",
         nodes: ["Sipariş / talep", "Yönlendirme", "İstasyon ekranları", "Teslim"],
         line: "Tek girdi ihtiyacı olan her istasyona kendi ekranıyla ulaşır; durum herkes için aynıdır.",
@@ -124,6 +130,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "otomasyon",
         label: "Manuel işi otomatikleştirmek istiyorum",
+        short: "Otomasyon",
         title: "İş akışı otomasyonu",
         nodes: ["Girdi", "Kurallar", "Otomatik akış", "Teslim"],
         line: "Elle dönen iş kaynağında bir kez yakalanır, kurala göre yönlenir.",
@@ -132,6 +139,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "kurumsal-site",
         label: "Kurumsal site + panel istiyorum",
+        short: "Kurumsal site",
         title: "Kurumsal site + panel",
         nodes: ["İçerik", "Panel", "Site + Talep", "Teslim"],
         line: "Donmuş vitrin yerine panelden güncellenen, talepleri sistemde toplayan bir site.",
@@ -155,6 +163,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "e-ticaret",
         label: "I need an e-commerce system",
+        short: "E-commerce",
         title: "E-commerce system",
         nodes: ["Product input", "Data model", "Storefront + Panel", "Handoff"],
         line: "Storefront and management layer in one infrastructure: the panel that manages products also manages the pages that sell them.",
@@ -163,6 +172,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "yonetim-paneli",
         label: "I need an admin panel",
+        short: "Admin panel",
         title: "Admin panel",
         nodes: ["Data", "Roles", "Admin screens", "Handoff"],
         line: "Data living in spreadsheets and chats moves into role-based, authorized screens.",
@@ -171,6 +181,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "dashboard",
         label: "I need to track operations",
+        short: "Ops tracking",
         title: "Dashboard / reporting",
         nodes: ["Events", "Data layer", "Live screen", "Handoff"],
         line: "The state of the work becomes visible at a glance — without asking.",
@@ -179,6 +190,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "operasyon",
         label: "I need an appointment / order flow",
+        short: "Orders & bookings",
         title: "Operations system",
         nodes: ["Order / request", "Routing", "Station screens", "Handoff"],
         line: "One input reaches every station on its own screen; status is the same for everyone.",
@@ -187,6 +199,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "otomasyon",
         label: "I want to automate manual work",
+        short: "Automation",
         title: "Workflow automation",
         nodes: ["Input", "Rules", "Automated flow", "Handoff"],
         line: "A flow running by hand is captured once at the source and routed by rule.",
@@ -195,6 +208,7 @@ const GATEWAY: Record<Locale, GatewayCopy> = {
       {
         id: "kurumsal-site",
         label: "I need a website with a panel",
+        short: "Website + panel",
         title: "Corporate website + panel",
         nodes: ["Content", "Panel", "Site + inquiries", "Handoff"],
         line: "Instead of a frozen brochure, a site updated from a panel that collects inquiries in a system.",
@@ -264,7 +278,6 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
   const reduceMotion = useReducedMotion() ?? false;
   const [selected, setSelected] = useState(0);
   const [interacted, setInteracted] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
 
   const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
   const lookupProject = locale === "en" ? getProjectEn : getProject;
@@ -296,8 +309,8 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
 
   return (
     <section
-      ref={sectionRef}
       onFocusCapture={engage}
+      onPointerEnter={engage}
       className="relative overflow-hidden border-b border-border/60 py-14 md:py-16"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
@@ -305,8 +318,15 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_0%,rgba(139,140,248,0.06),transparent)]" />
       </div>
 
+      {/* Concise status for screen readers: announces only the selected system,
+          and only after the visitor engages — so the pre-interaction auto-cycle
+          never spams assistive tech. */}
+      <p className="sr-only" role="status">
+        {interacted ? intent.title : ""}
+      </p>
+
       <Container className="relative">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-start lg:gap-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
           {/* left: heading + intent selector */}
           <div>
             <Reveal>
@@ -323,10 +343,13 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
             </Reveal>
 
             <Reveal delay={0.06}>
+              {/* Mobile: compact two-column chips (short labels, tap-friendly).
+                  Desktop: the full-sentence intent list. The full label stays
+                  the accessible name in both cases. */}
               <div
                 role="group"
                 aria-label={copy.eyebrow}
-                className="mt-6 flex flex-col gap-2"
+                className="mt-6 grid grid-cols-2 gap-2 lg:flex lg:flex-col"
               >
                 {copy.intents.map((it, i) => {
                   const Icon = ICONS[it.id] ?? ShoppingCart;
@@ -337,8 +360,9 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                       type="button"
                       onClick={() => choose(i)}
                       aria-pressed={isSel}
+                      aria-label={it.label}
                       className={cn(
-                        "group flex items-center gap-3 rounded-lg border px-3.5 py-2.5 text-left text-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                        "group flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:gap-3 lg:px-3.5",
                         isSel
                           ? "border-accent/50 bg-card/80 ring-1 ring-accent/20"
                           : "border-border bg-card/40 text-foreground/80 hover:border-foreground/20 hover:bg-card/60",
@@ -350,11 +374,14 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                           isSel ? "text-accent" : "text-muted-foreground",
                         )}
                       />
-                      <span className="min-w-0 flex-1 truncate">{it.label}</span>
+                      <span aria-hidden className="min-w-0 flex-1 truncate">
+                        <span className="lg:hidden">{it.short}</span>
+                        <span className="hidden lg:inline">{it.label}</span>
+                      </span>
                       <span
                         aria-hidden
                         className={cn(
-                          "size-1.5 shrink-0 rounded-full transition-colors",
+                          "hidden size-1.5 shrink-0 rounded-full transition-colors lg:block",
                           isSel ? "bg-accent" : "bg-muted-foreground/25",
                         )}
                       />
@@ -366,8 +393,8 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
           </div>
 
           {/* right: console panel */}
-          <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm">
+          <Reveal delay={0.1} className="h-full">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5 backdrop-blur-sm">
               <div aria-hidden className="scanlines absolute inset-0 opacity-30" />
               {/* corner brackets */}
               <span
@@ -403,8 +430,9 @@ export function VisualGateway({ locale = "tr" }: { locale?: Locale }) {
                 />
               </div>
 
-              {/* animated console body */}
-              <div className="relative p-5 md:p-6" aria-live="polite">
+              {/* animated console body — grows to fill the panel so the console
+                  reads as one solid block beside the intent list */}
+              <div className="relative flex flex-1 flex-col justify-center p-5 md:p-6">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={intent.id}
