@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import {
   AnimatePresence,
   motion,
@@ -8,10 +9,12 @@ import {
   useScroll,
   useSpring,
 } from "motion/react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
+import { buttonVariants } from "@/components/ui/button";
 import {
   DECOR_PULSES,
   EASE_OUT,
@@ -673,6 +676,60 @@ function StackedStory({ copy }: { copy: StoryCopy }) {
   );
 }
 
+/* ------------------------------- exit CTA -------------------------------- */
+
+/**
+ * The story is the longest stretch of the homepage and used to end with no way
+ * to act. This gives it a conversion surface without touching the cinema:
+ * primary → inquiry, secondary → proof.
+ */
+const EXIT_COPY = {
+  tr: {
+    line: "Bu akış her projede aynı işler. Sizin işinizin girdisi farklı olabilir.",
+    primary: "Bu akışı kendi projenize uyarlayalım",
+    primaryHref: "/teklif-al",
+    secondary: "Projeleri incele",
+    secondaryHref: "/projeler",
+  },
+  en: {
+    line: "This flow plays out the same in every project. Only your input differs.",
+    primary: "Apply this flow to your project",
+    primaryHref: "/en/start-project",
+    secondary: "View projects",
+    secondaryHref: "/en/projects",
+  },
+} as const;
+
+function StoryExit({ locale }: { locale: "tr" | "en" }) {
+  const copy = EXIT_COPY[locale];
+  return (
+    <Container className="pb-14 md:pb-16">
+      <Reveal>
+        <div className="flex flex-col items-center gap-4 text-center">
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
+            {copy.line}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={copy.primaryHref}
+              className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
+            >
+              {copy.primary}
+              <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href={copy.secondaryHref}
+              className={cn(buttonVariants({ variant: "outline" }), "h-11 px-6")}
+            >
+              {copy.secondary}
+            </Link>
+          </div>
+        </div>
+      </Reveal>
+    </Container>
+  );
+}
+
 /* -------------------------------- export -------------------------------- */
 
 export function FlagshipStory({ locale = "tr" }: { locale?: "tr" | "en" }) {
@@ -694,6 +751,7 @@ export function FlagshipStory({ locale = "tr" }: { locale?: "tr" | "en" }) {
           </div>
         </>
       )}
+      <StoryExit locale={locale} />
       <HandoffConnector />
     </section>
   );
