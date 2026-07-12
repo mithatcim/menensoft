@@ -48,14 +48,14 @@ export function Footer({ locale = "tr" }: { locale?: Locale }) {
                 href={site.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="transition-colors hover:text-foreground"
+                className="inline-block py-1 transition-colors hover:text-foreground"
               >
                 GitHub
               </a>
             )}
             <a
               href={`mailto:${site.email}`}
-              className="transition-colors hover:text-foreground"
+              className="inline-block py-1 transition-colors hover:text-foreground"
             >
               {site.email}
             </a>

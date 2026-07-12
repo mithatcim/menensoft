@@ -646,7 +646,7 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
                         {systemHref && (
                           <Link
                             href={systemHref}
-                            className="group/sys inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                            className="group/sys inline-flex items-center gap-1.5 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
                           >
                             {copy.systemLink}
                             <ArrowUpRight className="size-3.5 shrink-0 transition-transform group-hover/sys:-translate-y-0.5 group-hover/sys:translate-x-0.5" />

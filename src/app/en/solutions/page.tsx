@@ -165,14 +165,14 @@ export default function EnSolutionsPage() {
                           locale: "en",
                           systemSlug: solution.systemSlug,
                         })}
-                        className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
+                        className="group inline-flex items-center gap-2 py-1 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
                       >
                         Discuss this system
                         <ArrowRight className="size-4 text-accent transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <Link
                         href={`/en/systems/${solution.systemSlug}`}
-                        className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="group inline-flex items-center gap-2 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         See the system in depth
                         <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

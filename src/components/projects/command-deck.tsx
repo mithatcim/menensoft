@@ -131,9 +131,11 @@ function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
   return (
     <div className="p-5 md:p-6">
       <StatusBadge project={project} />
-      <h3 className="mt-3 text-xl font-semibold tracking-tight text-balance md:text-2xl">
+      {/* h2, not h3: the page heading is the h1 and there is nothing between
+          them, so an h3 here skipped a level in the outline. */}
+      <h2 className="mt-3 text-xl font-semibold tracking-tight text-balance md:text-2xl">
         {project.name}
-      </h3>
+      </h2>
       {/* dossierSummary, not oneLiner: the project card in the list beside this
           preview already prints oneLiner, so the selected project's one-liner
           appeared twice on the page. The summary is the richer line anyway. */}
@@ -195,7 +197,7 @@ function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
                 ? `${copy.quoteBase}?tur=${projectToFitType[project.slug]}`
                 : copy.quoteBase
             }
-            className="group/similar inline-flex items-center gap-1.5 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
+            className="group/similar inline-flex items-center gap-1.5 py-1 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
           >
             {copy.similar}
             <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover/similar:-translate-y-0.5 group-hover/similar:translate-x-0.5" />
@@ -317,13 +319,13 @@ function DeckCard({
             <Link
               href={`${copy.projectBase}/${project.slug}`}
               aria-label={copy.openAria(project.name)}
-              className="pointer-events-auto -m-1 p-1 text-muted-foreground transition-colors hover:text-foreground"
+              className="pointer-events-auto -m-1.5 p-1.5 text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowUpRight className="size-4" />
             </Link>
           </span>
         </div>
-        <h3
+        <h2
           className={cn(
             "mt-3 font-semibold tracking-tight text-balance",
             flagship ? "text-xl md:text-2xl" : "text-lg",
@@ -331,7 +333,7 @@ function DeckCard({
           )}
         >
           {project.name}
-        </h3>
+        </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {project.oneLiner}
         </p>

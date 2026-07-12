@@ -73,7 +73,7 @@ export function Header({ locale = "tr" }: { locale?: Locale }) {
       <Container className="relative flex h-16 items-center justify-between">
         <Link
           href={locale === "en" ? "/en" : "/"}
-          className="text-sm font-semibold tracking-tight text-foreground"
+          className="inline-block py-1 text-sm font-semibold tracking-tight text-foreground"
         >
           {site.name}
         </Link>
