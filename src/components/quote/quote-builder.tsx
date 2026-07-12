@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Mail,
   MessageCircle,
+  Send,
   ShoppingCart,
   Workflow,
   type LucideIcon,
@@ -18,7 +19,10 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { Field, Honeypot, inputClass } from "@/components/leads/field";
 import { buttonVariants } from "@/components/ui/button";
+import { leadFormCopy } from "@/content/lead-form";
+import { submitLead } from "@/lib/leads/client";
 import {
   fitNeedsEn,
   fitSituationsEn,
@@ -327,6 +331,23 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
   /** Guards the save effect so the empty first render can't erase the session. */
   const [hydrated, setHydrated] = useState(false);
 
+  // --- lead form (Phase 33C) -------------------------------------------------
+  const form = leadFormCopy[locale];
+  const [leadName, setLeadName] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadPhone, setLeadPhone] = useState("");
+  const [company, setCompany] = useState(""); // honeypot
+  // Lazy initializer, not an effect: state initializers re-run on the client
+  // during hydration, so this is the real moment the visitor saw the form — not
+  // the build time baked into the prerendered HTML.
+  const [formStartedAt] = useState(() => Date.now());
+  const [leadErrors, setLeadErrors] = useState<Record<string, string>>({});
+  const [sendState, setSendState] = useState<
+    "idle" | "sending" | "sent" | "failed"
+  >("idle");
+  const sent = sendState === "sent";
+
+
   // ?tur= / ?durum= / ?proje= preselection. The URL is deliberately read once
   // on mount: useSearchParams + Suspense would drop this page's static HTML to
   // a fallback, and a no-JS visitor would never see step 1 at all. Every param
@@ -461,6 +482,63 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
     draft,
     baseline,
   ]);
+
+  /**
+   * Send-through-the-site (Phase 33C). The message stays the source of truth:
+   * whatever is in the textarea is what the form posts, what the email carries
+   * and what WhatsApp carries. There is still exactly one message.
+   */
+  const onSubmitLead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (sendState === "sending") return;
+
+    const next: Record<string, string> = {};
+    if (!leadName.trim()) next.name = form.errName;
+    if (!leadEmail.trim() && !leadPhone.trim()) next.email = form.errReach;
+    else if (
+      leadEmail.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadEmail.trim())
+    ) {
+      next.email = form.errEmail;
+    }
+    if (!body.trim()) next.form = form.errMessage;
+    setLeadErrors(next);
+    if (Object.keys(next).length) return;
+
+    setSendState("sending");
+    const res = await submitLead({
+      name: leadName.trim(),
+      email: leadEmail.trim() || undefined,
+      phone: leadPhone.trim() || undefined,
+      message: body,
+      language: locale,
+      contactPreference: "form",
+      selectedFitId: systemId,
+      selectedSituation: situationId,
+      referenceProjectSlug: referenceSlug,
+      sourcePath: locale === "en" ? "/en/start-project" : "/teklif-al",
+      company,
+      formStartedAt: formStartedAt,
+    });
+
+    if (res.ok) {
+      setSendState("sent");
+      return;
+    }
+    if (res.code === "rate_limit") {
+      setLeadErrors({ form: form.errRate });
+      setSendState("idle");
+      return;
+    }
+    if (res.code === "validation" && res.field === "email") {
+      setLeadErrors({ email: form.errEmail });
+      setSendState("idle");
+      return;
+    }
+    // unconfigured / server / network: not the visitor's fault, and their text
+    // is untouched. The email and WhatsApp buttons below still carry it.
+    setSendState("failed");
+  };
 
   const editMessage = (value: string) => {
     // First keystroke: remember what they started from, so a later selection
@@ -734,33 +812,153 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                       </p>
                     )}
 
-                    {/* Both channels send the visitor's text — the same text,
-                        the one they are looking at. */}
-                    <div className="mt-4 flex flex-col gap-2.5">
-                      <ContactLink
-                        channel="email"
-                        subject={subject}
-                        body={body}
-                        className={cn(
-                          buttonVariants({ variant: "cta" }),
-                          "h-11 w-full px-5",
+                    {sent ? (
+                      <div className="mt-4 rounded-lg border border-accent/30 bg-accent/5 p-4">
+                        <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                          <Check className="size-4 text-accent" />
+                          {form.successTitle}
+                        </p>
+                        <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                          {form.successBody}
+                        </p>
+                      </div>
+                    ) : (
+                      <form onSubmit={onSubmitLead} noValidate className="mt-4">
+                        <Honeypot
+                          label={form.honeypot}
+                          value={company}
+                          onChange={setCompany}
+                        />
+
+                        {/* Name plus one way to reply. Nothing else — every extra
+                            field here is a chance to lose someone who was already
+                            willing to write. */}
+                        <div className="space-y-3">
+                          <Field
+                            id="lead-name"
+                            label={form.name}
+                            error={leadErrors.name}
+                          >
+                            <input
+                              id="lead-name"
+                              name="name"
+                              autoComplete="name"
+                              className={inputClass}
+                              placeholder={form.namePlaceholder}
+                              value={leadName}
+                              onChange={(e) => setLeadName(e.target.value)}
+                            />
+                          </Field>
+                          <Field
+                            id="lead-email"
+                            label={form.email}
+                            error={leadErrors.email}
+                          >
+                            <input
+                              id="lead-email"
+                              name="email"
+                              type="email"
+                              inputMode="email"
+                              autoComplete="email"
+                              className={inputClass}
+                              placeholder={form.emailPlaceholder}
+                              value={leadEmail}
+                              onChange={(e) => setLeadEmail(e.target.value)}
+                            />
+                          </Field>
+                          <Field
+                            id="lead-phone"
+                            label={form.phone}
+                            hint={form.phoneOptional}
+                          >
+                            <input
+                              id="lead-phone"
+                              name="phone"
+                              type="tel"
+                              inputMode="tel"
+                              autoComplete="tel"
+                              className={inputClass}
+                              placeholder={form.phonePlaceholder}
+                              value={leadPhone}
+                              onChange={(e) => setLeadPhone(e.target.value)}
+                            />
+                          </Field>
+                        </div>
+
+                        {leadErrors.form && (
+                          <p
+                            role="alert"
+                            className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs leading-relaxed text-foreground/90"
+                          >
+                            {leadErrors.form}
+                          </p>
                         )}
-                      >
-                        <Mail className="size-4" />
-                        {copy.ctaMail}
-                      </ContactLink>
-                      <ContactLink
-                        channel="whatsapp"
-                        body={body}
-                        className={cn(
-                          buttonVariants({ variant: "outline" }),
-                          "h-11 w-full px-5",
+
+                        {/* The database failing must never read as the message
+                            being lost. It is still in the textarea above, and the
+                            two buttons below still carry it. */}
+                        {sendState === "failed" && (
+                          <div
+                            role="alert"
+                            className="mt-3 rounded-lg border border-accent/30 bg-accent/5 p-3.5"
+                          >
+                            <p className="text-xs font-medium text-foreground">
+                              {form.errFallbackTitle}
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                              {form.errFallbackBody}
+                            </p>
+                          </div>
                         )}
-                      >
-                        <MessageCircle className="size-4" />
-                        {copy.ctaWa}
-                      </ContactLink>
-                    </div>
+
+                        <button
+                          type="submit"
+                          disabled={sendState === "sending"}
+                          className={cn(
+                            buttonVariants({ variant: "cta" }),
+                            "mt-4 h-11 w-full px-5 disabled:opacity-60",
+                          )}
+                        >
+                          <Send className="size-4" />
+                          {sendState === "sending"
+                            ? form.submitting
+                            : form.submit}
+                        </button>
+
+                        {/* Two-up and compact, not a third full-width button:
+                            three stacked giant CTAs on a phone is clutter, and
+                            WhatsApp is often the highest-intent channel for a
+                            Turkish buyer — it does not get buried behind a form. */}
+                        <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+                          <ContactLink
+                            channel="email"
+                            subject={subject}
+                            body={body}
+                            title={copy.ctaMail}
+                            className={cn(
+                              buttonVariants({ variant: "outline" }),
+                              "h-10 w-full px-3",
+                            )}
+                          >
+                            <Mail className="size-4" />
+                            {form.preferenceEmail}
+                          </ContactLink>
+                          <ContactLink
+                            channel="whatsapp"
+                            body={body}
+                            title={copy.ctaWa}
+                            className={cn(
+                              buttonVariants({ variant: "outline" }),
+                              "h-10 w-full px-3",
+                            )}
+                          >
+                            <MessageCircle className="size-4" />
+                            {form.preferenceWhatsapp}
+                          </ContactLink>
+                        </div>
+                      </form>
+                    )}
+
                     {/* break-all only on the address: applied to the whole line
                         it chopped the Turkish mid-word ("kuruc / uya ulaşır") */}
                     <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground/70">

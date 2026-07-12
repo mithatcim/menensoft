@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/content/site";
+import { ContactForm } from "@/components/leads/contact-form";
 import { ContactLink } from "@/components/shared/contact-link";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -158,9 +159,16 @@ export default function EnContactPage() {
             </Reveal>
           </div>
 
+          {/* A fourth door, not a replacement for the three: for the visitor who
+              would rather not open a mail client. If the form fails, the channels
+              above are still there — and the message is handed to them intact. */}
           <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]">
             <Reveal delay={0.1}>
-              <div>
+              <ContactForm locale="en" />
+            </Reveal>
+
+            <div className="space-y-6">
+              <Reveal delay={0.12}>
                 <h2 className="text-xl font-semibold tracking-tight">
                   Useful things to include
                 </h2>
@@ -188,34 +196,34 @@ export default function EnContactPage() {
                   And if you have none of it yet, that&apos;s fine — a few
                   sentences are enough. No spec expected.
                 </p>
-              </div>
-            </Reveal>
-
-            {site.githubUrl && (
-              <Reveal delay={0.12}>
-                <div className="rounded-xl border border-border bg-card/50 p-6">
-                  <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
-                    <span
-                      aria-hidden
-                      className="size-1.5 rotate-45 border border-muted-foreground/50"
-                    />
-                    Code
-                  </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Some of the work is public.
-                  </p>
-                  <a
-                    href={site.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group mt-4 inline-flex items-center gap-2 font-mono text-sm text-foreground/85 transition-colors hover:text-foreground"
-                  >
-                    <GitBranch className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
-                    GitHub
-                  </a>
-                </div>
               </Reveal>
-            )}
+
+              {site.githubUrl && (
+                <Reveal delay={0.14}>
+                  <div className="rounded-xl border border-border bg-card/50 p-6">
+                    <h2 className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground/80 uppercase">
+                      <span
+                        aria-hidden
+                        className="size-1.5 rotate-45 border border-muted-foreground/50"
+                      />
+                      Code
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      Some of the work is public.
+                    </p>
+                    <a
+                      href={site.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group mt-4 inline-flex items-center gap-2 font-mono text-sm text-foreground/85 transition-colors hover:text-foreground"
+                    >
+                      <GitBranch className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
+                      GitHub
+                    </a>
+                  </div>
+                </Reveal>
+              )}
+            </div>
           </div>
         </div>
       </Container>
