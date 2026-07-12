@@ -55,7 +55,7 @@ export default function SolutionsPage() {
                 href="/teklif-al"
                 className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
               >
-                Teklif al
+                Proje görüşmesi başlat
                 <ArrowRight className="size-4" />
               </Link>
               <Link
@@ -149,7 +149,7 @@ export default function SolutionsPage() {
                         href="/teklif-al"
                         className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
                       >
-                        Bu sistem için teklif al
+                        Bu sistemi konuşalım
                         <ArrowRight className="size-4 text-accent transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <Link

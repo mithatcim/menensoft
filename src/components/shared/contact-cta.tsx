@@ -14,7 +14,10 @@ const COPY = {
     availability: site.availability,
     title: "Kurulacak bir sisteminiz mi var?",
     text: "İhtiyacınızı yazın; kapsam ve yaklaşım konusunda net, dürüst bir dönüş alın.",
-    primary: "Teklif al",
+    // Not "Proje görüşmesi başlat": the hero and the gateway already carry that
+    // label on the homepage, and this band closes every page. Its own text is
+    // about scope, so the button says so — one of the primaries voice.ts allows.
+    primary: "Kapsamı netleştirelim",
     primaryHref: "/teklif-al",
     secondary: "E-posta gönder",
     footerPre: "ya da",
@@ -25,7 +28,7 @@ const COPY = {
     availability: siteEn.availability,
     title: "Have a system that needs building?",
     text: "Tell us what you need; you'll get a clear, honest read on scope and approach.",
-    primary: "Start a project",
+    primary: "Let's define the scope",
     primaryHref: "/en/start-project",
     secondary: "Send an email",
     footerPre: "or",

@@ -12,8 +12,18 @@ export const mainNav: NavItem[] = [
   { label: "SSS", href: "/sss" },
 ];
 
-/** Header call-to-action — the primary conversion path. */
-export const ctaItem: NavItem = { label: "Teklif al", href: "/teklif-al" };
+/**
+ * Header call-to-action — the primary conversion path.
+ *
+ * The label is "Proje görüşmesi", not "Teklif al": the page behind it
+ * deliberately refuses to quote a price before the scope is clear, so a button
+ * promising a quote set an expectation the page then had to walk back. The
+ * route keeps /teklif-al — only the visible wording changed.
+ */
+export const ctaItem: NavItem = {
+  label: "Proje görüşmesi",
+  href: "/teklif-al",
+};
 
 /**
  * Full navigation used in the footer and mobile menu. Hub pages

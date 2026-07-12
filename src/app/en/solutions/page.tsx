@@ -158,7 +158,7 @@ export default function EnSolutionsPage() {
                         href="/en/start-project"
                         className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"
                       >
-                        Request this system
+                        Discuss this system
                         <ArrowRight className="size-4 text-accent transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <Link

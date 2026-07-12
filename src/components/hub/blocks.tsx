@@ -200,13 +200,19 @@ export function ChipLinks({
   );
 }
 
-/** Sayfa içi dönüşüm bandı — birincil CTA her zaman /teklif-al. */
+/**
+ * Sayfa içi dönüşüm bandı — birincil CTA her zaman /teklif-al.
+ *
+ * Varsayılan etiket "Teklif al" değil: sayfa fiyatı kapsamdan önce vermiyor,
+ * dolayısıyla teklif vaat eden bir buton yanlış beklenti kuruyordu. İkincil
+ * etiket de Faz 23'te birleştirilen "Süreci incele" ile hizalandı.
+ */
 export function CtaBand({
   title,
   text,
-  primaryLabel = "Teklif al",
+  primaryLabel = "Proje görüşmesi başlat",
   primaryHref = "/teklif-al",
-  secondaryLabel = "Süreci gör",
+  secondaryLabel = "Süreci incele",
   secondaryHref = "/surec",
 }: {
   title: string;

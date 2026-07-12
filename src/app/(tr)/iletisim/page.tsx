@@ -171,7 +171,7 @@ export default function ContactPage() {
                 href="/teklif-al"
                 className={cn(buttonVariants({ variant: "cta" }), "h-10 px-5")}
               >
-                Teklif al
+                Proje görüşmesi başlat
                 <ArrowRight className="size-4" />
               </Link>
             </div>

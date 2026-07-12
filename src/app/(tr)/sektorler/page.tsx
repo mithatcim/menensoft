@@ -53,7 +53,7 @@ export default function SectorsPage() {
                 href="/teklif-al"
                 className={cn(buttonVariants({ variant: "cta" }), "h-11 px-6")}
               >
-                Teklif al
+                Proje görüşmesi başlat
                 <ArrowRight className="size-4" />
               </Link>
               <Link

@@ -58,7 +58,7 @@ export const faq: FaqItem[] = [
     question: "Mevcut veri veya sistem yeni sisteme taşınabilir mi?",
     answer:
       "Duruma bağlı. Belirleyici olan mevcut verinin erişilebilirliği, dışa aktarım seçenekleri ve hedef veri modelidir. Veriye erişim varsa taşıma, kapsam görüşmesinde ayrı bir iş kalemi olarak planlanır; erişim yoksa ya da veri dağınıksa önce bu netleştirilir. Her sistemden her verinin taşınacağı sözü baştan verilmez — önce bakılır, sonra söylenir.",
-    links: [{ label: "Teklif al", href: "/teklif-al" }],
+    links: [{ label: "Proje görüşmesi", href: "/teklif-al" }],
   },
   {
     id: "surec",
@@ -98,9 +98,9 @@ export const faq: FaqItem[] = [
     id: "iletisim",
     question: "İletişim nasıl kurulur?",
     answer:
-      "En hızlı kanal e-posta: mithat.menen@gmail.com. WhatsApp üzerinden de ulaşabilirsiniz. Teklif almak için /teklif-al sayfasındaki hazır akışı kullanabilirsiniz; mesajınız doğrudan kurucuya ulaşır.",
+      "En hızlı kanal e-posta: mithat.menen@gmail.com. WhatsApp üzerinden de ulaşabilirsiniz. Proje görüşmesi başlatmak için /teklif-al sayfasındaki hazır akışı kullanabilirsiniz; mesajınız doğrudan kurucuya ulaşır.",
     links: [
-      { label: "Teklif al", href: "/teklif-al" },
+      { label: "Proje görüşmesi", href: "/teklif-al" },
       { label: "İletişim", href: "/iletisim" },
     ],
   },
@@ -109,6 +109,6 @@ export const faq: FaqItem[] = [
     question: "Fiyat nasıl belirlenir?",
     answer:
       "Fiyat, kapsam ve modüllere göre belirlenir. Sabit bir liste fiyatı yoktur; ekran sayısı, rol ve yetki yapısı, entegrasyonlar ve içerik yönetimi ihtiyacı kapsamı belirler. Kapsam yazılı olarak netleştikten sonra net bir teklif sunulur — belirsiz işi şişirmek yerine netleştirmek tercih edilir.",
-    links: [{ label: "Teklif al", href: "/teklif-al" }],
+    links: [{ label: "Proje görüşmesi", href: "/teklif-al" }],
   },
 ];

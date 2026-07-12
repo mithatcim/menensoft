@@ -8,10 +8,13 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
 
+// Başlık "Teklif al" değil: sayfa kapsamdan önce fiyat vermiyor. "Teklif"
+// kelimesi açıklamada dürüst haliyle duruyor — net teklif, kapsam netleştikten
+// sonra gelir. Rota /teklif-al olarak kalıyor; değişen yalnızca görünen metin.
 export const metadata = pageMeta({
-  title: "Teklif al",
+  title: "Proje görüşmesi",
   description:
-    "Menensoft ile proje görüşmesi başlatın: sistem türünü seçin, ihtiyacınızı yazın. Fiyat, kapsam ve modüllere göre belirlenir — önce kapsam netleşir, sonra çözüm önerilir.",
+    "Menensoft ile proje görüşmesi başlatın: sistem türünü seçin, ihtiyacınızı yazın. Fiyat, kapsam ve modüllere göre belirlenir; net teklif, kapsam netleştikten sonra sunulur.",
   path: "/teklif-al",
 });
 
@@ -101,7 +104,7 @@ export default function QuotePage() {
         <Reveal>
           <SectionHeading
             as="h1"
-            eyebrow="Teklif al"
+            eyebrow="Proje görüşmesi"
             title="Proje görüşmesi başlatın"
             description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. Sistem türünü seçtiğiniz anda mesajınız hazırlanır; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
           />

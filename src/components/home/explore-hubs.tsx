@@ -7,7 +7,8 @@ import { type Locale } from "@/lib/locale";
 
 /**
  * Ziyaretçi yolu: sisteme ihtiyacın varsa → çözümleri/sektörleri incele →
- * kararsızsan rehberi oku → teklif al. Üç sessiz keşif kartı; ağır sahne yok.
+ * kararsızsan rehberi oku → proje görüşmesi başlat. Üç sessiz keşif kartı; ağır
+ * sahne yok.
  */
 const HUBS = {
   tr: [

@@ -38,8 +38,13 @@ export const voice = {
   ],
 
   cta: [
-    "Birincil: Teklif al / Proje görüşmesi başlat / Kapsamı beraber netleştirelim.",
-    "İkincil: Projeleri incele / Süreci gör / İlgili sistemi incele / Sektör örneklerini gör.",
+    // "Teklif al" bilinçli olarak listeden çıkarıldı (Faz 24): sayfa kapsamdan
+    // önce fiyat vermiyor, dolayısıyla teklif vaat eden etiket yanlış beklenti
+    // kuruyordu. Rota /teklif-al olarak kalıyor; değişen yalnızca görünen metin.
+    "Birincil: Proje görüşmesi başlat / Kapsamı netleştirelim / İhtiyacınızı yazın.",
+    "Nav etiketi: 'Proje görüşmesi'.",
+    "Sistem düzeyinde: 'Bu sistemi konuşalım'. Proje düzeyinde: projeye özel CTA.",
+    "İkincil: Projeleri incele / Süreci incele / İlgili sistemi incele / Sektör örneklerini gör.",
     "'Yazın; …' kalıbını üst üste tekrarlama — kapanışları sayfaya göre çeşitlendir.",
     "Her sayfada tek birincil aksiyon: /teklif-al.",
   ],
