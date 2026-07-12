@@ -102,4 +102,17 @@ export const faqEn: FaqItem[] = [
       "Price is determined by scope and modules. There is no fixed price list; screen count, roles and permissions, integrations and content-management needs define the scope. Once the scope is agreed in writing you get a clear quote — the preference is to clarify unclear work, not to inflate it.",
     links: [{ label: "Start a project", href: "/en/start-project" }],
   },
+  {
+    /** Kept in parity with the Turkish FAQ: "how is price determined" and "how
+     *  do I actually get a quote" are two different questions. The answer names
+     *  the quote process without promising a price before scope. */
+    id: "quote",
+    question: "How do I get a quote?",
+    answer:
+      "A quote starts with a project conversation: you pick a system type and describe your need in a few sentences. No spec is required from you. A clear quote follows once the scope is agreed in writing; no price or timeline is quoted before that.",
+    links: [
+      { label: "Start a project", href: "/en/start-project" },
+      { label: "See the process", href: "/en/process" },
+    ],
+  },
 ];

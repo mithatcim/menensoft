@@ -8,11 +8,14 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
 
-// Başlık "Teklif al" değil: sayfa kapsamdan önce fiyat vermiyor. "Teklif"
-// kelimesi açıklamada dürüst haliyle duruyor — net teklif, kapsam netleştikten
-// sonra gelir. Rota /teklif-al olarak kalıyor; değişen yalnızca görünen metin.
+/**
+ * Başlık "Teklif al" değil (Faz 24) ama "teklif" kelimesini de terk etmiyor
+ * (Faz 25): sayfa anında fiyat vermiyor, fakat teklif sürecinin başladığı yer
+ * tam olarak burası. Başlık bunu olduğu gibi söylüyor — vaat değil, sıralama.
+ * Rota /teklif-al olarak kalıyor.
+ */
 export const metadata = pageMeta({
-  title: "Proje görüşmesi",
+  title: "Proje görüşmesi ve teklif süreci",
   description:
     "Menensoft ile proje görüşmesi başlatın: sistem türünü seçin, ihtiyacınızı yazın. Fiyat, kapsam ve modüllere göre belirlenir; net teklif, kapsam netleştikten sonra sunulur.",
   path: "/teklif-al",
@@ -61,7 +64,7 @@ const OBJECTIONS = [
     href: "/sss#tek-kisi-riski",
   },
   {
-    q: "Fiyat nasıl çıkar?",
+    q: "Teklif ve fiyat nasıl belirlenir?",
     a: "Sabit liste yok; fiyat, kapsam ve modüllere göre belirlenir — kapsam netleşince net teklif.",
     href: "/sss#fiyat",
   },
@@ -106,7 +109,7 @@ export default function QuotePage() {
             as="h1"
             eyebrow="Proje görüşmesi"
             title="Proje görüşmesi başlatın"
-            description="İhtiyacınızı yazın, kapsamı beraber netleştirelim. Sistem türünü seçtiğiniz anda mesajınız hazırlanır; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
+            description="Proje görüşmesi, teklif sürecinin ilk adımıdır: ihtiyacınızı yazın, kapsamı beraber netleştirelim. Sistem türünü seçtiğiniz anda mesajınız hazırlanır; gönderim e-posta ya da WhatsApp üzerinden, doğrudan kurucuya gider."
           />
         </Reveal>
 

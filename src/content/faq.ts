@@ -111,4 +111,20 @@ export const faq: FaqItem[] = [
       "Fiyat, kapsam ve modüllere göre belirlenir. Sabit bir liste fiyatı yoktur; ekran sayısı, rol ve yetki yapısı, entegrasyonlar ve içerik yönetimi ihtiyacı kapsamı belirler. Kapsam yazılı olarak netleştikten sonra net bir teklif sunulur — belirsiz işi şişirmek yerine netleştirmek tercih edilir.",
     links: [{ label: "Proje görüşmesi", href: "/teklif-al" }],
   },
+  {
+    /**
+     * "Fiyat nasıl belirlenir?" fiyatın neye göre çıktığını anlatıyor; bu soru
+     * ise sürecin kendisini soruyor — ziyaretçinin gerçekten sorduğu ama
+     * sitenin hiçbir yerinde doğrudan cevaplanmayan hâli. Anında fiyat vaat
+     * etmeden teklif sürecini adlandırır.
+     */
+    id: "teklif",
+    question: "Teklif nasıl alınır?",
+    answer:
+      "Teklif, proje görüşmesiyle başlar: sistem türünü seçer, ihtiyacınızı birkaç cümleyle yazarsınız. Şartname hazırlamanız gerekmez. Kapsam yazılı olarak netleştikten sonra net teklif sunulur; kapsamdan önce fiyat ya da süre verilmez.",
+    links: [
+      { label: "Proje görüşmesi", href: "/teklif-al" },
+      { label: "Süreci incele", href: "/surec" },
+    ],
+  },
 ];

@@ -13,7 +13,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata = pageMeta({
   title: "Sıkça sorulan sorular",
   description:
-    "Menensoft ne yapar, kimler için web sistemi geliştirir, süreç nasıl ilerler, teslimde ne alınır ve fiyat nasıl belirlenir — kısa ve net cevaplar.",
+    "Menensoft ne yapar, kimler için web sistemi geliştirir, süreç nasıl ilerler, teslimde ne alınır, fiyat ve teklif nasıl belirlenir — kısa ve net cevaplar.",
   path: "/sss",
 });
 
