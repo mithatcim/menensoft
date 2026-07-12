@@ -1,5 +1,4 @@
 import { BuyerBridge } from "@/components/home/buyer-bridge";
-import { CapabilityConsole } from "@/components/home/capability-console";
 import { ExploreHubs } from "@/components/home/explore-hubs";
 import { FeaturedProjectsSection } from "@/components/home/featured-projects-section";
 import { FlagshipStory } from "@/components/home/flagship-story";
@@ -27,13 +26,11 @@ export default function EnHomePage() {
       <TelemetryDivider code="SYS·01" label="from need to system" />
       <BuyerBridge locale="en" />
       <SystemLayers locale="en" />
-      <TelemetryDivider code="SYS·02" label="capability console" />
-      <CapabilityConsole locale="en" />
-      <TelemetryDivider code="SYS·03" label="selected work" />
+      <TelemetryDivider code="SYS·02" label="selected work" />
       <FeaturedProjectsSection locale="en" />
-      <TelemetryDivider code="SYS·04" label="solutions" />
+      <TelemetryDivider code="SYS·03" label="solutions" />
       <ServicesPreviewSection locale="en" />
-      <TelemetryDivider code="SYS·05" label="explore" />
+      <TelemetryDivider code="SYS·04" label="explore" />
       <ExploreHubs locale="en" />
       <ContactCTA locale="en" />
     </>
