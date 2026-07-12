@@ -12,7 +12,6 @@ import { getProjectEn } from "@/content/en/projects";
 import {
   audienceEn,
   avoidedEn,
-  deliverablesEn,
   solutionsEn,
   triggersEn,
 } from "@/content/en/solutions";
@@ -28,10 +27,16 @@ export const metadata = pageMeta({
   path: "/en/solutions",
 });
 
+/**
+ * Phase 27: the "What you receive" block is gone. The same promise appeared in
+ * five places -- the homepage BuyerBridge, every system detail page, every sector
+ * detail page and the FAQ -- and this was the vaguest of them. Every card on this
+ * page already links to a detail page that answers it concretely. The three that
+ * remain (who it fits, when you need it, what gets avoided) exist only here.
+ */
 const CONVERSION_BLOCKS = [
   { title: "Who it fits", items: audienceEn, quiet: false },
   { title: "When you need this", items: triggersEn, quiet: false },
-  { title: "What you receive", items: deliverablesEn, quiet: false },
   { title: "What gets avoided", items: avoidedEn, quiet: true },
 ];
 
@@ -99,16 +104,16 @@ export default function EnSolutionsPage() {
                       <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
                         {solution.title}
                       </h2>
-                      <div className="mt-5 grid gap-6 md:mt-6 md:grid-cols-2 md:gap-8">
+                      <div className="mt-4 grid gap-5 md:mt-6 md:grid-cols-2 md:gap-8">
                         <div>
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                             The problem it solves
                           </h3>
-                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
                             {solution.problem}
                           </p>
                           {related.length > 0 && (
-                            <div className="mt-4 md:mt-5">
+                            <div className="mt-3.5 md:mt-5">
                               <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                                 Proven in
                               </h3>
@@ -189,12 +194,12 @@ export default function EnSolutionsPage() {
             </Reveal>
             <Reveal delay={0.08} className="mt-8 md:mt-10">
               <div className="overflow-hidden rounded-xl border border-border bg-border">
-                <div className="grid gap-px sm:grid-cols-2">
+                <div className="grid gap-px sm:grid-cols-3">
                   {CONVERSION_BLOCKS.map((block) => (
                     <div
                       key={block.title}
                       className={cn(
-                        "p-5 md:p-6",
+                        "p-4 md:p-6",
                         block.quiet ? "bg-card/60" : "bg-card",
                       )}
                     >

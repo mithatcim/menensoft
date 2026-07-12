@@ -12,7 +12,6 @@ import { getProject } from "@/content/projects";
 import {
   audience,
   avoided,
-  deliverables,
   solutions,
   triggers,
 } from "@/content/solutions";
@@ -28,11 +27,18 @@ export const metadata = pageMeta({
   path: "/cozumler",
 });
 
-/** Dönüşüm bandındaki dört blok — içerik src/content/solutions.ts'ten gelir. */
+/**
+ * Dönüşüm bandındaki bloklar — içerik src/content/solutions.ts'ten gelir.
+ *
+ * Faz 27: "Teslimde ne alırsınız" bloğu kaldırıldı. Aynı vaat sitede beş yerde
+ * duruyordu — ana sayfadaki BuyerBridge, her sistem detayı, her sektör detayı ve
+ * /sss — ve buradaki en genel hâliydi. Bu sayfadaki her kart zaten o soruyu somut
+ * olarak cevaplayan detay sayfasına bağlanıyor. Kalan üç blok (kime uygun, ne
+ * zaman gerekir, nelerden kaçınılır) yalnızca burada var.
+ */
 const CONVERSION_BLOCKS = [
   { title: "Kimler için uygun", items: audience, quiet: false },
   { title: "Ne zaman ihtiyaç duyarsınız", items: triggers, quiet: false },
-  { title: "Teslimde ne alırsınız", items: deliverables, quiet: false },
   { title: "Nelerden kaçınılır", items: avoided, quiet: true },
 ];
 
@@ -90,16 +96,16 @@ export default function SolutionsPage() {
                       <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
                         {solution.title}
                       </h2>
-                      <div className="mt-5 grid gap-6 md:mt-6 md:grid-cols-2 md:gap-8">
+                      <div className="mt-4 grid gap-5 md:mt-6 md:grid-cols-2 md:gap-8">
                         <div>
                           <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                             Çözülen problem
                           </h3>
-                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
                             {solution.problem}
                           </p>
                           {related.length > 0 && (
-                            <div className="mt-4 md:mt-5">
+                            <div className="mt-3.5 md:mt-5">
                               <h3 className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                                 Kanıtlandığı projeler
                               </h3>
@@ -181,12 +187,12 @@ export default function SolutionsPage() {
             </Reveal>
             <Reveal delay={0.08} className="mt-8 md:mt-10">
               <div className="overflow-hidden rounded-xl border border-border bg-border">
-                <div className="grid gap-px sm:grid-cols-2">
+                <div className="grid gap-px sm:grid-cols-3">
                   {CONVERSION_BLOCKS.map((block) => (
                     <div
                       key={block.title}
                       className={cn(
-                        "p-5 md:p-6",
+                        "p-4 md:p-6",
                         block.quiet ? "bg-card/60" : "bg-card",
                       )}
                     >
