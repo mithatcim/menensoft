@@ -237,6 +237,17 @@ const MESSAGE_MAX = 1500;
 
 const draftKey = (locale: Locale) => `menensoft:inquiry-draft:${locale}`;
 
+/** What survives a tab-local navigation. `d` is the visitor's text, `b` the
+ *  generated text they started editing from. */
+interface SavedSession {
+  sys: string | null;
+  sit: string | null;
+  needs: string[];
+  ref: string | null;
+  d: string | null;
+  b: string;
+}
+
 function buildMessage({
   copy,
   systemLabel,
@@ -313,42 +324,71 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
    * only reworded it" (say nothing — their text is still current).
    */
   const [baseline, setBaseline] = useState<string>("");
+  /** Guards the save effect so the empty first render can't erase the session. */
+  const [hydrated, setHydrated] = useState(false);
 
   // ?tur= / ?durum= / ?proje= preselection. The URL is deliberately read once
   // on mount: useSearchParams + Suspense would drop this page's static HTML to
   // a fallback, and a no-JS visitor would never see step 1 at all. Every param
   // is validated against real content, so junk values degrade to "not selected"
   // instead of rendering a broken state.
+  //
+  // The session is restored in the same pass. Selections are restored, not just
+  // the text: the message only renders once a system is chosen, so bringing back
+  // a draft without the choice it was written under leaves the visitor's own
+  // words stranded on a page that shows them nothing.
+  //
+  // The URL always outranks the session — an explicit ?tur= from a system page
+  // is a fresh intent, and a stale saved choice must not silently override it.
+  // If the restored draft no longer matches the restored selections, that is
+  // exactly what the regenerate prompt exists to say.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tur = params.get("tur");
     const durum = params.get("durum");
     const proje = params.get("proje");
-    /* eslint-disable react-hooks/set-state-in-effect -- one-off URL read on mount, no render cascade */
-    // validated against THIS locale's pool: the ids happen to be locale-stable,
-    // but hardcoding the Turkish pool here (as this once did) meant /en silently
-    // depended on that coincidence
-    if (tur && copy.systems.some((s) => s.id === tur)) setSystemId(tur);
-    if (durum && copy.situations.some((s) => s.id === durum)) {
-      setSituationId(durum);
-    }
-    if (proje && copy.lookupProject(proje)) setReferenceSlug(proje);
 
-    // Restore an edit-in-progress. Typing a project brief and losing it to a
-    // stray back-navigation is the kind of thing you only forgive once.
-    // sessionStorage, not localStorage: it belongs to this tab and this visit.
+    let saved: Partial<SavedSession> = {};
     try {
-      const saved = window.sessionStorage.getItem(draftKey(locale));
-      if (saved) {
-        const { d, b } = JSON.parse(saved) as { d: string; b: string };
-        if (typeof d === "string" && typeof b === "string") {
-          setBaseline(b);
-          setDraft(d);
-        }
-      }
+      const raw = window.sessionStorage.getItem(draftKey(locale));
+      if (raw) saved = JSON.parse(raw) as Partial<SavedSession>;
     } catch {
       // private mode / quota / malformed value — the generated message still works
     }
+
+    /* eslint-disable react-hooks/set-state-in-effect -- one-off URL+session read on mount, no render cascade */
+    // validated against THIS locale's pool: the ids happen to be locale-stable,
+    // but hardcoding the Turkish pool here (as this once did) meant /en silently
+    // depended on that coincidence
+    const isSystem = (v?: string | null) =>
+      Boolean(v && copy.systems.some((s) => s.id === v));
+    const isSituation = (v?: string | null) =>
+      Boolean(v && copy.situations.some((s) => s.id === v));
+
+    if (isSystem(tur)) setSystemId(tur);
+    else if (isSystem(saved.sys)) setSystemId(saved.sys!);
+
+    if (isSituation(durum)) setSituationId(durum);
+    else if (isSituation(saved.sit)) setSituationId(saved.sit!);
+
+    if (proje && copy.lookupProject(proje)) setReferenceSlug(proje);
+    else if (saved.ref && copy.lookupProject(saved.ref)) {
+      setReferenceSlug(saved.ref);
+    }
+
+    if (saved.needs?.length) {
+      const valid = saved.needs.filter((n) =>
+        copy.needs.some((x) => x.id === n),
+      );
+      if (valid.length) setNeedIds(valid);
+    }
+
+    if (typeof saved.d === "string" && typeof saved.b === "string") {
+      setBaseline(saved.b);
+      setDraft(saved.d);
+    }
+
+    setHydrated(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [copy, locale]);
 
@@ -392,31 +432,46 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
    */
   const stale = edited && generated !== baseline;
 
-  const persist = (next: { d: string; b: string } | null) => {
+  // One save for the whole wizard, not one per field. Runs only after the
+  // restore pass, so the empty first render cannot wipe the saved session.
+  useEffect(() => {
+    if (!hydrated) return;
     try {
-      if (next) {
-        window.sessionStorage.setItem(draftKey(locale), JSON.stringify(next));
-      } else {
-        window.sessionStorage.removeItem(draftKey(locale));
-      }
+      window.sessionStorage.setItem(
+        draftKey(locale),
+        JSON.stringify({
+          sys: systemId,
+          sit: situationId,
+          needs: needIds,
+          ref: referenceSlug,
+          d: draft,
+          b: baseline,
+        } satisfies SavedSession),
+      );
     } catch {
       // storage unavailable — editing still works, it just won't survive a reload
     }
-  };
+  }, [
+    hydrated,
+    locale,
+    systemId,
+    situationId,
+    needIds,
+    referenceSlug,
+    draft,
+    baseline,
+  ]);
 
   const editMessage = (value: string) => {
     // First keystroke: remember what they started from, so a later selection
     // change is detectable without diffing against a moving target.
-    const base = edited ? baseline : generated;
-    setBaseline(base);
+    if (!edited) setBaseline(generated);
     setDraft(value);
-    persist({ d: value, b: base });
   };
 
   const regenerate = () => {
     setDraft(null);
     setBaseline("");
-    persist(null);
   };
 
   const subject =
