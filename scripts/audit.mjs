@@ -32,12 +32,14 @@ const EXPECTED_CANONICAL_COUNT = 58; // 29 Türkçe + 29 İngilizce (/en)
 /** FAQPage şemasının izinli olduğu sayfalar (görünür SSS içeren). */
 const FAQ_ROUTES = ["/sss", "/en/faq"];
 
+// İngilizce kelimeli eski yollar → İngilizce kanonik hedefler.
+// src/lib/routes.ts (compatRedirects) + next.config.ts ile birlikte güncelle.
 const REDIRECTS = [
-  ["/projects", "/projeler"],
-  ["/projects/ecommerce-cms", "/projeler/ecommerce-cms"],
-  ["/services", "/cozumler"],
-  ["/about", "/hakkimda"],
-  ["/contact", "/iletisim"],
+  ["/projects", "/en/projects"],
+  ["/projects/ecommerce-cms", "/en/projects/ecommerce-cms"],
+  ["/services", "/en/solutions"],
+  ["/about", "/en/about"],
+  ["/contact", "/en/contact"],
 ];
 
 const ENGLISH_PREFIXES = ["/projects", "/services", "/about", "/contact"];

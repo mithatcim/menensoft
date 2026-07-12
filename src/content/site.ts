@@ -36,19 +36,45 @@ export interface SiteConfig {
 
 /**
  * Absolute deploy origin used for metadataBase, canonical URLs, Open Graph
- * image URLs, sitemap, and robots.
- *
- * PRODUCTION MUST set NEXT_PUBLIC_SITE_URL to the real domain at build time —
- * without it, absolute URLs (canonical/OG/sitemap) point at the fallback and
- * social/search tooling will be wrong.
+ * image URLs, sitemap, robots, and every JSON-LD `@id`.
  *
  * The fallback is only a generic local-dev default. It is intentionally the
  * conventional Next port 3000, not this machine's current 3001 (which is only
  * a fallback because another app occupies 3000). No real domain is invented.
+ *
+ * Forgetting NEXT_PUBLIC_SITE_URL in production is silent — the build succeeds
+ * and the site works, it just publishes localhost as its own address. The guard
+ * below turns that into a loud build failure, but ONLY on Vercel: `pnpm build`
+ * locally also runs with NODE_ENV=production, so keying on NODE_ENV would break
+ * `pnpm start` and `pnpm audit:browser`, which rely on the fallback.
  */
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
-  "http://localhost:3000";
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+
+// Vercel sets VERCEL=1 for every build/runtime on its platform; it is never set
+// by a local build. Non-NEXT_PUBLIC_* vars are not inlined into client bundles,
+// so this is a server/build-time check and cannot throw in the browser.
+if (process.env.VERCEL && !rawSiteUrl) {
+  throw new Error(
+    "NEXT_PUBLIC_SITE_URL is not set. A Vercel deploy must set it to the " +
+      "primary production origin — scheme included, no path, no trailing " +
+      "slash (e.g. https://domain.com). Without it, canonical URLs, og:url, " +
+      "hreflang, all 58 sitemap entries, robots.txt and every JSON-LD @id " +
+      "would publish as http://localhost:3000. Set it in Vercel → Settings → " +
+      "Environment Variables (Production), then redeploy without build cache " +
+      "— NEXT_PUBLIC_* values are inlined at build time.",
+  );
+}
+
+// A value without a scheme throws deep inside `new URL()` in the root layout,
+// which is a confusing way to discover a typo. Fail here with the reason.
+if (rawSiteUrl && !/^https?:\/\//.test(rawSiteUrl)) {
+  throw new Error(
+    `NEXT_PUBLIC_SITE_URL must include the scheme: got "${rawSiteUrl}", ` +
+      `expected "https://${rawSiteUrl}".`,
+  );
+}
+
+export const siteUrl = rawSiteUrl || "http://localhost:3000";
 
 export const site: SiteConfig = {
   name: "Menensoft",

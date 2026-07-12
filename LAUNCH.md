@@ -11,16 +11,17 @@ olarak localhost'a düşer.
 - [ ] Görünür Türkçe kopya için son bir ana-dil okuması yapıldı.
 - [ ] Proje ekran görüntüleri stratejisi netleşti (rezerve çerçeveler bilinçli
       olarak boş — gerçek görseller ayrı bir fazda eklenecek).
-- [ ] **Yönlendirme kararı verildi.** `next.config.ts` içindeki 5 eski
-      yönlendirme (`/projects`, `/projects/:slug`, `/services`, `/about`,
-      `/contact`) bugün Türkçe sayfalara gidiyor. Site hiç yayınlanmadığı için
-      korunacak eski bağlantı yok; bu yollara gelecek tek kitle İngilizce kelime
-      deneyen ziyaretçi/crawler. Karar yayından ÖNCE verilmeli: dizine
-      girdikten sonra hedef değiştirmek yönlendirme zinciri üretir.
-- [ ] **Build guard kararı verildi.** Yayında `NEXT_PUBLIC_SITE_URL` unutulursa
-      build sessizce localhost ile geçer. Vercel'e özel bir guard eklemek
-      (`process.env.VERCEL` varsa değişken yoksa build'i düşür) opsiyoneldir;
-      eklenmediyse §5 doğrulaması bunu yakalamak zorundadır.
+- [x] **Yönlendirme kararı verildi — uygulandı (Option B).** İngilizce kelimeli
+      5 eski yol artık İngilizce kanonik sayfalara gidiyor: `/projects` →
+      `/en/projects`, `/projects/:slug` → `/en/projects/:slug`, `/services` →
+      `/en/solutions`, `/about` → `/en/about`, `/contact` → `/en/contact`.
+      Hepsi tek adımlık 308; hedefler 200. Türkçe kanonik rotalar değişmedi.
+- [x] **Build guard kararı verildi — uygulandı.** `src/content/site.ts`,
+      `process.env.VERCEL` varken `NEXT_PUBLIC_SITE_URL` yoksa build'i açık bir
+      hata ile düşürür. Yerel `pnpm build` / `pnpm start` / `pnpm audit:browser`
+      etkilenmez: guard yalnızca Vercel'de tetiklenir, dışarıda localhost
+      fallback'i aynen çalışır. (NODE_ENV'e bakılmaz — yerel build de
+      NODE_ENV=production'dır.)
 
 ## 2. Ortam değişkeni
 
@@ -39,6 +40,10 @@ NEXT_PUBLIC_SITE_URL=https://<birincil-domain>   # sonda / OLMADAN
   `https://menensoft.com` geçerli.
 - Sondaki `/` kod tarafında kırpılır (`replace(/\/+$/, "")`), yani zararsız —
   ama yazmayın.
+- **Guard:** Vercel'de (`process.env.VERCEL`) değişken yoksa build kasıtlı
+  olarak düşer — yanlışlıkla localhost yayınlanamaz. Yerelde guard sessizdir;
+  fallback çalışmaya devam eder. Şemasız bir değer de (örn. `domain.com`)
+  açık bir hata ile reddedilir.
 
 Değişken yoksa (bugünkü durum) kod `http://localhost:3000` fallback'ine düşer.
 Bunun etki alanı **tek bir etiket değil**; localhost bu üretimlere sızar:
@@ -99,7 +104,10 @@ Ek elle kontroller:
       doğrulayıcısında önizleme kontrolü.
 - [ ] JSON-LD: `/`, `/en`, `/sss` ve `/en/faq` Google Rich Results
       testinden geçer (FAQPage yalnızca /sss ve /en/faq'ta).
-- [ ] Yönlendirmeler: `/projects`, `/services`, `/about`, `/contact` → 308.
+- [ ] Yönlendirmeler tek adımda 308 ve İngilizce hedefe gidiyor:
+      `/projects` → `/en/projects`, `/projects/ecommerce-cms` →
+      `/en/projects/ecommerce-cms`, `/services` → `/en/solutions`,
+      `/about` → `/en/about`, `/contact` → `/en/contact`. Zincir yok.
 - [ ] Metadata rotaları: favicon.ico, icon, apple-icon, og/twitter image,
       robots.txt, sitemap.xml, manifest.webmanifest → 200.
 - [ ] HTTPS sertifikası apex + www'de geçerli; karışık içerik yok.

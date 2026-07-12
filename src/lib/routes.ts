@@ -57,16 +57,19 @@ export const allCanonicalRoutes: string[] = [
 ];
 
 /**
- * Eski İngilizce rotalar → Türkçe kanonik hedefler (308).
+ * İngilizce kelimeli eski yollar → İngilizce kanonik hedefler (308).
  * Davranış next.config.ts'te tanımlıdır; bu liste denetim/testlerin
  * beklentiyi doğrulaması içindir. İkisini birlikte güncelle.
  */
 export const compatRedirects: { source: string; destination: string }[] = [
-  { source: "/projects", destination: "/projeler" },
-  { source: "/projects/ecommerce-cms", destination: "/projeler/ecommerce-cms" },
-  { source: "/services", destination: "/cozumler" },
-  { source: "/about", destination: "/hakkimda" },
-  { source: "/contact", destination: "/iletisim" },
+  { source: "/projects", destination: "/en/projects" },
+  {
+    source: "/projects/ecommerce-cms",
+    destination: "/en/projects/ecommerce-cms",
+  },
+  { source: "/services", destination: "/en/solutions" },
+  { source: "/about", destination: "/en/about" },
+  { source: "/contact", destination: "/en/contact" },
 ];
 
 /** Sitemap dışında kalması gereken, 200 dönmesi beklenen metadata rotaları. */
