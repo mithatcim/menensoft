@@ -12,7 +12,6 @@ import {
   RelatedProjects,
 } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
-import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
@@ -215,6 +214,8 @@ export default async function SystemPage({ params }: SystemPageProps) {
               <Reveal delay={0.04}>
                 <CtaBand
                   primaryHref={prefilledInquiry}
+                  locale="tr"
+                  contactFallback
                   title={system.ctaTitle}
                   text={system.ctaText}
                   secondaryLabel="Projeleri incele"
@@ -252,7 +253,6 @@ export default async function SystemPage({ params }: SystemPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA inquiryHref={prefilledInquiry} />
     </>
   );
 }

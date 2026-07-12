@@ -12,7 +12,6 @@ import {
   RelatedProjects,
 } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
-import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
@@ -240,6 +239,8 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
                   text={system.ctaText}
                   primaryLabel="Start a project"
                   primaryHref={prefilledInquiry}
+                  locale="en"
+                  contactFallback
                   secondaryLabel="View projects"
                   secondaryHref="/en/projects"
                 />
@@ -275,7 +276,6 @@ export default async function EnSystemPage({ params }: SystemPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA locale="en" inquiryHref={prefilledInquiry} />
     </>
   );
 }

@@ -12,7 +12,6 @@ import {
   RelatedProjects,
 } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
-import { ContactCTA } from "@/components/shared/contact-cta";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
@@ -191,6 +190,8 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
                   text={sector.ctaText}
                   primaryLabel="Start a project"
                   primaryHref={prefilledInquiry}
+                  locale="en"
+                  contactFallback
                   secondaryLabel="See the process"
                   secondaryHref="/en/process"
                 />
@@ -226,7 +227,6 @@ export default async function EnSectorPage({ params }: SectorPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA locale="en" inquiryHref={prefilledInquiry} />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
 import { getProjectEn } from "@/content/en/projects";
 import { getProject } from "@/content/projects";
+import { site } from "@/content/site";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
@@ -200,12 +201,35 @@ export function ChipLinks({
   );
 }
 
+/** The direct-contact escape hatch, for pages that close with CtaBand alone. */
+const FALLBACK_COPY = {
+  tr: {
+    pre: "Sihirbazsız yazmayı tercih ederseniz",
+    email: "doğrudan e-posta gönderin",
+    or: "ya da",
+    contact: "iletişim kanallarına bakın",
+    contactHref: "/iletisim",
+  },
+  en: {
+    pre: "Prefer to write without the wizard?",
+    email: "send an email directly",
+    or: "or",
+    contact: "see the contact channels",
+    contactHref: "/en/contact",
+  },
+} as const;
+
 /**
  * Sayfa içi dönüşüm bandı — birincil CTA her zaman /teklif-al.
  *
  * Varsayılan etiket "Teklif al" değil: sayfa fiyatı kapsamdan önce vermiyor,
  * dolayısıyla teklif vaat eden bir buton yanlış beklenti kuruyordu. İkincil
  * etiket de Faz 23'te birleştirilen "Süreci incele" ile hizalandı.
+ *
+ * Faz 27: `contactFallback` ile bir e-posta/iletişim satırı taşıyabilir. Sistem
+ * ve sektör detay sayfaları artık kapanışı yalnızca bu bantla yapıyor —
+ * ardından gelen ContactCTA aynı hedefe giden üçüncü bir bant oluyordu — ve
+ * ContactCTA'nın sunduğu doğrudan e-posta yolu bu satırla korunuyor.
  */
 export function CtaBand({
   title,
@@ -214,6 +238,8 @@ export function CtaBand({
   primaryHref = "/teklif-al",
   secondaryLabel = "Süreci incele",
   secondaryHref = "/surec",
+  locale = "tr",
+  contactFallback = false,
 }: {
   title: string;
   text: string;
@@ -221,7 +247,12 @@ export function CtaBand({
   primaryHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  locale?: Locale;
+  /** Render the direct email / contact line (pages that drop ContactCTA). */
+  contactFallback?: boolean;
 }) {
+  const fb = FALLBACK_COPY[locale];
+
   return (
     <div className="relative overflow-hidden rounded-xl border border-accent/25 bg-accent/5 p-6 md:p-8">
       <div
@@ -250,6 +281,26 @@ export function CtaBand({
             {secondaryLabel}
           </Link>
         </div>
+
+        {contactFallback && site.email && (
+          <p className="mt-5 text-sm text-muted-foreground">
+            {fb.pre}{" "}
+            <a
+              href={`mailto:${site.email}`}
+              className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            >
+              {fb.email}
+            </a>{" "}
+            {fb.or}{" "}
+            <Link
+              href={fb.contactHref}
+              className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            >
+              {fb.contact}
+            </Link>
+            .
+          </p>
+        )}
       </div>
     </div>
   );

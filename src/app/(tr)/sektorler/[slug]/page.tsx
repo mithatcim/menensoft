@@ -12,7 +12,6 @@ import {
   RelatedProjects,
 } from "@/components/hub/blocks";
 import { Container } from "@/components/layout/container";
-import { ContactCTA } from "@/components/shared/contact-cta";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
@@ -192,6 +191,8 @@ export default async function SectorPage({ params }: SectorPageProps) {
               <Reveal delay={0.04}>
                 <CtaBand
                   primaryHref={prefilledInquiry}
+                  locale="tr"
+                  contactFallback
                   title={sector.ctaTitle}
                   text={sector.ctaText}
                 />
@@ -228,7 +229,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
           </div>
         </Container>
       </section>
-      <ContactCTA inquiryHref={prefilledInquiry} />
     </>
   );
 }
