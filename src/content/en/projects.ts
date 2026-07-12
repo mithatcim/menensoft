@@ -28,6 +28,7 @@ export const projectsEn: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Completed product infrastructure: the admin panel, storefront and visual page builder run together. Interface captures and architecture notes will be added.",
+    similarCta: "I need a similar e-commerce system",
     flow: ["Admin & CMS", "Visual page builder", "Storefront"],
     dossierSummary:
       "One system where the panel that manages products also manages the pages that sell them. Admin panel, visual page builder and storefront run together — completed as production-ready product infrastructure.",
@@ -75,6 +76,7 @@ export const projectsEn: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Completed operations system: an order flows from the QR menu to the waiter, kitchen and cashier screens in working condition. Delivered as a working build.",
+    similarCta: "Discuss a similar operations system",
     flow: ["QR menu", "Waiter screen", "Kitchen screen", "Cashier"],
     dossierSummary:
       "A completed full-stack operations system: the order is captured once at the table and reaches the waiter, the kitchen and the cashier — every role that needs it — relying on the system, not on memory.",
@@ -121,6 +123,7 @@ export const projectsEn: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Completed corporate site + panel: with content management and an appointment request flow — work completed and delivered to the client's needs.",
+    similarCta: "I need a site and panel like this",
     flow: ["Admin panel", "Content management", "Corporate site"],
     dossierSummary:
       "A completed site + panel pair for a psychology clinic: the corporate site presents the clinic, while the panel lets the people running it manage content and appointment requests without touching code.",
@@ -162,6 +165,7 @@ export const projectsEn: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Internal product infrastructure: log collection, storage and review modules run in working condition. Hardening and compliance work was deliberately kept out of this scope.",
+    similarCta: "Discuss a similar reporting system",
     flow: ["Log collection", "Storage", "Search & review"],
     dossierSummary:
       "Internal product infrastructure built for central security log management: collection, storage and a review interface in one place, as working modules.",
@@ -197,6 +201,7 @@ export const projectsEn: Project[] = [
     role: "Designed and built end to end",
     statusNote:
       "Earlier product work: the membership, access and publishing infrastructure is complete and in working condition.",
+    similarCta: "I need a similar membership flow",
     flow: ["Membership & access", "Publishing", "Member delivery"],
     dossierSummary:
       "Completed membership/signal platform work: accounts, access control and the infrastructure for publishing notification-style signal records to members, in working condition.",

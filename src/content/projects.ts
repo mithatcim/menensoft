@@ -26,6 +26,12 @@ export interface Project {
   role?: string;
   /** Projenin bugünkü durumu hakkında tek dürüst paragraf. */
   statusNote?: string;
+  /**
+   * Proje detayının üst CTA metni — "bu yapıya benzerini istiyorum" niyetini
+   * projeye özel dille söyler. Hedef her zaman sihirbazdır ve fit id
+   * projectToFitType'tan türetilir; burada URL veya fit id tekrarlanmaz.
+   */
+  similarCta?: string;
   /** Gerçekten geliştirilen yapıdan türetilmiş soyut sistem akışı. */
   flow?: string[];
   /** Sistem dosyası içerikleri (8C onaylı içeriğin Türkçe karşılığı). */
@@ -61,6 +67,7 @@ export const projects: Project[] = [
     role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
       "Tamamlanmış ürün altyapısı: yönetim paneli, vitrin ve görsel sayfa kurucu birlikte çalışır durumda. Ekran görüntüleri ve mimari notlar eklenecek.",
+    similarCta: "Benzer bir e-ticaret altyapısı istiyorum",
     flow: ["Yönetim & CMS", "Görsel sayfa kurucu", "Vitrin"],
     dossierSummary:
       "Ürünleri yöneten panelin, onları satan sayfaları da yönettiği tek sistem. Yönetim paneli, görsel sayfa kurucu ve vitrin birlikte çalışır durumda; üretime hazır ürün altyapısı olarak tamamlandı.",
@@ -108,6 +115,7 @@ export const projects: Project[] = [
     role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
       "Tamamlanmış operasyon sistemi: sipariş, QR menüden garson, mutfak ve kasa ekranlarına çalışır şekilde akar. Çalışır teslim edilmiş yapı.",
+    similarCta: "Benzer bir operasyon sistemi konuşalım",
     flow: ["QR menü", "Garson ekranı", "Mutfak ekranı", "Kasa"],
     dossierSummary:
       "Tamamlanmış full-stack operasyon sistemi: sipariş masada bir kez alınır ve garson, mutfak, kasa — ihtiyacı olan her role — hafızaya değil sisteme dayanarak ulaşır.",
@@ -154,6 +162,7 @@ export const projects: Project[] = [
     role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
       "Tamamlanmış kurumsal site + panel: içerik yönetimi ve randevu talebi akışıyla, müşteri ihtiyacına göre tamamlanmış ve teslim edilmiş çalışma.",
+    similarCta: "Bu yapıya yakın bir site + panel istiyorum",
     flow: ["Yönetim paneli", "İçerik yönetimi", "Kurumsal site"],
     dossierSummary:
       "Bir psikoloji kliniği için tamamlanmış site + panel ikilisi: kurumsal site kliniği anlatır, panel ise kliniği yürütenlerin içerikleri ve randevu taleplerini koda dokunmadan yönetmesini sağlar.",
@@ -195,6 +204,7 @@ export const projects: Project[] = [
     role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
       "İç ürün altyapısı: log toplama, saklama ve inceleme modülleri çalışır durumda. Sertleştirme ve uyumluluk çalışmaları bilinçli olarak bu kapsamın dışında tutuldu.",
+    similarCta: "Benzer bir raporlama sistemi konuşalım",
     flow: ["Log toplama", "Saklama", "Arama & inceleme"],
     dossierSummary:
       "Merkezî güvenlik log yönetimi için geliştirilmiş iç ürün altyapısı: toplama, saklama ve inceleme arayüzü tek yerde, çalışır modüller halinde.",
@@ -230,6 +240,7 @@ export const projects: Project[] = [
     role: "Uçtan uca tasarlandı ve geliştirildi",
     statusNote:
       "Önceki ürün çalışması: üyelik, erişim ve yayınlama altyapısı tamamlanmış ve çalışır durumda.",
+    similarCta: "Benzer bir üyelik/otomasyon akışı istiyorum",
     flow: ["Üyelik & erişim", "Yayınlama", "Üyeye iletim"],
     dossierSummary:
       "Tamamlanmış üyelik/sinyal platformu çalışması: hesaplar, erişim kontrolü ve üyelere bildirim tarzı sinyal kayıtları yayınlama altyapısı çalışır halde.",
