@@ -54,6 +54,17 @@ const ICONS: Record<string, LucideIcon> = {
 /** The two areas given extra visual weight so the grid stops reading flat. */
 const FLAGSHIP_FITS = new Set(["e-ticaret", "operasyon"]);
 
+/**
+ * Where a solution lists several honest proofs, prefer the one that spreads the
+ * evidence across the portfolio instead of repeating the same project. Only
+ * ever applied if the slug is genuinely among that solution's relatedSlugs —
+ * proof is never borrowed from an unrelated project.
+ */
+const PREFERRED_PROOF: Record<string, string> = {
+  "yonetim-paneli": "orva-psychology",
+  dashboard: "log-management-platform",
+};
+
 const COPY = {
   tr: {
     eyebrow: "Çözümler",
@@ -135,10 +146,13 @@ export function ServicesPreviewSection({ locale = "tr" }: { locale?: Locale }) {
             const system = lookupSystem(solution.systemSlug);
             const whoNeeds = system?.whoNeeds[0];
 
-            // honest proof only: the first genuinely related project, if any
-            const proof = solution.relatedSlugs.length
-              ? lookupProject(solution.relatedSlugs[0])
-              : undefined;
+            // honest proof only, chosen from this solution's own related list
+            const preferred = fitId ? PREFERRED_PROOF[fitId] : undefined;
+            const proofSlug =
+              preferred && solution.relatedSlugs.includes(preferred)
+                ? preferred
+                : solution.relatedSlugs[0];
+            const proof = proofSlug ? lookupProject(proofSlug) : undefined;
 
             const ctaHref = fitId
               ? `${copy.quoteBase}?tur=${fitId}`
