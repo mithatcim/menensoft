@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Analytics } from "@/components/analytics/analytics";
+import { LanguageHint } from "@/components/shared/language-hint";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { siteEn } from "@/content/en/site";
 import { site } from "@/content/site";
@@ -79,6 +80,7 @@ export default function EnRootLayout({
         <Analytics locale="en" />
         <div className="relative z-10 flex min-h-screen flex-col">
           <Header locale="en" />
+          <LanguageHint locale="en" />
           <main className="flex-1">{children}</main>
           <Footer locale="en" />
         </div>

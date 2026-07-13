@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Analytics } from "@/components/analytics/analytics";
+import { LanguageHint } from "@/components/shared/language-hint";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { site } from "@/content/site";
 import {
@@ -75,6 +76,7 @@ export default function RootLayout({
         <Analytics locale="tr" />
         <div className="relative z-10 flex min-h-screen flex-col">
           <Header />
+          <LanguageHint locale="tr" />
           <main className="flex-1">{children}</main>
           <Footer />
         </div>
