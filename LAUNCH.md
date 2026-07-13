@@ -25,6 +25,13 @@ olarak localhost'a düşer.
 
 ## 2. Ortam değişkeni
 
+> **Phase 33C notu.** Site artık form gönderimi de kabul ediyor (Supabase).
+> Kurulum ve doğrulama adımları **`SUPABASE_SETUP.md`** dosyasında; oradaki
+> "ücretsiz katman duraklaması" uyarısı ve anon-erişim testi yayından önce
+> mutlaka yapılmalıdır. `NEXT_PUBLIC_SITE_URL` hâlâ tek **zorunlu** değişken:
+> Supabase değişkenleri eksikse site çalışır, yalnızca formlar dürüst bir hata
+> gösterip e-posta/WhatsApp'a yönlendirir.
+
 Tek zorunlu değişken:
 
 ```
