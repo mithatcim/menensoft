@@ -154,6 +154,107 @@ comment on table admin_login_attempts is
   'Admin giriş denemesi sayacı (IP hash başına). Ham IP saklanmaz.';
 
 -- ---------------------------------------------------------------------------
+-- Analitik (Phase 33E) — çerezsiz, birinci taraf
+-- ---------------------------------------------------------------------------
+-- TASARIM, TEK PARAGRAF:
+-- Ziyaretçi kimliği tarayıcıda DEĞİL, sunucuda türetilir:
+--   visitor_key = sha256(günlük_tuz + ip + user_agent + site)
+-- IP yalnızca bellekte, hash'i hesaplamak için kullanılır ve HİÇBİR YERE yazılmaz.
+-- Tuz her gün döner, yani aynı kişi yarın farklı bir anahtar alır: kimse günler
+-- boyunca izlenemez. Bu yüzden çerez yok, localStorage yok, parmak izi yok — ve
+-- bu yüzden çerez banner'ı da yok. Ziyaretçinin cihazına hiçbir şey yazılmıyor.
+--
+-- Bunun bedeli: "dün gelen kişi bugün geri döndü mü?" sorusunu yanıtlayamayız.
+-- Bu iş için o soru gerekli değil.
+--
+-- SAKLANMAYANLAR (kasıtlı, sütun bile yok):
+--   - ham IP
+--   - tam user-agent (yalnızca mobile/tablet/desktop/unknown türetilir)
+--   - tam referrer URL (yalnızca HOST; tam URL arama sorgusu ya da özel yol taşır)
+--   - parmak izi / cihaz imzası
+
+create table if not exists visitor_sessions (
+  id              uuid primary key default gen_random_uuid(),
+  visitor_key     text not null,
+  created_at      timestamptz not null default now(),
+  last_seen_at    timestamptz not null default now(),
+  first_path      text,
+  last_path       text,
+  locale          text,
+  referrer_host   text,
+  device_type     text,
+  country         text,
+  pageview_count  integer not null default 0,
+  duration_seconds integer not null default 0,
+
+  constraint vs_device_type check (
+    device_type is null
+    or device_type in ('mobile', 'tablet', 'desktop', 'unknown')
+  ),
+  constraint vs_locale check (locale is null or locale in ('tr', 'en')),
+  -- referrer_host bir HOST'tur: içinde / ? # olamaz. Tam URL kaçarsa bu kısıt
+  -- yakalar — "yalnızca host saklıyoruz" bir söz değil, bir kural olsun.
+  constraint vs_referrer_is_host check (
+    referrer_host is null or referrer_host !~ '[/?#]'
+  )
+);
+
+create table if not exists analytics_events (
+  id            uuid primary key default gen_random_uuid(),
+  created_at    timestamptz not null default now(),
+  session_id    uuid references visitor_sessions(id) on delete set null,
+  event_type    text not null,
+  path          text,
+  locale        text,
+  referrer_host text,
+  device_type   text,
+  country       text,
+  metadata      jsonb not null default '{}'::jsonb,
+
+  constraint ae_event_type check (
+    event_type in (
+      'session_start', 'page_view', 'cta_click', 'proof_click',
+      'email_click', 'whatsapp_click', 'form_submit', 'language_switch',
+      'heartbeat'
+    )
+  ),
+  constraint ae_locale check (locale is null or locale in ('tr', 'en')),
+  constraint ae_device_type check (
+    device_type is null
+    or device_type in ('mobile', 'tablet', 'desktop', 'unknown')
+  ),
+  constraint ae_referrer_is_host check (
+    referrer_host is null or referrer_host !~ '[/?#]'
+  ),
+  -- metadata şişmesin: /api/e zaten kırpıyor, bu bağımsız tavan.
+  constraint ae_metadata_size check (length(metadata::text) <= 1000)
+);
+
+comment on table visitor_sessions is
+  'Çerezsiz oturumlar. visitor_key = sha256(günlük tuz + ip + UA + site). Ham IP saklanmaz, kimlik günler arası taşınmaz.';
+comment on table analytics_events is
+  'Birinci taraf olaylar. Kişisel veri taşımaz: mesaj/e-posta/telefon buraya asla yazılmaz.';
+comment on column visitor_sessions.duration_seconds is
+  'YAKLAŞIK: son olay ile ilk olay arası. Son sayfanın gerçek okunma süresi bilinemez.';
+comment on column visitor_sessions.referrer_host is
+  'Yalnızca host. Tam URL asla saklanmaz — arama sorgusu ya da özel yol taşıyabilir.';
+
+create index if not exists ae_created_at_idx on analytics_events (created_at desc);
+create index if not exists ae_type_created_idx on analytics_events (event_type, created_at desc);
+create index if not exists ae_session_created_idx on analytics_events (session_id, created_at);
+create index if not exists ae_path_idx on analytics_events (path) where path is not null;
+
+create index if not exists vs_created_at_idx on visitor_sessions (created_at desc);
+create index if not exists vs_last_seen_idx on visitor_sessions (last_seen_at desc);
+create index if not exists vs_visitor_key_idx on visitor_sessions (visitor_key, last_seen_at desc);
+
+-- SAKLAMA SÜRESİ (öneri: 12 ay). Zamanlanmış silme kasıtlı olarak eklenmedi —
+-- veri silen bir cron'u yanlış kurmak, hiç kurmamaktan kötüdür. Hazır olduğunuzda:
+--   delete from analytics_events  where created_at < now() - interval '12 months';
+--   delete from visitor_sessions  where last_seen_at < now() - interval '12 months';
+-- (leads bir iş kaydıdır; o silinmez.)
+
+-- ---------------------------------------------------------------------------
 -- Doğrulama
 -- ---------------------------------------------------------------------------
 -- \d leads
