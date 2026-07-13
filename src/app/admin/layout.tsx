@@ -41,10 +41,16 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-background font-sans text-foreground antialiased`}
-      >
+    // `dark` + colorScheme, exactly as the public root layouts do. Without them
+    // the panel falls back to the light palette and looks like a different,
+    // half-broken product — the theme lives on <html>, and a root layout that
+    // forgets it does not inherit anything from its siblings.
+    <html
+      lang="tr"
+      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      style={{ colorScheme: "dark" }}
+    >
+      <body className="min-h-dvh bg-background font-sans text-foreground">
         {children}
       </body>
     </html>
