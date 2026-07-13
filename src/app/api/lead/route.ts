@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 import { NextResponse } from "next/server";
 
 import { type LeadErrorCode, type LeadResult } from "@/lib/leads/types";
@@ -15,6 +13,7 @@ import {
   leadSchema,
 } from "@/lib/leads/validate";
 import { getPool } from "@/lib/db/postgres";
+import { clientHash, hitRateLimit } from "@/lib/db/rate-limit";
 
 /**
  * POST /api/lead — the site's only public write endpoint (Phase 33C-PG).
@@ -48,64 +47,6 @@ const fail = (
   message: string,
   field?: string,
 ) => NextResponse.json({ ok: false, code, message, field }, { status });
-
-/**
- * The client IP is hashed and never stored — not in `leads` (which has no IP
- * column at all) and not in `lead_rate_limits`, which holds only the digest. The
- * hash answers "is this the same sender?" and nothing else.
- *
- * Salted with LEAD_RATE_LIMIT_SALT when set. If it is absent we fall back to
- * DATABASE_URL, which is already a server-only secret and is stable across
- * requests — so the limiter still works out of the box rather than silently
- * degrading to unsalted (and therefore reversible) hashes of an address space
- * small enough to brute-force.
- */
-function clientHash(req: Request): string {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
-  const salt =
-    process.env.LEAD_RATE_LIMIT_SALT || process.env.DATABASE_URL || "menensoft";
-  return createHash("sha256").update(`${ip}:${salt}`).digest("hex");
-}
-
-/**
- * One atomic statement, not read-then-write: two concurrent submissions would
- * both read the old count and both be allowed. The upsert closes that race in a
- * single round trip, and RETURNING tells us where we landed.
- */
-async function overRateLimit(
-  pool: NonNullable<ReturnType<typeof getPool>>,
-  hash: string,
-): Promise<boolean> {
-  try {
-    const { rows } = await pool.query<{ count: number }>(
-      `insert into lead_rate_limits (ip_hash, window_start, count)
-       values ($1, now(), 1)
-       on conflict (ip_hash) do update set
-         count = case
-           when lead_rate_limits.window_start < now() - $2::interval then 1
-           else lead_rate_limits.count + 1
-         end,
-         window_start = case
-           when lead_rate_limits.window_start < now() - $2::interval then now()
-           else lead_rate_limits.window_start
-         end
-       returning count`,
-      [hash, RATE_WINDOW],
-    );
-    return (rows[0]?.count ?? 0) > RATE_MAX;
-  } catch (err) {
-    // Fail OPEN. A broken limiter must never be the reason a real lead is lost —
-    // the worst case is some spam gets through, and spam is cheaper than silence.
-    console.error(
-      "[lead] rate limiter unavailable, allowing through:",
-      err instanceof Error ? err.message : err,
-    );
-    return false;
-  }
-}
 
 export async function POST(req: Request) {
   if (!req.headers.get("content-type")?.includes("application/json")) {
@@ -158,7 +99,16 @@ export async function POST(req: Request) {
     return fail(503, "unconfigured", "database_not_configured");
   }
 
-  if (await overRateLimit(pool, clientHash(req))) {
+  // Fails OPEN (see hitRateLimit): a broken limiter must never be the reason a
+  // real lead is lost. Spam is cheaper than silence. Admin login takes the
+  // opposite trade deliberately.
+  const rl = await hitRateLimit(
+    "lead",
+    clientHash(req, "lead"),
+    RATE_MAX,
+    RATE_WINDOW,
+  );
+  if (rl.limited) {
     return fail(429, "rate_limit", "too_many_submissions");
   }
 

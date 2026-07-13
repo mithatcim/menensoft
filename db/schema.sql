@@ -132,6 +132,28 @@ comment on table lead_rate_limits is
 --   delete from lead_rate_limits where window_start < now() - interval '1 day';
 
 -- ---------------------------------------------------------------------------
+-- admin_login_attempts (Phase 33D)
+-- ---------------------------------------------------------------------------
+-- Aynı yapı, farklı amaç: /admin/login'e kaba kuvvet denemesini yavaşlatır.
+-- Ayrı tablo, çünkü eşikleri farklıdır — bir ziyaretçinin 10 dakikada 5 form
+-- göndermesi normaldir; 10 dakikada 5 kez yanlış parola girmesi değildir.
+--
+-- Burada da ham IP saklanmaz: yalnızca sha256(ip + salt).
+--
+-- ÖNEMLİ: leads rate limit'inden farklı olarak bu limit FAIL CLOSED'dır.
+-- Veritabanı yoksa giriş denemesi reddedilir. Bozuk bir limitleyici, kaba
+-- kuvvet saldırısına açık bir giriş formundan iyidir; kaybedilen tek şey
+-- sahibin birkaç dakikalık erişimidir, veri değil.
+create table if not exists admin_login_attempts (
+  ip_hash      text primary key,
+  window_start timestamptz not null default now(),
+  count        integer not null default 0
+);
+
+comment on table admin_login_attempts is
+  'Admin giriş denemesi sayacı (IP hash başına). Ham IP saklanmaz.';
+
+-- ---------------------------------------------------------------------------
 -- Doğrulama
 -- ---------------------------------------------------------------------------
 -- \d leads
