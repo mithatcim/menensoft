@@ -29,47 +29,57 @@ export default async function ProtectedAdminLayout({
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-5">
-          <nav className="flex items-center gap-1">
+        {/* The brand, three nav items and a logout button do not fit in 390px of
+            phone. Before this, the logout button sat 72px past the right edge of
+            the viewport and every admin page scrolled sideways. The labels
+            collapse to icons below `sm`; the icons carry aria-labels so nothing
+            is lost to a screen reader. */}
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5">
+          <nav className="flex min-w-0 items-center gap-0.5 sm:gap-1">
             <Link
               href="/admin"
-              className="mr-3 text-sm font-semibold tracking-tight"
+              className="mr-1 shrink-0 text-sm font-semibold tracking-tight sm:mr-3"
             >
-              Menensoft{" "}
-              <span className="font-mono text-xs text-muted-foreground">
+              Menensoft
+              <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
+                {" "}
                 /yönetim
               </span>
             </Link>
             <Link
               href="/admin"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Özet"
+              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:px-2.5"
             >
-              <LayoutDashboard className="size-4" />
-              Özet
+              <LayoutDashboard className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Özet</span>
             </Link>
             <Link
               href="/admin/leads"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Talepler"
+              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:px-2.5"
             >
-              <Inbox className="size-4" />
-              Talepler
+              <Inbox className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Talepler</span>
             </Link>
             <Link
               href="/admin/analytics"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Analitik"
+              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:px-2.5"
             >
-              <BarChart3 className="size-4" />
-              Analitik
+              <BarChart3 className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Analitik</span>
             </Link>
           </nav>
 
-          <form action={logoutAction}>
+          <form action={logoutAction} className="shrink-0">
             <button
               type="submit"
-              className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground"
+              aria-label="Çıkış"
+              className="flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground sm:px-2.5"
             >
-              <LogOut className="size-3.5" />
-              Çıkış
+              <LogOut className="size-3.5 shrink-0" />
+              <span className="hidden sm:inline">Çıkış</span>
             </button>
           </form>
         </div>
