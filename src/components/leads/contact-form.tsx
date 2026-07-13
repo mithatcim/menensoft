@@ -7,6 +7,7 @@ import { Field, Honeypot, inputClass } from "@/components/leads/field";
 import { ContactLink } from "@/components/shared/contact-link";
 import { buttonVariants } from "@/components/ui/button";
 import { leadFormCopy } from "@/content/lead-form";
+import { track } from "@/components/analytics/analytics";
 import { submitLead } from "@/lib/leads/client";
 import { type ContactPreference } from "@/lib/leads/types";
 import { type Locale } from "@/lib/locale";
@@ -40,7 +41,6 @@ export function ContactForm({ locale = "tr" }: { locale?: Locale }) {
     "idle",
   );
 
-
   const validate = () => {
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = copy.errName;
@@ -72,6 +72,10 @@ export function ContactForm({ locale = "tr" }: { locale?: Locale }) {
     });
 
     if (res.ok) {
+      // Only on a CONFIRMED insert. A form_submit event that fires on failure
+      // would inflate the one number that is supposed to mean "this worked".
+      // Nothing personal travels with it — no name, no email, no message.
+      track("form_submit", locale, { label: "contact", channel: preference });
       setState("sent");
       return;
     }

@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Field, Honeypot, inputClass } from "@/components/leads/field";
 import { buttonVariants } from "@/components/ui/button";
 import { leadFormCopy } from "@/content/lead-form";
+import { track } from "@/components/analytics/analytics";
 import { submitLead } from "@/lib/leads/client";
 import {
   fitNeedsEn,
@@ -521,6 +522,14 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
     });
 
     if (res.ok) {
+      // Only on a CONFIRMED insert, and carrying only the funnel's own
+      // vocabulary: the system id and the reference project, both closed sets.
+      // Never the name, email, phone or the message itself.
+      track("form_submit", locale, {
+        label: "inquiry",
+        ...(systemId ? { fit: systemId } : {}),
+        ...(referenceSlug ? { project: referenceSlug } : {}),
+      });
       setSendState("sent");
       return;
     }

@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
 import { JsonLd } from "@/components/shared/json-ld";
+import { Analytics } from "@/components/analytics/analytics";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { site } from "@/content/site";
 import {
@@ -71,6 +72,7 @@ export default function RootLayout({
         />
         <AmbientBackground />
         <ScrollProgress />
+        <Analytics locale="tr" />
         <div className="relative z-10 flex min-h-screen flex-col">
           <Header />
           <main className="flex-1">{children}</main>
