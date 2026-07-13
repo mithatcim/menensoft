@@ -27,7 +27,9 @@
 
 const BASE = (process.env.BASE || "http://localhost:3000").replace(/\/+$/, "");
 
-const EXPECTED_CANONICAL_COUNT = 58; // 29 Türkçe + 29 İngilizce (/en)
+const EXPECTED_CANONICAL_COUNT = 60; // 30 Türkçe + 30 İngilizce (/en)
+// 33F: 58 -> 60. Gizlilik sayfaları (/gizlilik, /en/privacy) eklendi.
+// Bu bilinçli ve onaylı bir artış; drift değil.
 
 /** FAQPage şemasının izinli olduğu sayfalar (görünür SSS içeren). */
 const FAQ_ROUTES = ["/sss", "/en/faq"];

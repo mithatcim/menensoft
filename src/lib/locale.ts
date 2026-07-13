@@ -23,6 +23,7 @@ export const staticRoutePairs: Record<string, string> = {
   "/sistemler": "/en/systems",
   "/neden-menensoft": "/en/why-menensoft",
   "/hazir-site-mi-ozel-sistem-mi": "/en/custom-system-vs-template",
+  "/gizlilik": "/en/privacy",
 };
 
 /** Sektör slug eşlemesi: TR → EN. */

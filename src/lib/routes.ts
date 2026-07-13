@@ -32,6 +32,7 @@ export const staticRoutes = [
   "/sistemler",
   "/neden-menensoft",
   "/hazir-site-mi-ozel-sistem-mi",
+  "/gizlilik",
 ] as const;
 
 /** İçerikten türetilen detay rotaları. */

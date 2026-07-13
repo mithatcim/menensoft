@@ -44,6 +44,14 @@ export function Footer({ locale = "tr" }: { locale?: Locale }) {
             © {new Date().getFullYear()} {site.name}
           </p>
           <div className="flex flex-col gap-2 font-mono sm:flex-row sm:items-center sm:gap-6">
+            {/* Footer only, never the header nav: a privacy link belongs where
+                people look for it, not competing with the funnel. */}
+            <Link
+              href={en ? "/en/privacy" : "/gizlilik"}
+              className="inline-block py-1 transition-colors hover:text-foreground"
+            >
+              {en ? "Privacy" : "Gizlilik"}
+            </Link>
             {site.githubUrl && (
               <a
                 href={site.githubUrl}
