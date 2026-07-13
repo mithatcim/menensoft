@@ -347,7 +347,6 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
   >("idle");
   const sent = sendState === "sent";
 
-
   // ?tur= / ?durum= / ?proje= preselection. The URL is deliberately read once
   // on mount: useSearchParams + Suspense would drop this page's static HTML to
   // a fallback, and a no-JS visitor would never see step 1 at all. Every param
@@ -812,152 +811,162 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                       </p>
                     )}
 
-                    {sent ? (
-                      <div className="mt-4 rounded-lg border border-accent/30 bg-accent/5 p-4">
-                        <p className="flex items-center gap-2 text-sm font-medium text-foreground">
-                          <Check className="size-4 text-accent" />
-                          {form.successTitle}
-                        </p>
-                        <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                          {form.successBody}
-                        </p>
-                      </div>
-                    ) : (
-                      <form onSubmit={onSubmitLead} noValidate className="mt-4">
-                        <Honeypot
-                          label={form.honeypot}
-                          value={company}
-                          onChange={setCompany}
-                        />
-
-                        {/* Name plus one way to reply. Nothing else — every extra
-                            field here is a chance to lose someone who was already
-                            willing to write. */}
-                        <div className="space-y-3">
-                          <Field
-                            id="lead-name"
-                            label={form.name}
-                            error={leadErrors.name}
-                          >
-                            <input
-                              id="lead-name"
-                              name="name"
-                              autoComplete="name"
-                              className={inputClass}
-                              placeholder={form.namePlaceholder}
-                              value={leadName}
-                              onChange={(e) => setLeadName(e.target.value)}
-                            />
-                          </Field>
-                          <Field
-                            id="lead-email"
-                            label={form.email}
-                            error={leadErrors.email}
-                          >
-                            <input
-                              id="lead-email"
-                              name="email"
-                              type="email"
-                              inputMode="email"
-                              autoComplete="email"
-                              className={inputClass}
-                              placeholder={form.emailPlaceholder}
-                              value={leadEmail}
-                              onChange={(e) => setLeadEmail(e.target.value)}
-                            />
-                          </Field>
-                          <Field
-                            id="lead-phone"
-                            label={form.phone}
-                            hint={form.phoneOptional}
-                          >
-                            <input
-                              id="lead-phone"
-                              name="phone"
-                              type="tel"
-                              inputMode="tel"
-                              autoComplete="tel"
-                              className={inputClass}
-                              placeholder={form.phonePlaceholder}
-                              value={leadPhone}
-                              onChange={(e) => setLeadPhone(e.target.value)}
-                            />
-                          </Field>
-                        </div>
-
-                        {leadErrors.form && (
-                          <p
-                            role="alert"
-                            className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs leading-relaxed text-foreground/90"
-                          >
-                            {leadErrors.form}
-                          </p>
-                        )}
-
-                        {/* The database failing must never read as the message
-                            being lost. It is still in the textarea above, and the
-                            two buttons below still carry it. */}
-                        {sendState === "failed" && (
-                          <div
-                            role="alert"
-                            className="mt-3 rounded-lg border border-accent/30 bg-accent/5 p-3.5"
-                          >
-                            <p className="text-xs font-medium text-foreground">
-                              {form.errFallbackTitle}
-                            </p>
-                            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                              {form.errFallbackBody}
-                            </p>
-                          </div>
-                        )}
-
-                        <button
-                          type="submit"
-                          disabled={sendState === "sending"}
+                    {/* Order matters, and it flips at the breakpoint.
+                        On desktop the panel is sticky and nothing is below the
+                        fold, so the form leads. On MOBILE the channels lead:
+                        Phase 22 fought the send CTA down from 2900px to 1654px,
+                        and putting three form fields above the buttons quietly
+                        pushed it back to ~2070px. A WhatsApp-first Turkish buyer
+                        should not have to scroll past a form they never intended
+                        to fill. One tap stays one tap. */}
+                    <div className="mt-4 flex flex-col gap-4">
+                      <div className="order-1 grid grid-cols-2 gap-2.5 lg:order-2">
+                        <ContactLink
+                          channel="email"
+                          subject={subject}
+                          body={body}
+                          title={copy.ctaMail}
                           className={cn(
-                            buttonVariants({ variant: "cta" }),
-                            "mt-4 h-11 w-full px-5 disabled:opacity-60",
+                            buttonVariants({ variant: "outline" }),
+                            "h-11 w-full px-3",
                           )}
                         >
-                          <Send className="size-4" />
-                          {sendState === "sending"
-                            ? form.submitting
-                            : form.submit}
-                        </button>
+                          <Mail className="size-4" />
+                          {form.preferenceEmail}
+                        </ContactLink>
+                        <ContactLink
+                          channel="whatsapp"
+                          body={body}
+                          title={copy.ctaWa}
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "h-11 w-full px-3",
+                          )}
+                        >
+                          <MessageCircle className="size-4" />
+                          {form.preferenceWhatsapp}
+                        </ContactLink>
+                      </div>
 
-                        {/* Two-up and compact, not a third full-width button:
-                            three stacked giant CTAs on a phone is clutter, and
-                            WhatsApp is often the highest-intent channel for a
-                            Turkish buyer — it does not get buried behind a form. */}
-                        <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-                          <ContactLink
-                            channel="email"
-                            subject={subject}
-                            body={body}
-                            title={copy.ctaMail}
-                            className={cn(
-                              buttonVariants({ variant: "outline" }),
-                              "h-10 w-full px-3",
-                            )}
-                          >
-                            <Mail className="size-4" />
-                            {form.preferenceEmail}
-                          </ContactLink>
-                          <ContactLink
-                            channel="whatsapp"
-                            body={body}
-                            title={copy.ctaWa}
-                            className={cn(
-                              buttonVariants({ variant: "outline" }),
-                              "h-10 w-full px-3",
-                            )}
-                          >
-                            <MessageCircle className="size-4" />
-                            {form.preferenceWhatsapp}
-                          </ContactLink>
+                      {sent ? (
+                        <div className="order-2 rounded-lg border border-accent/30 bg-accent/5 p-4 lg:order-1">
+                          <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+                            <Check className="size-4 text-accent" />
+                            {form.successTitle}
+                          </p>
+                          <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                            {form.successBody}
+                          </p>
                         </div>
-                      </form>
-                    )}
+                      ) : (
+                        <form
+                          onSubmit={onSubmitLead}
+                          noValidate
+                          className="order-2 lg:order-1"
+                        >
+                          <Honeypot
+                            label={form.honeypot}
+                            value={company}
+                            onChange={setCompany}
+                          />
+
+                          {/* Name plus one way to reply. Nothing else — every extra
+                            field here is a chance to lose someone who was already
+                            willing to write. */}
+                          <div className="space-y-3">
+                            <Field
+                              id="lead-name"
+                              label={form.name}
+                              error={leadErrors.name}
+                            >
+                              <input
+                                id="lead-name"
+                                name="name"
+                                autoComplete="name"
+                                className={inputClass}
+                                placeholder={form.namePlaceholder}
+                                value={leadName}
+                                onChange={(e) => setLeadName(e.target.value)}
+                              />
+                            </Field>
+                            <Field
+                              id="lead-email"
+                              label={form.email}
+                              error={leadErrors.email}
+                            >
+                              <input
+                                id="lead-email"
+                                name="email"
+                                type="email"
+                                inputMode="email"
+                                autoComplete="email"
+                                className={inputClass}
+                                placeholder={form.emailPlaceholder}
+                                value={leadEmail}
+                                onChange={(e) => setLeadEmail(e.target.value)}
+                              />
+                            </Field>
+                            <Field
+                              id="lead-phone"
+                              label={form.phone}
+                              hint={form.phoneOptional}
+                            >
+                              <input
+                                id="lead-phone"
+                                name="phone"
+                                type="tel"
+                                inputMode="tel"
+                                autoComplete="tel"
+                                className={inputClass}
+                                placeholder={form.phonePlaceholder}
+                                value={leadPhone}
+                                onChange={(e) => setLeadPhone(e.target.value)}
+                              />
+                            </Field>
+                          </div>
+
+                          {leadErrors.form && (
+                            <p
+                              role="alert"
+                              className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs leading-relaxed text-foreground/90"
+                            >
+                              {leadErrors.form}
+                            </p>
+                          )}
+
+                          {/* The database failing must never read as the message
+                            being lost. It is still in the textarea above, and the
+                            two buttons below still carry it. */}
+                          {sendState === "failed" && (
+                            <div
+                              role="alert"
+                              className="mt-3 rounded-lg border border-accent/30 bg-accent/5 p-3.5"
+                            >
+                              <p className="text-xs font-medium text-foreground">
+                                {form.errFallbackTitle}
+                              </p>
+                              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                                {form.errFallbackBody}
+                              </p>
+                            </div>
+                          )}
+
+                          <button
+                            type="submit"
+                            disabled={sendState === "sending"}
+                            className={cn(
+                              buttonVariants({ variant: "cta" }),
+                              "mt-4 h-11 w-full px-5 disabled:opacity-60",
+                            )}
+                          >
+                            <Send className="size-4" />
+                            {sendState === "sending"
+                              ? form.submitting
+                              : form.submit}
+                          </button>
+                        </form>
+                      )}
+                    </div>
 
                     {/* break-all only on the address: applied to the whole line
                         it chopped the Turkish mid-word ("kuruc / uya ulaşır") */}
