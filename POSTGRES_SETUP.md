@@ -182,7 +182,111 @@ değiştirilmez:
 }
 ```
 
-## 7. Sonraki faz (33D — admin panel)
+## 7. Analitik (Phase 33E)
+
+Birinci taraf, **çerezsiz**. Üçüncü taraf script yok, Google Analytics yok,
+Plausible/Fathom yok.
+
+### Neden çerez banner'ı yok
+
+Ziyaretçi kimliği **tarayıcıda değil, sunucuda** türetilir:
+
+```
+visitor_key = sha256(ANALYTICS_SALT + UTC-tarih + ip + user-agent + "menensoft")
+```
+
+- **IP yalnızca bellekte** kullanılır, hash'i hesaplamak için. Hiçbir tabloda IP
+  sütunu **yoktur** — olmayan sütun sızmaz.
+- **Tuz her gün döner**: aynı kişi yarın farklı bir anahtar alır. Günler
+  boyunca izleme teknik olarak mümkün değildir.
+- Ziyaretçinin cihazına **hiçbir şey yazılmaz**: çerez yok, localStorage yok,
+  parmak izi yok.
+
+Cihazda hiçbir tanımlayıcı saklanmadığı için çerez onayı gerekmez. Bedeli:
+"dünkü ziyaretçi bugün döndü mü?" sorusunu **yanıtlayamayız**. Bu iş için o soru
+gerekli değil; bir banner'ın maliyeti ise gerçek.
+
+> Bu hukuki tavsiye değildir. AB trafiği ticari olarak önemliyse bir hukukçuya
+> danışın.
+
+### Saklanmayanlar (kasıtlı, sütun bile yok)
+
+- ham IP
+- tam user-agent (yalnızca `mobile/tablet/desktop/unknown` türetilir)
+- **tam referrer URL** — yalnızca HOST saklanır. Tam URL, ziyaretçinin arama
+  sorgusunu ya da özel bir yolunu taşıyabilir. Bu bir söz değil, bir **CHECK
+  kısıtı**: veritabanı içinde `/ ? #` geçen bir referrer'ı reddeder.
+- e-posta, telefon, mesaj — olay metadata'sı kapalı bir anahtar listesiyle
+  sınırlıdır.
+
+### DNT / Sec-GPC
+
+`DNT: 1` ya da `Sec-GPC: 1` gönderen ziyaretçiler **kaydedilmez**. Botlar da
+yazma anında elenir (sonradan temizlemek mümkün değildir). Yani paneldeki
+sayılar gerçek trafiğin bir **alt kümesidir** — panel bunu açıkça söyler.
+
+### Ortam değişkeni
+
+```
+ANALYTICS_SALT=<uzun rastgele dize>
+```
+
+Üretin:
+
+```bash
+node -e "console.log('ANALYTICS_SALT=' + require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+**Yoksa analitik KAPALIDIR** (`/api/e` → `{ok:true, skipped:"unconfigured"}`).
+Bu bilinçli: tuzsuz bir IP+UA hash'i pratikte geri döndürülebilir — adres uzayı
+kaba kuvvetle taranacak kadar küçüktür. "Tuz yok" **analitik yok** demektir,
+"zayıf anahtarla analitik" değil.
+
+Tuzu değiştirirseniz geçmiş anahtarlarla bağ kopar (zaten günlük kopuyor).
+
+### Rotalar
+
+- `POST /api/e` — olay toplama. **Yalnızca yazar**; GET yoktur, veri döndürmez.
+  Hiçbir hata sayfayı bozmaz: her başarısızlık `200 {ok, skipped}` döner.
+- `/admin/analytics` — panel (admin girişi gerekir).
+- `/admin/sessions/<id>` — oturum yolu.
+
+### Test
+
+Şemayı uygulayın (yeni tablolar idempotent eklenir):
+
+```bash
+docker exec -i websitem-pg psql -U menensoft -d menensoft < db/schema.sql
+```
+
+`ANALYTICS_SALT` ayarlayın, `pnpm build && pnpm start`, siteyi **gerçek bir
+tarayıcıda** gezin (headless/bot user-agent'ları bilinçli olarak elenir), sonra:
+
+```bash
+psql "$DATABASE_URL" -c "select event_type, path, metadata from analytics_events order by created_at desc limit 10;"
+psql "$DATABASE_URL" -c "select first_path, last_path, pageview_count, duration_seconds from visitor_sessions order by last_seen_at desc limit 5;"
+```
+
+IP sütunu olmadığını doğrulayın:
+
+```bash
+psql "$DATABASE_URL" -c "select column_name from information_schema.columns where table_name in ('visitor_sessions','analytics_events') and column_name ~ 'ip|fingerprint|user_agent';"
+# 0 satır
+```
+
+### Saklama süresi (öneri: 12 ay)
+
+Zamanlanmış silme **kasıtlı olarak eklenmedi** — veri silen bir cron'u yanlış
+kurmak, hiç kurmamaktan kötüdür. Hazır olduğunuzda:
+
+```sql
+delete from analytics_events where created_at   < now() - interval '12 months';
+delete from visitor_sessions where last_seen_at < now() - interval '12 months';
+```
+
+`leads` bir iş kaydıdır; o silinmez.
+
+## 8. Sonraki faz (33D — admin panel)
 
 Admin paneli **aynı `leads` tablosunu** okuyacak. Yeni tablo gerekmez; admin
 kimliği veritabanında değil ortam değişkeninde durur (tek kullanıcı için bir
