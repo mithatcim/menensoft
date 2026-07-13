@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { StatusBadge } from "@/components/admin/status-badge";
+import { getAnalytics } from "@/lib/admin/analytics";
 import { getLeadSummary } from "@/lib/admin/leads";
 
 export const dynamic = "force-dynamic";
@@ -75,7 +76,7 @@ function Breakdown({
 }
 
 export default async function AdminDashboard() {
-  const s = await getLeadSummary();
+  const [s, a] = await Promise.all([getLeadSummary(), getAnalytics()]);
 
   if (!s) {
     return (
@@ -91,8 +92,15 @@ export default async function AdminDashboard() {
       <div>
         <h1 className="text-xl font-semibold tracking-tight">Özet</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Tüm sayılar form gönderimlerinden gelir. Ziyaretçi/trafik verisi henüz
-          toplanmıyor.
+          Aşağıdaki talep sayıları form gönderimlerinden gelir. Ziyaretçi
+          verileri için{" "}
+          <Link
+            href="/admin/analytics"
+            className="text-foreground/85 underline underline-offset-4 hover:text-foreground"
+          >
+            Analitik
+          </Link>
+          .
         </p>
       </div>
 
@@ -107,12 +115,37 @@ export default async function AdminDashboard() {
         <Stat label="Okundu" value={s.byStatus.read ?? 0} />
         <Stat label="İletişime geçildi" value={s.byStatus.contacted ?? 0} />
         <Stat label="Arşiv" value={s.byStatus.archived ?? 0} />
-        <div className="flex items-center rounded-xl border border-dashed border-border bg-card/30 p-5">
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Ziyaretçi, oturum ve sayfa görüntüleme metrikleri sonraki fazda
-            gelecek.
-          </p>
-        </div>
+
+        {/* Real numbers, or an honest setup state. Never zeros pretending to be
+            data: a dashboard full of zeros looks exactly like a business with no
+            visitors, and that is a very expensive thing to believe by mistake. */}
+        {a?.hasAnyData ? (
+          <Link
+            href="/admin/analytics"
+            className="group rounded-xl border border-border bg-card/60 p-5 transition-colors hover:border-accent/40"
+          >
+            <p className="flex items-center justify-between font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
+              Ziyaretçi (bugün)
+              <ArrowUpRight className="size-3.5 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight tabular-nums">
+              {a.overview.visitorsToday}
+            </p>
+            <p className="mt-1 font-mono text-xs text-muted-foreground/60">
+              {a.overview.pageViewsToday} görüntüleme · {a.overview.ctaToday}{" "}
+              CTA
+            </p>
+          </Link>
+        ) : (
+          <div className="flex items-center rounded-xl border border-dashed border-border bg-card/30 p-5">
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Ziyaretçi verisi yok.{" "}
+              {a
+                ? "Şema uygulandı ama henüz olay kaydedilmedi."
+                : "Analitik tabloları okunamıyor — şema/ANALYTICS_SALT kontrol edin."}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -123,7 +156,9 @@ export default async function AdminDashboard() {
 
       <div>
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-base font-semibold tracking-tight">Son talepler</h2>
+          <h2 className="text-base font-semibold tracking-tight">
+            Son talepler
+          </h2>
           <Link
             href="/admin/leads"
             className="group inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
@@ -140,7 +175,10 @@ export default async function AdminDashboard() {
         ) : (
           <ul className="mt-4 overflow-hidden rounded-xl border border-border">
             {s.latest.map((lead) => (
-              <li key={lead.id} className="border-b border-border/60 last:border-0">
+              <li
+                key={lead.id}
+                className="border-b border-border/60 last:border-0"
+              >
                 <Link
                   href={`/admin/leads/${lead.id}`}
                   className="flex items-center justify-between gap-4 bg-card px-5 py-3.5 transition-colors hover:bg-muted/40"

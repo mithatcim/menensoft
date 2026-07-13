@@ -1,4 +1,4 @@
-import { Inbox, LayoutDashboard, LogOut } from "lucide-react";
+import { BarChart3, Inbox, LayoutDashboard, LogOut } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -53,6 +53,13 @@ export default async function ProtectedAdminLayout({
             >
               <Inbox className="size-4" />
               Talepler
+            </Link>
+            <Link
+              href="/admin/analytics"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <BarChart3 className="size-4" />
+              Analitik
             </Link>
           </nav>
 

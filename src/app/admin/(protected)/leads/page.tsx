@@ -146,7 +146,10 @@ export default async function AdminLeadsPage({
           </select>
           <button
             type="submit"
-            className={cn(buttonVariants({ variant: "cta" }), "h-11 shrink-0 px-4")}
+            className={cn(
+              buttonVariants({ variant: "cta" }),
+              "h-11 shrink-0 px-4",
+            )}
           >
             Filtrele
           </button>
@@ -161,7 +164,10 @@ export default async function AdminLeadsPage({
         <div className="overflow-hidden rounded-xl border border-border">
           <ul>
             {leads.map((lead) => (
-              <li key={lead.id} className="border-b border-border/60 last:border-0">
+              <li
+                key={lead.id}
+                className="border-b border-border/60 last:border-0"
+              >
                 <Link
                   href={`/admin/leads/${lead.id}`}
                   className="group flex flex-col gap-3 bg-card px-5 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
@@ -188,7 +194,9 @@ export default async function AdminLeadsPage({
                       </span>
                     )}
                     <span className="uppercase">{lead.language}</span>
-                    <span className="hidden sm:inline">{lead.source_path ?? "—"}</span>
+                    <span className="hidden sm:inline">
+                      {lead.source_path ?? "—"}
+                    </span>
                     <span>
                       {lead.created_at.toLocaleString("tr-TR", {
                         day: "2-digit",
@@ -222,7 +230,8 @@ export default async function AdminLeadsPage({
             <span />
           )}
           <p className="font-mono text-xs text-muted-foreground">
-            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} / {total}
+            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} /{" "}
+            {total}
           </p>
           {page < pages ? (
             <Link
