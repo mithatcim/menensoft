@@ -128,13 +128,24 @@ export async function POST(req: Request) {
     try {
       await client.query("begin");
 
-      // Find this visitor's live session, or start one. The 30-minute window is
-      // evaluated in SQL so two events racing in cannot both create a session.
+      // Serialize everything for THIS visitor, and only this visitor.
+      //
+      // Every navigation fires two beacons almost at once — a heartbeat for the
+      // page being left and a page_view for the page being entered. With no
+      // session row yet, both would run `select ... for update`, both would find
+      // nothing (FOR UPDATE locks rows that exist; it cannot lock a row that
+      // does not), and both would create a session. The visitor would show up
+      // twice and their path would be split in half.
+      //
+      // An advisory lock keyed on the visitor solves it without a table-wide
+      // lock: concurrent requests from OTHER visitors are unaffected, and the
+      // lock is released automatically when the transaction ends.
+      await client.query("select pg_advisory_xact_lock(hashtext($1))", [key]);
+
       const found = await client.query<{ id: string }>(
         `select id from visitor_sessions
           where visitor_key = $1 and last_seen_at > now() - $2::interval
-          order by last_seen_at desc limit 1
-          for update`,
+          order by last_seen_at desc limit 1`,
         [key, SESSION_GAP],
       );
 
