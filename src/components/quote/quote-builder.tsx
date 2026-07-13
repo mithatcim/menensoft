@@ -820,7 +820,16 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
                         should not have to scroll past a form they never intended
                         to fill. One tap stays one tap. */}
                     <div className="mt-4 flex flex-col gap-4">
-                      <div className="order-1 grid grid-cols-2 gap-2.5 lg:order-2">
+                      <div
+                        className={cn(
+                          "order-1 grid grid-cols-2 gap-2.5",
+                          // Desktop normally shows the form first. But when the
+                          // form has just failed, the channels ARE the path — and
+                          // a fallback that points at buttons sitting below the
+                          // fold is not a fallback. They come first on failure.
+                          sendState === "failed" ? "lg:order-1" : "lg:order-2",
+                        )}
+                      >
                         <ContactLink
                           channel="email"
                           subject={subject}
