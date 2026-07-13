@@ -58,7 +58,7 @@ Bunun etki alanı **tek bir etiket değil**; localhost bu üretimlere sızar:
 | --- | --- |
 | `<link rel="canonical">`, `og:url` | `metadataBase` (iki kök layout) |
 | hreflang üçlüsü (tr / en / x-default) | `src/lib/seo.ts` |
-| `/sitemap.xml` — 58 URL'nin tamamı | `src/app/sitemap.ts` |
+| `/sitemap.xml` — 60 URL'nin tamamı | `src/app/sitemap.ts` |
 | `/robots.txt` `Host:` + `Sitemap:` | `src/app/robots.ts` |
 | JSON-LD `@id` ve `url` alanları (organization, website, founder, breadcrumb, proje) | `src/lib/schema.ts` |
 
@@ -75,8 +75,8 @@ tüm mutlak URL yüzeyi yanlış olur.
 
 ## 4. Build beklentisi
 
-`pnpm build` → TypeScript temiz, sıfır uyarı, **58 kanonik sayfa** (29 TR +
-29 EN) + metadata rotaları. Rota tablosunda **2 dinamik (ƒ) rota normaldir**:
+`pnpm build` → TypeScript temiz, sıfır uyarı, **60 kanonik sayfa** (30 TR +
+30 EN) + metadata rotaları. Rota tablosunda **2 dinamik (ƒ) rota normaldir**:
 `(tr)/[...rest]` ve `en/[...rest]` — iki kök layout'lu yapıda markalı 404'ü
 sağlayan yakala-hepsi rotalarıdır; Vercel'de sorunsuz çalışır. Yeni bir
 uyarı = regresyon.
@@ -96,7 +96,7 @@ olur. Beklenen çıktı: her satır `0`. Sıfırdan büyük tek bir sayı bile
 
 ```
 curl -s https://<domain>/            | grep -c localhost   # canonical + og:url + JSON-LD
-curl -s https://<domain>/sitemap.xml | grep -c localhost   # 58 URL
+curl -s https://<domain>/sitemap.xml | grep -c localhost   # 60 URL
 curl -s https://<domain>/robots.txt  | grep -c localhost   # Host + Sitemap
 ```
 
@@ -104,7 +104,7 @@ Ek elle kontroller:
 
 - [ ] `view-source` ile canonical'lar gerçek domainde (ana sayfa + 1 proje +
       1 sektör + 1 sistem).
-- [ ] `/sitemap.xml` **58 URL** (29 TR + 29 EN), hepsi gerçek domainde.
+- [ ] `/sitemap.xml` **60 URL** (30 TR + 30 EN), hepsi gerçek domainde.
 - [ ] `/robots.txt` Sitemap/Host satırları gerçek domainde.
 - [ ] `/opengraph-image` ve `/twitter-image` 200; bir sosyal kart
       doğrulayıcısında önizleme kontrolü.
@@ -145,7 +145,7 @@ Ek elle kontroller:
 
 - [ ] Search Console'da mülk doğrulama.
 - [ ] `/sitemap.xml` gönderimi.
-- [ ] Birkaç gün sonra kapsam raporunda 58 sayfanın (Türkçe VE İngilizce
+- [ ] Birkaç gün sonra kapsam raporunda 60 sayfanın (Türkçe VE İngilizce
       URL'lerin) durumunu kontrol et; /en sayfalarının "alternate page with
       canonical" olarak değil, kendi başına dizinlendiğini doğrula.
 
@@ -154,6 +154,23 @@ Ek elle kontroller:
 - `src/content/site.ts` içindeki `NEXT_PUBLIC_SITE_URL` fallback mantığı.
 - İletişim değerleri: mithat.menen@gmail.com, wa.me/905303115870,
   github.com/mithatcim.
-- 29 rotalık envanter (`src/lib/routes.ts`), yönlendirme haritası, JSON-LD
+- 30 rotalık envanter (`src/lib/routes.ts`), yönlendirme haritası, JSON-LD
   üreticileri, favicon seti.
-- Yeni bağımlılık, analitik/izleme scripti, i18n altyapısı eklenmez.
+- Üçüncü taraf analitik/izleme scripti eklenmez. (Sitenin kendi çerezsiz
+  analitiği vardır — POSTGRES_SETUP.md bölüm 7.)
+
+## 9. Phase 33F — gizlilik ve dil
+
+- **Sitemap 58 → 60.** `/gizlilik` ve `/en/privacy` eklendi. Bu bilinçli ve
+  onaylı bir artıştır; drift değildir. `scripts/audit.mjs` içindeki
+  `EXPECTED_CANONICAL_COUNT` de 60'a çekildi, yani denetim yeni sayıyı
+  **zorunlu tutar** — susturulmuş değildir.
+- **Dil önerisi banner'ı** eklendi: otomatik yönlendirme YOKTUR. Ne middleware,
+  ne IP/ülke tespiti, ne sunucu tarafı yönlendirme. Tek sinyal tarayıcının
+  `navigator.languages` değeridir; Googlebot dâhil herkes istediği rotada
+  200 alır. Sebep: ABD IP'lerinden tarayan Googlebot, "/" → "/en" yönlendirmesi
+  görürse Türkçe ana sayfa Türkçe dizinden düşebilir.
+- Banner **akış içindedir, overlay değildir** — hiçbir CTA'yı kapatmaz.
+- Banner kapatma/seçim tercihi tarayıcıda tek bir işlevsel anahtarda tutulur
+  (`menensoft_language_hint`). Kimlik değildir, sunucuya gönderilmez, analitikle
+  ilgisi yoktur. Analitik hâlâ çerezsizdir; çerez onay penceresi gerekmez.

@@ -219,6 +219,28 @@ gerekli değil; bir banner'ın maliyeti ise gerçek.
 - e-posta, telefon, mesaj — olay metadata'sı kapalı bir anahtar listesiyle
   sınırlıdır.
 
+### Tarayıcı depolaması — analitik DEĞİL
+
+Analitik hiçbir şey yazmaz. Tarayıcıda tutulan tek işlevsel değer, Phase 33F
+dil öneri banner'ının tercihidir (): ziyaretçi
+"Kapat" ya da dil düğmesine bastığında yazılır, yalnızca aynı öneriyi tekrar
+göstermemek için. Kimlik değildir, sunucuya gönderilmez, analitikte
+kullanılmaz. Bu yüzden çerez onay penceresi hâlâ gerekmez.
+
+### Tarayıcı depolaması — analitik DEĞİL (Phase 33F)
+
+Analitik ziyaretçinin cihazına hiçbir şey yazmaz. Tarayıcıda tutulan tek
+işlevsel değer, dil öneri banner'ının tercihidir: `menensoft_language_hint`.
+Yalnızca ziyaretçi "Kapat"a ya da dil düğmesine bastığında yazılır ve tek işi
+aynı öneriyi tekrar göstermemektir.
+
+Kimlik değildir, sunucuya gönderilmez, analitikte kullanılmaz. Bu yüzden çerez
+onay penceresi hâlâ gerekmez.
+
+Dil banner'ı **hiçbir yönlendirme yapmaz**: middleware yok, IP/ülke tespiti yok.
+Tek sinyal `navigator.languages`. Sebep: ABD IP'lerinden tarayan Googlebot
+"/" → "/en" yönlendirmesi görürse Türkçe ana sayfa Türkçe dizinden düşebilir.
+
 ### DNT / Sec-GPC
 
 `DNT: 1` ya da `Sec-GPC: 1` gönderen ziyaretçiler **kaydedilmez**. Botlar da

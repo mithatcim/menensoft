@@ -170,6 +170,17 @@ export default async function AdminAnalyticsPage() {
             — yani gerçek trafiğin bir alt kümesidir. Kimlik günler arasında
             taşınmaz: dünkü ziyaretçi bugün yeni sayılır.
           </p>
+          <p>
+            Hedeflenen saklama süresi 12 aydır; otomatik silme henüz kurulmadı
+            (POSTGRES_SETUP.md). Ziyaretçilere ne anlattığımız:{" "}
+            <Link
+              href="/gizlilik"
+              className="text-foreground/85 underline underline-offset-4 hover:text-foreground"
+            >
+              /gizlilik
+            </Link>
+            .
+          </p>
         </div>
       </div>
 
