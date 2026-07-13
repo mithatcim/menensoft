@@ -239,7 +239,9 @@ export default async function AdminAnalyticsPage() {
               </p>
             ) : (
               <div className="mt-4 overflow-x-auto">
-                <table className="w-full text-sm">
+                {/* Cell padding, not just row padding: without it adjacent
+                    columns touch and the header renders as "SÜREÇİHAZ". */}
+                <table className="w-full text-sm [&_td]:pr-6 [&_td:last-child]:pr-0 [&_th]:pr-6 [&_th:last-child]:pr-0">
                   <thead>
                     <tr className="border-b border-border/60 text-left font-mono text-xs text-muted-foreground/60 uppercase">
                       <th className="pb-2 font-normal">Yol</th>
@@ -277,7 +279,9 @@ export default async function AdminAnalyticsPage() {
               Son oturumlar
             </h2>
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full text-sm">
+              {/* Same fix as the table above: without cell padding the columns
+                  touch and the header renders as "SÜREÇİHAZ". */}
+              <table className="w-full text-sm [&_td]:pr-6 [&_td:last-child]:pr-0 [&_th]:pr-6 [&_th:last-child]:pr-0">
                 <thead>
                   <tr className="border-b border-border/60 text-left font-mono text-xs text-muted-foreground/60 uppercase">
                     <th className="pb-2 font-normal">Başlangıç</th>
