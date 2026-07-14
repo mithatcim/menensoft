@@ -70,6 +70,7 @@ export interface ProjectInput {
   slug: string;
   tier: (typeof TIERS)[number];
   fit_id: string | null;
+  capabilities: string[];
   featured: boolean;
   sort_order: number;
   stack: string[];
@@ -138,8 +139,8 @@ export async function listAdminProjects(
   }
 
   const { rows: projects } = await pool.query<CmsProject>(
-    `select id, slug, status, tier, featured, sort_order, fit_id, stack, year,
-            live_url, repo_url, image, image_alt, internal_notes,
+    `select id, slug, status, tier, featured, sort_order, fit_id, capabilities,
+            stack, year, live_url, repo_url, image, image_alt, internal_notes,
             created_at, updated_at, published_at, archived_at
        from projects p
        ${where.length ? `where ${where.join(" and ")}` : ""}
@@ -185,8 +186,8 @@ export async function getAdminProject(
   if (!pool) return null;
 
   const { rows } = await pool.query<CmsProject>(
-    `select id, slug, status, tier, featured, sort_order, fit_id, stack, year,
-            live_url, repo_url, image, image_alt, internal_notes,
+    `select id, slug, status, tier, featured, sort_order, fit_id, capabilities,
+            stack, year, live_url, repo_url, image, image_alt, internal_notes,
             created_at, updated_at, published_at, archived_at
        from projects where id = $1`,
     [id],
@@ -294,9 +295,10 @@ export async function createProject(input: ProjectInput): Promise<string> {
 
     const { rows } = await client.query<{ id: string }>(
       `insert into projects
-         (slug, status, tier, featured, sort_order, fit_id, stack, year,
-          live_url, repo_url, image, image_alt, internal_notes)
-       values ($1, 'draft', $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12)
+         (slug, status, tier, featured, sort_order, fit_id, capabilities,
+          stack, year, live_url, repo_url, image, image_alt, internal_notes)
+       values ($1, 'draft', $2, $3, $4, $5, $6::jsonb, $7::jsonb, $8, $9, $10, $11,
+               $12, $13)
        returning id`,
       [
         input.slug,
@@ -304,6 +306,7 @@ export async function createProject(input: ProjectInput): Promise<string> {
         input.featured,
         input.sort_order,
         input.fit_id,
+        JSON.stringify(input.capabilities),
         JSON.stringify(input.stack),
         input.year,
         input.live_url,
@@ -358,8 +361,9 @@ export async function updateProject(
     await client.query(
       `update projects set
          slug = $2, tier = $3, featured = $4, sort_order = $5, fit_id = $6,
-         stack = $7::jsonb, year = $8, live_url = $9, repo_url = $10,
-         image = $11, image_alt = $12, internal_notes = $13, updated_at = now()
+         capabilities = $7::jsonb, stack = $8::jsonb, year = $9, live_url = $10,
+         repo_url = $11, image = $12, image_alt = $13, internal_notes = $14,
+         updated_at = now()
        where id = $1`,
       [
         id,
@@ -368,6 +372,7 @@ export async function updateProject(
         input.featured,
         input.sort_order,
         input.fit_id,
+        JSON.stringify(input.capabilities),
         JSON.stringify(input.stack),
         input.year,
         input.live_url,

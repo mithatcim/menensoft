@@ -35,6 +35,8 @@ export interface CmsProject {
   featured: boolean;
   sort_order: number;
   fit_id: string | null;
+  /** 38E: capability matrix — a set of ids, language-neutral. */
+  capabilities: string[];
   stack: string[];
   year: string | null;
   live_url: string | null;
@@ -75,7 +77,7 @@ export interface CmsProjectWithTranslations {
 }
 
 const PROJECT_COLS = `
-  id, slug, status, tier, featured, sort_order, fit_id, stack, year,
+  id, slug, status, tier, featured, sort_order, fit_id, capabilities, stack, year,
   live_url, repo_url, image, image_alt, internal_notes,
   created_at, updated_at, published_at, archived_at`;
 

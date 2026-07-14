@@ -48,11 +48,19 @@ export interface Project {
  * `fitId` is optional and deliberately absent from `Project` itself. The typed
  * files never had it — the mapping lived in fit.ts — and adding it to the base
  * shape would make the 38A parity proof report an invented field on every
- * project. Components read `project.fitId ?? projectToFitType[slug]`, so a
- * project created in the admin panel gets its system chip from the database
- * while the five original ones keep resolving through the old map.
+ * project. Components read `project.fitId`, so a project created in the panel
+ * gets its system chip from the database.
+ *
+ * `capabilities` (38E) is here for the same reason: the capability matrix is a
+ * language-neutral set of ids on the project row, and it never existed on the
+ * typed shape. An empty array means the project has no matrix and the section is
+ * hidden — an empty matrix would print "0 / 9" and claim the project demonstrates
+ * nothing.
  */
-export type PublicProject = Project & { fitId?: string };
+export type PublicProject = Project & {
+  fitId?: string;
+  capabilities?: string[];
+};
 
 export function projectImage(project: Project) {
   if (!project.image) return undefined;

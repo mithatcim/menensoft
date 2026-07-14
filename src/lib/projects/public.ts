@@ -4,6 +4,7 @@ import { cache } from "react";
 
 import { getPool } from "@/lib/db/postgres";
 
+import { normalizeCapabilities } from "./capabilities";
 import type { PublicProject } from "./types";
 
 /**
@@ -27,7 +28,7 @@ export type Locale = "tr" | "en";
 
 const COLUMNS = `
   p.slug, p.tier, p.featured, p.stack, p.year, p.live_url, p.repo_url,
-  p.image, p.image_alt, p.fit_id, p.sort_order,
+  p.image, p.image_alt, p.fit_id, p.capabilities, p.sort_order,
   t.name, t.one_liner, t.problem, t.status_label, t.status_note,
   t.similar_cta, t.role, t.dossier_summary, t.meta_title, t.meta_description,
   t.og_title, t.og_description, t.built, t.flow, t.constraints_list, t.modules`;
@@ -57,6 +58,7 @@ interface Row {
   image: string | null;
   image_alt: string | null;
   fit_id: string | null;
+  capabilities: string[];
   sort_order: number;
   name: string;
   one_liner: string;
@@ -116,6 +118,12 @@ function toPublicProject(row: Row): PublicProject {
   if (row.image !== null) project.image = row.image;
   if (row.image_alt !== null) project.imageAlt = row.image_alt;
   if (row.fit_id !== null) project.fitId = row.fit_id;
+
+  // Normalised, not trusted: order comes from the canonical list, junk and
+  // duplicates are dropped. The column has a CHECK too — belt and braces, because
+  // this array is rendered straight into the page.
+  const capabilities = normalizeCapabilities(row.capabilities);
+  if (capabilities.length > 0) project.capabilities = capabilities;
 
   return project;
 }

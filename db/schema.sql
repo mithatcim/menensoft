@@ -396,6 +396,27 @@ create table if not exists projects (
   )
 );
 
+-- 38E: the capability matrix (the nine boxes on a project page) moves into the
+-- CMS. Language-neutral by nature — whether a system has an admin dashboard is a
+-- fact about the system, not about the language you describe it in — so it lives
+-- on the project row, not in project_translations.
+--
+-- A SET, not a score. `[]` means the project has no matrix and the section is
+-- hidden, which is the honest rendering: an empty matrix would print "0 / 9" over
+-- nine dimmed cells and tell a visitor the project demonstrates nothing.
+alter table projects
+  add column if not exists capabilities jsonb not null default '[]'::jsonb;
+
+-- The closed set, in the table. The app validates too, but the app can be
+-- bypassed; a CHECK cannot. `<@` is jsonb containment: every element of
+-- capabilities must appear in the allowed list.
+alter table projects drop constraint if exists projects_capabilities_shape;
+alter table projects add  constraint projects_capabilities_shape check (
+  jsonb_typeof(capabilities) = 'array'
+  and capabilities <@ '["interface","admin","data","automation","operations",
+                        "security","content","ordering","membership"]'::jsonb
+);
+
 create unique index if not exists projects_slug_idx on projects (slug);
 create index if not exists projects_status_order_idx on projects (status, sort_order);
 create index if not exists projects_featured_idx on projects (featured) where featured;

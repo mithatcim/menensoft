@@ -1,3 +1,5 @@
+import { CAPABILITY_IDS } from "@/lib/projects/capabilities";
+
 import {
   FIT_IDS,
   REQUIRED_TRANSLATION_FIELDS,
@@ -223,6 +225,19 @@ export function parseProjectForm(form: FormData): ValidationResult {
     errors.sort_order = "0–999 arası bir tam sayı olmalı.";
   }
 
+  // Checkboxes: only the ticked ones are submitted, so an untouched matrix
+  // simply yields []. Anything not in the closed set is dropped rather than
+  // stored — and the column has a CHECK constraint behind this, because the
+  // validator can be bypassed and the table cannot.
+  const capabilities = form
+    .getAll("capabilities")
+    .map((v) => String(v))
+    .filter((v) => CAPABILITY_IDS.includes(v));
+
+  if (form.getAll("capabilities").length !== capabilities.length) {
+    errors.capabilities = "Bilinmeyen yetkinlik değeri.";
+  }
+
   const stack = lines(str(form, "stack"));
   if (stack.some((item) => MARKUP.test(item) || item.length > MAX.item)) {
     errors.stack = "Her satır düz metin ve kısa olmalı.";
@@ -264,6 +279,7 @@ export function parseProjectForm(form: FormData): ValidationResult {
       slug,
       tier: tier as (typeof TIERS)[number],
       fit_id,
+      capabilities,
       featured: form.get("featured") === "on",
       sort_order: Number.isInteger(sort_order) ? sort_order : 0,
       stack,
