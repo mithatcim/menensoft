@@ -6,6 +6,8 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
 import { JsonLd } from "@/components/shared/json-ld";
+import { ProjectIndexProvider } from "@/components/projects/project-index";
+import { getPublishedProjects } from "@/lib/projects/public";
 import { Analytics } from "@/components/analytics/analytics";
 import { LanguageHint } from "@/components/shared/language-hint";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
@@ -60,11 +62,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EnRootLayout({
+export default async function EnRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetched once per render and handed to client components through context.
+  // They need to look projects up by slug for proof chips and cannot query the
+  // database themselves — and must not.
+  const projects = await getPublishedProjects("en");
+
   return (
     <html
       lang="en"
@@ -78,12 +85,14 @@ export default function EnRootLayout({
         <AmbientBackground />
         <ScrollProgress />
         <Analytics locale="en" />
-        <div className="relative z-10 flex min-h-screen flex-col">
-          <Header locale="en" />
-          <LanguageHint locale="en" />
-          <main className="flex-1">{children}</main>
-          <Footer locale="en" />
-        </div>
+        <ProjectIndexProvider projects={projects}>
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <Header locale="en" />
+            <LanguageHint locale="en" />
+            <main className="flex-1">{children}</main>
+            <Footer locale="en" />
+          </div>
+        </ProjectIndexProvider>
       </body>
     </html>
   );

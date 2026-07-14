@@ -7,7 +7,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { fitSystemsEn } from "@/content/en/fit";
 import { getSystemEn } from "@/content/en/systems";
 import { fitSystems, projectToFitType } from "@/content/fit";
-import { type Project } from "@/content/projects";
+import type { PublicProject } from "@/lib/projects/types";
 import { getSystem } from "@/content/systems";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
@@ -61,14 +61,16 @@ export function CaseStudyHero({
   project,
   locale = "tr",
 }: {
-  project: Project;
+  project: PublicProject;
   locale?: Locale;
 }) {
   const copy = HERO_COPY[locale];
   const internal = project.tier === "internal";
 
   // system type: derived, never duplicated into the project record
-  const fitId = projectToFitType[project.slug];
+  // 38C: prefer the fit id the database carries; fall back to the static map
+  // so the five original projects behave exactly as before.
+  const fitId = project.fitId ?? projectToFitType[project.slug];
   const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
   const lookupSystem = locale === "en" ? getSystemEn : getSystem;
   const fit = fitId ? fitPool.find((f) => f.id === fitId) : undefined;

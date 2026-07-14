@@ -22,8 +22,14 @@ import { ContactCTA } from "@/components/shared/contact-cta";
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
-import { getProjectEn, projectsEn } from "@/content/en/projects";
-import { projectImage } from "@/content/projects";
+import { permanentRedirect } from "next/navigation";
+
+import {
+  getPublishedProject,
+  getPublishedSlugs,
+  resolveProjectRedirect,
+} from "@/lib/projects/public";
+import { projectImage } from "@/lib/projects/types";
 import { breadcrumbSchema, graph, projectSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
@@ -31,19 +37,25 @@ interface ProjectPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return projectsEn.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  const slugs = await getPublishedSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
+
+/** See the Turkish route: a new published slug must render without a redeploy. */
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectEn(slug);
-  if (!project) return {};
+  const found = await getPublishedProject(slug, "en");
+  if (!found) return {};
+
+  const { project, seo } = found;
   return pageMeta({
-    title: project.name,
-    description: project.oneLiner,
+    title: seo.metaTitle ?? project.name,
+    description: seo.metaDescription ?? project.oneLiner,
     path: `/en/projects/${project.slug}`,
   });
 }
@@ -75,9 +87,17 @@ function StageHeading({ children }: { children: React.ReactNode }) {
 
 export default async function EnProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProjectEn(slug);
-  if (!project) notFound();
+  const found = await getPublishedProject(slug, "en");
 
+  if (!found) {
+    // A retired slug 308s to its project's current address — but only while that
+    // project is still published. See the Turkish route.
+    const target = await resolveProjectRedirect(slug);
+    if (target) permanentRedirect(`/en/projects/${target}`);
+    notFound();
+  }
+
+  const { project } = found;
   const capture = projectImage(project);
 
   return (

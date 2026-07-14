@@ -7,7 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { sectorsEn } from "@/content/en/sectors";
 import { systemsEn } from "@/content/en/systems";
 import { projectToFitType } from "@/content/fit";
-import { type Project } from "@/content/projects";
+import type { Project } from "@/lib/projects/types";
 import { sectors } from "@/content/sectors";
 import { systems } from "@/content/systems";
 import { type Locale } from "@/lib/locale";

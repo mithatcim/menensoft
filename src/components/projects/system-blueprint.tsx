@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-import { type Project } from "@/content/projects";
+import type { Project } from "@/lib/projects/types";
 import { type Locale } from "@/lib/locale";
 import { DECOR_PULSES, EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";

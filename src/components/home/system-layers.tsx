@@ -14,8 +14,7 @@ import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { buttonVariants } from "@/components/ui/button";
-import { getProjectEn } from "@/content/en/projects";
-import { getProject } from "@/content/projects";
+import { useProjectLookup } from "@/components/projects/project-index";
 import { type Locale } from "@/lib/locale";
 import { DECOR_PULSES, EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -359,7 +358,10 @@ export function SystemLayers({ locale = "tr" }: { locale?: Locale }) {
   const [selected, setSelected] = useState(1); // data model — the foundation
 
   const layer = copy.layers[selected];
-  const lookupProject = locale === "en" ? getProjectEn : getProject;
+  // Phase 38C: published projects come from the database via context. The
+  // locale no longer selects a module — the layout already fetched this
+  // locale's inventory.
+  const lookupProject = useProjectLookup();
   const proof = layer.projectSlug ? lookupProject(layer.projectSlug) : null;
   const proofHref = proof ? `${copy.projectBase}/${proof.slug}` : undefined;
   const systemHref = layer.systemSlug

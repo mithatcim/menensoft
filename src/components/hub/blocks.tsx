@@ -3,12 +3,11 @@ import Link from "next/link";
 
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
-import { getProjectEn } from "@/content/en/projects";
 import { siteEn } from "@/content/en/site";
-import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
 import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
+import { getPublishedProjects } from "@/lib/projects/public";
 import { cn } from "@/lib/utils";
 
 /**
@@ -138,14 +137,17 @@ export function ModuleGrid({
 }
 
 /** Gerçek projelere dürüst etiketli bağlantılar. */
-export function RelatedProjects({
+export async function RelatedProjects({
   items,
   locale = "tr",
 }: {
   items: { slug: string; note: string }[];
   locale?: Locale;
 }) {
-  const lookup = locale === "en" ? getProjectEn : getProject;
+  // Published projects only (38C): an archived project stops being proof.
+  const published = await getPublishedProjects(locale);
+  const lookup = (slug: string) =>
+    published.find((project) => project.slug === slug);
   const base = locale === "en" ? "/en/projects" : "/projeler";
   const resolved = items
     .map((item) => ({ project: lookup(item.slug), note: item.note }))

@@ -1,13 +1,17 @@
-import { getProject, projects } from "@/content/projects";
 import { site } from "@/content/site";
+import {
+  getPublishedProject,
+  getPublishedSlugs,
+} from "@/lib/projects/public";
 import { OG_CONTENT_TYPE, OG_SIZE, renderOgImage } from "@/lib/og";
 
 export const alt = "Proje özeti";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  const slugs = await getPublishedSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function OpengraphImage({
@@ -16,7 +20,8 @@ export default async function OpengraphImage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const found = await getPublishedProject(slug, "tr");
+  const project = found?.project;
 
   if (!project) {
     return renderOgImage({

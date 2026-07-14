@@ -2,9 +2,8 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { Reveal } from "@/components/shared/reveal";
-import { getProjectEn } from "@/content/en/projects";
-import { getProject } from "@/content/projects";
 import { type Locale } from "@/lib/locale";
+import { getPublishedProjects } from "@/lib/projects/public";
 import { cn } from "@/lib/utils";
 
 /**
@@ -31,7 +30,7 @@ const COPY = {
   en: { proofLabel: "Proof", projectBase: "/en/projects" },
 } as const;
 
-export function EarlyCta({
+export async function EarlyCta({
   locale = "tr",
   eyebrow,
   text,
@@ -51,7 +50,10 @@ export function EarlyCta({
   className?: string;
 }) {
   const copy = COPY[locale];
-  const lookup = locale === "en" ? getProjectEn : getProject;
+  // Published projects only (38C): an archived project stops being proof.
+  const published = await getPublishedProjects(locale);
+  const lookup = (slug: string) =>
+    published.find((project) => project.slug === slug);
   const proofs = proofSlugs
     .map((s) => lookup(s))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));

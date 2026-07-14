@@ -14,7 +14,7 @@ import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
 import { projectToFitType } from "@/content/fit";
 import { type Locale } from "@/lib/locale";
-import { projectImage, type Project } from "@/content/projects";
+import { projectImage, type PublicProject } from "@/lib/projects/types";
 import { EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ interface Tier {
   id: string;
   label: string;
   quiet: boolean;
-  match: (p: Project) => boolean;
+  match: (p: PublicProject) => boolean;
 }
 
 const TIERS_TR: Tier[] = [
@@ -113,7 +113,7 @@ const DECK_COPY = {
 
 type DeckCopy = (typeof DECK_COPY)[Locale];
 
-function StatusBadge({ project }: { project: Project }) {
+function StatusBadge({ project }: { project: PublicProject }) {
   return (
     <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
       <span
@@ -125,7 +125,7 @@ function StatusBadge({ project }: { project: Project }) {
   );
 }
 
-function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
+function PreviewBody({ project, copy }: { project: PublicProject; copy: DeckCopy }) {
   const quiet = project.tier === "internal";
 
   return (
@@ -193,7 +193,9 @@ function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
           </Link>
           <Link
             href={
-              projectToFitType[project.slug]
+              // 38C: a project created in the panel carries its own fit id;
+              // the five originals still resolve through the old map.
+              project.fitId ?? projectToFitType[project.slug]
                 ? `${copy.quoteBase}?tur=${projectToFitType[project.slug]}`
                 : copy.quoteBase
             }
@@ -213,7 +215,7 @@ function PreviewBody({ project, copy }: { project: Project; copy: DeckCopy }) {
 }
 
 /** Desktop inspection panel — crossfades between selected projects. */
-function PreviewPanel({ project, copy }: { project: Project; copy: DeckCopy }) {
+function PreviewPanel({ project, copy }: { project: PublicProject; copy: DeckCopy }) {
   const reduceMotion = useReducedMotion();
   return (
     <div
@@ -259,7 +261,7 @@ function DeckCard({
   onSelect,
   copy,
 }: {
-  project: Project;
+  project: PublicProject;
   index: number;
   quiet: boolean;
   flagship: boolean;
@@ -351,7 +353,7 @@ export function ProjectCommandDeck({
   projects,
   locale = "tr",
 }: {
-  projects: Project[];
+  projects: PublicProject[];
   locale?: Locale;
 }) {
   const copy = DECK_COPY[locale];

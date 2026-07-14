@@ -16,14 +16,13 @@ import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { fitSystemsEn } from "@/content/en/fit";
-import { getProjectEn } from "@/content/en/projects";
 import { solutionsEn } from "@/content/en/solutions";
 import { getSystemEn } from "@/content/en/systems";
 import { fitSystems } from "@/content/fit";
-import { getProject } from "@/content/projects";
 import { solutions } from "@/content/solutions";
 import { getSystem } from "@/content/systems";
 import { type Locale } from "@/lib/locale";
+import { getPublishedProjects } from "@/lib/projects/public";
 import { cn } from "@/lib/utils";
 
 /**
@@ -103,11 +102,14 @@ const COPY = {
   },
 } as const;
 
-export function ServicesPreviewSection({ locale = "tr" }: { locale?: Locale }) {
+export async function ServicesPreviewSection({ locale = "tr" }: { locale?: Locale }) {
   const copy = COPY[locale];
   const pool = locale === "en" ? solutionsEn : solutions;
   const lookupSystem = locale === "en" ? getSystemEn : getSystem;
-  const lookupProject = locale === "en" ? getProjectEn : getProject;
+  // Published projects only (38C): an archived project stops being proof.
+  const published = await getPublishedProjects(locale);
+  const lookupProject = (slug: string) =>
+    published.find((project) => project.slug === slug);
   const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
 
   // systemSlug -> wizard fit id, so each card can prefill the wizard instead of

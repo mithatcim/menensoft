@@ -30,14 +30,13 @@ import {
   fitSystemsEn,
   resolveRecommendationEn,
 } from "@/content/en/fit";
-import { getProjectEn } from "@/content/en/projects";
 import {
   fitNeeds,
   fitSituations,
   fitSystems,
   resolveRecommendation,
 } from "@/content/fit";
-import { getProject } from "@/content/projects";
+import { useProjectLookup } from "@/components/projects/project-index";
 import { site } from "@/content/site";
 import { ContactLink } from "@/components/shared/contact-link";
 import { type Locale } from "@/lib/locale";
@@ -83,7 +82,6 @@ const WIZARD_COPY = {
     situations: fitSituations,
     needs: fitNeeds,
     resolve: resolveRecommendation,
-    lookupProject: getProject,
     subjectGeneric: "Menensoft proje görüşmesi",
     subjectFor: (label: string) => `Menensoft — ${label} görüşmesi`,
     bodyLabels: {
@@ -150,7 +148,6 @@ const WIZARD_COPY = {
     situations: fitSituationsEn,
     needs: fitNeedsEn,
     resolve: resolveRecommendationEn,
-    lookupProject: getProjectEn,
     subjectGeneric: "Menensoft project inquiry",
     subjectFor: (label: string) => `Menensoft — ${label} inquiry`,
     bodyLabels: {
@@ -310,6 +307,9 @@ function StepChip({
 
 export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
   const copy = WIZARD_COPY[locale];
+  // Published projects only — an archived project can no longer be used as a
+  // ?proje= reference, because it is no longer in the index.
+  const lookupProject = useProjectLookup();
   const [systemId, setSystemId] = useState<string | null>(null);
   const [situationId, setSituationId] = useState<string | null>(null);
   const [needIds, setNeedIds] = useState<string[]>([]);
@@ -392,8 +392,8 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
     if (isSituation(durum)) setSituationId(durum);
     else if (isSituation(saved.sit)) setSituationId(saved.sit!);
 
-    if (proje && copy.lookupProject(proje)) setReferenceSlug(proje);
-    else if (saved.ref && copy.lookupProject(saved.ref)) {
+    if (proje && lookupProject(proje)) setReferenceSlug(proje);
+    else if (saved.ref && lookupProject(saved.ref)) {
       setReferenceSlug(saved.ref);
     }
 
@@ -411,18 +411,24 @@ export function QuoteBuilder({ locale = "tr" }: { locale?: Locale }) {
 
     setHydrated(true);
     /* eslint-enable react-hooks/set-state-in-effect */
+    // lookupProject is intentionally NOT a dependency. This effect reads the URL
+    // exactly once, on mount. The lookup is memoised over the project index, and
+    // if that index were ever revalidated (an admin publish), re-running this
+    // would re-apply ?tur=/?proje= over selections the visitor had already
+    // changed — silently rewriting their answers mid-form.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [copy, locale]);
 
   const system = copy.systems.find((s) => s.id === systemId);
   const situation = copy.situations.find((s) => s.id === situationId);
   const referenceProject = referenceSlug
-    ? copy.lookupProject(referenceSlug)
+    ? lookupProject(referenceSlug)
     : undefined;
 
   const done = Boolean(system && situation);
   const rec = done ? copy.resolve(system!.id, situation!.id) : null;
   const proofProject = rec?.projectSlug
-    ? copy.lookupProject(rec.projectSlug)
+    ? lookupProject(rec.projectSlug)
     : null;
 
   const needLabels = copy.needs

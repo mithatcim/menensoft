@@ -8,7 +8,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
-import { getProject } from "@/content/projects";
+import { getPublishedProjects } from "@/lib/projects/public";
 import {
   audience,
   avoided,
@@ -42,7 +42,12 @@ const CONVERSION_BLOCKS = [
   { title: "Nelerden kaçınılır", items: avoided, quiet: true },
 ];
 
-export default function SolutionsPage() {
+export default async function SolutionsPage() {
+  // Proof chips resolve against PUBLISHED projects only: an archived project
+  // must stop being offered as proof, not linger as a dead link.
+  const published = await getPublishedProjects("tr");
+  const bySlug = new Map(published.map((p) => [p.slug, p]));
+
   return (
     <>
       <JsonLd data={graph(servicesSchema())} />
@@ -84,7 +89,7 @@ export default function SolutionsPage() {
           <div className="grid gap-5 md:gap-6">
             {solutions.map((solution) => {
               const related = solution.relatedSlugs
-                .map((slug) => getProject(slug))
+                .map((slug) => bySlug.get(slug))
                 .filter((p): p is NonNullable<typeof p> => Boolean(p));
               return (
                 <Reveal key={solution.id}>

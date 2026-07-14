@@ -5,9 +5,8 @@ import { Container } from "@/components/layout/container";
 import { ProjectCard } from "@/components/shared/project-card";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { featuredProjectsEn } from "@/content/en/projects";
-import { featuredProjects } from "@/content/projects";
 import { type Locale } from "@/lib/locale";
+import { getFeaturedProjects } from "@/lib/projects/public";
 
 const FEATURED_COPY = {
   tr: {
@@ -28,9 +27,11 @@ const FEATURED_COPY = {
   },
 } as const;
 
-export function FeaturedProjectsSection({ locale = "tr" }: { locale?: Locale }) {
+export async function FeaturedProjectsSection({ locale = "tr" }: { locale?: Locale }) {
   const copy = FEATURED_COPY[locale];
-  const items = locale === "en" ? featuredProjectsEn : featuredProjects;
+  // Featured is now a database flag, so un-featuring a project in the panel
+  // takes it off the homepage — it does not just stop being highlighted.
+  const items = await getFeaturedProjects(locale);
   return (
     <section className="py-16 md:py-24">
       <Container>

@@ -3,10 +3,9 @@ import Link from "next/link";
 
 import { Reveal } from "@/components/shared/reveal";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
-import { getProjectEn } from "@/content/en/projects";
-import { getProject } from "@/content/projects";
 import { fitIdForSystem, inquiryHref } from "@/lib/inquiry";
 import { type Locale } from "@/lib/locale";
+import { getPublishedProjects } from "@/lib/projects/public";
 import { cn } from "@/lib/utils";
 
 /**
@@ -79,7 +78,7 @@ export interface HubCardProps {
   delay?: number;
 }
 
-export function HubCard({
+export async function HubCard({
   eyebrow,
   title,
   description,
@@ -91,7 +90,10 @@ export function HubCard({
   delay = 0,
 }: HubCardProps) {
   const copy = COPY[locale];
-  const lookupProject = locale === "en" ? getProjectEn : getProject;
+  // Published projects only (38C): an archived project stops being proof.
+  const published = await getPublishedProjects(locale);
+  const lookupProject = (slug: string) =>
+    published.find((project) => project.slug === slug);
 
   const fitId = fitIdForSystem(systemSlug, locale);
   const proofSlug = pickProof(proofSlugs, fitId);

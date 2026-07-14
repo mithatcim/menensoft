@@ -6,9 +6,8 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { buttonVariants } from "@/components/ui/button";
-import { projectsEn } from "@/content/en/projects";
 import { siteEn } from "@/content/en/site";
-import { projects } from "@/content/projects";
+import { usePublishedProjects } from "@/components/projects/project-index";
 import { site } from "@/content/site";
 import { type Locale } from "@/lib/locale";
 import { EASE_OUT } from "@/lib/motion";
@@ -27,7 +26,6 @@ import { cn } from "@/lib/utils";
 const HERO_COPY = {
   tr: {
     site,
-    projects,
     bridge: "Bu sistemleri kuran marka",
     intro:
       "Vitrin, panel, veri modeli ve teslim tek elden ilerler. Menensoft'un arkasında, her katmanı uçtan uca tasarlayıp geliştiren kurucu geliştirici var: Mithat Yılmaz.",
@@ -47,7 +45,6 @@ const HERO_COPY = {
   },
   en: {
     site: siteEn,
-    projects: projectsEn,
     bridge: "The brand behind these systems",
     intro:
       "Storefront, panel, data model and handoff move as one. Behind Menensoft is a founder-developer who designs and builds every layer end to end: Mithat Yılmaz.",
@@ -117,6 +114,9 @@ function OrbitField() {
 
 function BuildStatusCard({ locale }: { locale: Locale }) {
   const copy = HERO_COPY[locale];
+  // 38C: the status card lists the real published inventory, so archiving a
+  // project removes it from the hero instead of leaving a ghost row.
+  const projects = usePublishedProjects();
   return (
     <div className="relative">
       <div
@@ -149,7 +149,7 @@ function BuildStatusCard({ locale }: { locale: Locale }) {
             card is lg-only and the grid is items-center against a taller left
             column, so the extra line costs no section height. */}
         <ul className="relative divide-y divide-border/60">
-          {copy.projects.map((project) => (
+          {projects.map((project) => (
             <li
               key={project.slug}
               className="flex flex-col gap-1 px-4 py-2.5 font-mono text-xs"
@@ -170,7 +170,7 @@ function BuildStatusCard({ locale }: { locale: Locale }) {
           ))}
         </ul>
         <p className="relative border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground">
-          {copy.cardFooter(copy.projects.length)}
+          {copy.cardFooter(projects.length)}
         </p>
       </div>
     </div>

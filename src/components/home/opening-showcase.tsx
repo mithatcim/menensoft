@@ -12,9 +12,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/shared/reveal";
 import { fitSystemsEn } from "@/content/en/fit";
-import { getProjectEn } from "@/content/en/projects";
 import { fitSystems } from "@/content/fit";
-import { getProject } from "@/content/projects";
+import { useProjectLookup } from "@/components/projects/project-index";
 import { type Locale } from "@/lib/locale";
 import { DECOR_PULSES } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -247,7 +246,10 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
   const reduceMotion = useReducedMotion() ?? false;
 
   const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
-  const lookupProject = locale === "en" ? getProjectEn : getProject;
+  // Phase 38C: published projects come from the database via context. The
+  // locale no longer selects a module — the layout already fetched this
+  // locale's inventory.
+  const lookupProject = useProjectLookup();
 
   // Lazy useState, not useRef: the plugin instance must be stable across
   // renders AND readable during render (to hand to useEmblaCarousel), and

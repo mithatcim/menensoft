@@ -1,5 +1,5 @@
 import { SpotlightCard } from "@/components/shared/spotlight-card";
-import { type Project } from "@/content/projects";
+import type { Project } from "@/lib/projects/types";
 import { type Locale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 

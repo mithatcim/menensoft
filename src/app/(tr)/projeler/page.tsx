@@ -3,7 +3,8 @@ import { ProjectCommandDeck } from "@/components/projects/command-deck";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { projects, type ProjectTier } from "@/content/projects";
+import { getPublishedProjects } from "@/lib/projects/public";
+import type { ProjectTier, PublicProject } from "@/lib/projects/types";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -18,7 +19,7 @@ const TIER_LABEL: Record<ProjectTier, string> = {
   internal: "iç altyapı / önceki çalışma",
 };
 
-function StatusRail() {
+function StatusRail({ projects }: { projects: PublicProject[] }) {
   const counts = new Map<ProjectTier, number>();
   for (const project of projects) {
     counts.set(project.tier, (counts.get(project.tier) ?? 0) + 1);
@@ -38,7 +39,9 @@ function StatusRail() {
   );
 }
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getPublishedProjects("tr");
+
   return (
     <>
       <section className="py-16 md:py-24">
@@ -52,7 +55,7 @@ export default function ProjectsPage() {
             />
           </Reveal>
           <Reveal delay={0.05}>
-            <StatusRail />
+            <StatusRail projects={projects} />
           </Reveal>
           <ProjectCommandDeck projects={projects} />
         </Container>

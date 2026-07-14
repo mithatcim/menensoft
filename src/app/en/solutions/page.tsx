@@ -8,7 +8,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { buttonVariants } from "@/components/ui/button";
-import { getProjectEn } from "@/content/en/projects";
+import { getPublishedProjects } from "@/lib/projects/public";
 import {
   audienceEn,
   avoidedEn,
@@ -40,7 +40,11 @@ const CONVERSION_BLOCKS = [
   { title: "What gets avoided", items: avoidedEn, quiet: true },
 ];
 
-export default function EnSolutionsPage() {
+export default async function EnSolutionsPage() {
+  // Published projects only — see the Turkish page.
+  const published = await getPublishedProjects("en");
+  const bySlug = new Map(published.map((p) => [p.slug, p]));
+
   return (
     <>
       <JsonLd
@@ -92,7 +96,7 @@ export default function EnSolutionsPage() {
           <div className="grid gap-5 md:gap-6">
             {solutionsEn.map((solution) => {
               const related = solution.relatedSlugs
-                .map((slug) => getProjectEn(slug))
+                .map((slug) => bySlug.get(slug))
                 .filter((p): p is NonNullable<typeof p> => Boolean(p));
               return (
                 <Reveal key={solution.id}>
