@@ -12,6 +12,7 @@ import {
   deviceTypeFromUA,
   leadSchema,
 } from "@/lib/leads/validate";
+import { visitorKey } from "@/lib/analytics/visitor";
 import { getPool } from "@/lib/db/postgres";
 import { clientHash, hitRateLimit } from "@/lib/db/rate-limit";
 
@@ -41,12 +42,61 @@ const MAX_BODY_BYTES = 16 * 1024;
 const RATE_MAX = 5;
 const RATE_WINDOW = "10 minutes";
 
+/** Same 30-minute window /api/e uses to decide a session is still live. */
+const SESSION_WINDOW = "30 minutes";
+
 const fail = (
   status: number,
   code: LeadErrorCode,
   message: string,
   field?: string,
 ) => NextResponse.json({ ok: false, code, message, field }, { status });
+
+/**
+ * Attach the lead to the visitor's live analytics session (Phase 36A).
+ *
+ * WHAT THIS DOES NOT DO, and cannot:
+ *   - it does not accept a session id from the client. The browser has no
+ *     identifier, has never had one, and could not send one if it wanted to.
+ *   - it does not set a cookie or write to localStorage.
+ *   - it does not store an IP. The address is used in memory to recompute the
+ *     SAME daily-rotating visitor_key that /api/e derives, and is written
+ *     nowhere. There is still no IP column in any table.
+ *   - it does not enable cross-day tracking. The salt rotates at UTC midnight,
+ *     so a lead submitted today can only ever match a session from today.
+ *
+ * What it DOES do, stated plainly because the privacy page now says so too: the
+ * admin panel can see which pages a NAMED person read before they wrote in.
+ * That is a real escalation over "these two tables never join", and it is why
+ * /gizlilik and /en/privacy were rewritten in the same phase rather than after.
+ *
+ * It is best-effort. A failure here must never cost a lead: no session found, no
+ * salt configured, query error — all return null and the insert proceeds.
+ */
+async function findLiveSession(
+  pool: NonNullable<ReturnType<typeof getPool>>,
+  req: Request,
+): Promise<string | null> {
+  try {
+    const key = visitorKey(req); // null when ANALYTICS_SALT is unset
+    if (!key) return null;
+
+    const { rows } = await pool.query<{ id: string }>(
+      `select id from visitor_sessions
+        where visitor_key = $1 and last_seen_at > now() - $2::interval
+        order by last_seen_at desc
+        limit 1`,
+      [key, SESSION_WINDOW],
+    );
+    return rows[0]?.id ?? null;
+  } catch (err) {
+    console.error(
+      "[lead] session lookup failed, saving lead unlinked:",
+      err instanceof Error ? err.message : err,
+    );
+    return null;
+  }
+}
 
 export async function POST(req: Request) {
   if (!req.headers.get("content-type")?.includes("application/json")) {
@@ -117,6 +167,8 @@ export async function POST(req: Request) {
   const ua = req.headers.get("user-agent");
   const country = req.headers.get("x-vercel-ip-country"); // null off Vercel
 
+  const sessionId = await findLiveSession(pool, req);
+
   try {
     // Parameterized. Nothing the visitor sends is ever concatenated into SQL.
     const { rows } = await pool.query<{ id: string }>(
@@ -144,7 +196,7 @@ export async function POST(req: Request) {
         deviceTypeFromUA(ua),
         country || null,
         ua ? ua.slice(0, 400) : null,
-        null, // session_id — Phase 33F
+        sessionId,
       ],
     );
 
