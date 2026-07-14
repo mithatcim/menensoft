@@ -209,3 +209,26 @@ Ek elle kontroller:
 
 - `src/content/projects.ts` artık **seed kaynağı ve geri dönüş yolu**dur, canlı
   içerik değil. Silmeyin.
+
+## 12. Phase 38D — sertleştirme
+
+Üretim build'i şu **beş** durumda bilinçli olarak DÜŞER (hepsi test edildi):
+
+| Durum | Sonuç |
+| --- | --- |
+| `SITE_ENV=production` + `NEXT_PUBLIC_SITE_URL` yok | build düşer |
+| `SITE_ENV=production` + şemasız URL (`menensoft.com`) | build düşer |
+| `SITE_ENV=production` + `DATABASE_URL` yok | build düşer |
+| `SITE_ENV=production` + yayında hiç proje yok | build düşer |
+| Vercel + `NEXT_PUBLIC_SITE_URL` yok | build düşer |
+
+Yerel geliştirme (hiçbiri ayarlı değilken) etkilenmez.
+
+**`DATABASE_URL` ayarlı ama veritabanı erişilemezse build HER YERDE düşer** —
+yerelde de. `DATABASE_URL` yazmak "bir veritabanı var" demektir; bu yanlışsa,
+projesiz bir siteyi sessizce üretmek istemediğimiz tek sonuçtur.
+
+**Sitemap sayısı artık sabit değil, türetiliyor:** `pnpm audit:site`
+veritabanındaki yayın sayısını okur (50 statik + yayındaki proje × 2). Sabit 60,
+38C'den sonra bir yalana dönüşmüştü: panelden bir proje yayınlarsanız 62 olur ve
+denetim doğru bir siteyi "bozuk" diye raporlardı.

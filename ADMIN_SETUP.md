@@ -183,8 +183,18 @@ alanın tasarlanmış bir bileşene render edilmesini garanti eder.
 **Slug değişirse** eski slug `project_slug_redirects` tablosuna yazılır ve
 herkese açık rota onu **308** ile tüketir.
 
+**Sistem türü (fit)** artık projenin kendi alanıdır. Panelde seçtiğiniz değer
+sihirbaz ön-seçimini besler; `fit.ts` içindeki eski harita yalnızca seed/parity
+içindir ve panelden açılan bir projeyi tanımaz.
+
+**Yetkinlik matrisi** (proje detayındaki 9 kutucuk) editoryal bir eşlemedir ve
+yalnızca ilk beş proje için tanımlıdır. Panelden açılan bir projede **hiç
+gösterilmez** — boş bir matris "0 / 9" yazardı, ki bu bir iddiadır.
+
 Önizleme: `/admin/projects/<id>/preview` — yalnızca giriş yapmış sahibe açıktır,
-paylaşılabilir bağlantı ya da token yoktur.
+paylaşılabilir bağlantı ya da token yoktur. **38D'den beri önizleme, yayın
+sayfasının kendisidir**: aynı bileşen ağacı, taslak veriyle. Gördüğünüz şey
+yayınlanacak şeydir.
 
 İçeriği veritabanına aktarmak / doğrulamak:
 

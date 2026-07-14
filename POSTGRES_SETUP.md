@@ -348,8 +348,16 @@ sayfada, ne sitemap'te, ne de sayfa payload'ında.
 > hiç proje yoksa, üretim build'i **bilinçli olarak düşer** — boş bir
 > /projeler ve 50 URL'lik bir sitemap, düşen bir build'den çok daha pahalıdır.
 
-**Typed dosyaları silmeyin.** `src/content/projects.ts` artık herkese açık
-sitenin kaynağı değil; **seed kaynağı ve geri dönüş yolu**dur.
+**Typed dosyaları silmeyin — ama onları düzenlemeyin de.**
+`src/content/projects.ts` ve `src/content/en/projects.ts` artık herkese açık
+sitenin kaynağı DEĞİL; **seed kaynağı, eşitlik referansı ve geri dönüş yolu**dur.
+Orada bir kelimeyi değiştirmek ziyaretçinin gördüğü hiçbir şeyi değiştirmez.
+Siteyi değiştirmek için `/admin/projects`.
+
+Bu bir yorumla değil, **lint kuralıyla** korunur (Phase 38D): `src/app`,
+`src/components` ya da `src/lib` altında bu dosyalardan veri import etmek bir
+**hata**dır. Altı ay sonra birinin otomatik tamamlamaya güvenip ikinci bir
+doğruluk kaynağı diriltmesi, tam olarak böyle olurdu.
 
 ```bash
 pnpm cms:seed      # typed dosyaları veritabanına birebir kopyalar (idempotent)
