@@ -377,6 +377,11 @@ kanıt, başarısız **olabildiği** için bir kanıttır.
 
 Bu scriptler Node 24 ister (yerleşik TypeScript tip soyma + `--env-file`).
 
+**38E:** `projects.capabilities` (jsonb dizi) yetkinlik matrisini taşır. Dile bağlı
+olmadığı için proje satırındadır, çeviri tablosunda değil. Kapalı küme tabloda bir
+CHECK ile zorlanır (`capabilities <@ '[...dokuz id...]'`): uygulama atlanabilir,
+tablo atlanamaz. `[]` = matris yok = bölüm gizli.
+
 **38B notu.** Panelden proje oluşturulabildiği için veritabanı artık typed
 dosyaların bir **üst kümesi** olabilir. `cms:verify` bunu bilir: panelden
 eklenen projeleri ayrı satırda bildirir ve dışarıda bırakır. Sorduğu soru

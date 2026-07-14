@@ -187,9 +187,21 @@ herkese açık rota onu **308** ile tüketir.
 sihirbaz ön-seçimini besler; `fit.ts` içindeki eski harita yalnızca seed/parity
 içindir ve panelden açılan bir projeyi tanımaz.
 
-**Yetkinlik matrisi** (proje detayındaki 9 kutucuk) editoryal bir eşlemedir ve
-yalnızca ilk beş proje için tanımlıdır. Panelden açılan bir projede **hiç
-gösterilmez** — boş bir matris "0 / 9" yazardı, ki bu bir iddiadır.
+**Yetkinlik matrisi** (proje detayındaki 9 kutucuk) artık **panelden yönetilir**
+(Phase 38E). Temel sekmesinde onay kutuları: bu sistem neyi gösteriyor?
+
+- Kutucuk id'leri **dile bağlı değildir** — "admin dashboard var mı" sistem
+  hakkında bir olgudur, onu hangi dilde anlattığınıza bağlı değil. Bu yüzden
+  matris projenin kendi satırında (`capabilities`) durur, çeviri tablosunda değil.
+  TR ve EN sayfalar aynı seti, kendi etiketleriyle gösterir.
+- **Hiçbiri seçilmezse bölüm hiç görünmez.** Boş bir matris "0 / 9" yazıp dokuz
+  soluk kutu gösterirdi — bu boşluk değil, "bu proje hiçbir şey göstermiyor"
+  iddiasıdır.
+- Kapalı küme: dokuz id'nin dışında bir değer **veritabanı seviyesinde** reddedilir
+  (CHECK constraint), yalnızca uygulamada değil.
+
+Eski dosya tabanlı matris haritası (`src/content/project-capabilities.ts`) artık
+yalnızca **seed/parity fixture**'ıdır ve lint kuralıyla canlı koddan engellenir.
 
 Önizleme: `/admin/projects/<id>/preview` — yalnızca giriş yapmış sahibe açıktır,
 paylaşılabilir bağlantı ya da token yoktur. **38D'den beri önizleme, yayın

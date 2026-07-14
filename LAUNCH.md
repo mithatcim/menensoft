@@ -232,3 +232,13 @@ projesiz bir siteyi sessizce üretmek istemediğimiz tek sonuçtur.
 veritabanındaki yayın sayısını okur (50 statik + yayındaki proje × 2). Sabit 60,
 38C'den sonra bir yalana dönüşmüştü: panelden bir proje yayınlarsanız 62 olur ve
 denetim doğru bir siteyi "bozuk" diye raporlardı.
+
+## 13. Phase 38E — yetkinlik matrisi CMS'e taşındı
+
+- `db/schema.sql` yeni bir sütun ekler (`projects.capabilities`). **Şema
+  build'den önce uygulanmalı**, her zamanki gibi.
+- `pnpm cms:seed` ilk beş projenin matrisini fixture'dan **birebir** taşır.
+  Göç sırasında yeniden puanlama yapılmaz — bu, kimsenin gözden geçirmediği
+  editoryal içerik uydurmak olurdu.
+- Panelden açılan projeler matrislerini kendileri taşır; `fit.ts` ya da
+  bileşen içindeki eski harita artık canlı gerçek değildir.
