@@ -1,5 +1,5 @@
 import { faq } from "@/content/faq";
-import { type Project } from "@/content/projects";
+import type { Project } from "@/lib/projects/types";
 import { solutions } from "@/content/solutions";
 import { site, siteUrl } from "@/content/site";
 

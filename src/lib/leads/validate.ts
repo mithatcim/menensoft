@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 import { fitNeeds, fitSituations, fitSystems } from "@/content/fit";
-import { projects } from "@/content/projects";
+import {
+  getPublishedSlugSet,
+  isPublishedProjectPath,
+} from "@/lib/projects/public";
 import { allCanonicalRoutes } from "@/lib/routes";
 
 /**
@@ -20,7 +23,6 @@ import { allCanonicalRoutes } from "@/lib/routes";
 /** Ids are locale-stable, so one pool covers both languages. */
 const FIT_IDS = new Set(fitSystems.map((s) => s.id));
 const SITUATION_IDS = new Set(fitSituations.map((s) => s.id));
-const PROJECT_SLUGS = new Set(projects.map((p) => p.slug));
 const CANONICAL_PATHS = new Set(allCanonicalRoutes);
 
 // `fitNeeds` is imported to keep this file's dependency on the content model
@@ -85,10 +87,24 @@ export const cleanFitId = (v?: string | null) =>
   v && FIT_IDS.has(v) ? v : null;
 export const cleanSituation = (v?: string | null) =>
   v && SITUATION_IDS.has(v) ? v : null;
-export const cleanProjectSlug = (v?: string | null) =>
-  v && PROJECT_SLUGS.has(v) ? v : null;
-export const cleanSourcePath = (v?: string | null) =>
-  v && CANONICAL_PATHS.has(v) ? v : null;
+/**
+ * Phase 38C: the reference project is checked against the PUBLISHED set in the
+ * database, not a compiled-in array. So a project created in the panel can be
+ * referenced immediately, and an ARCHIVED one stops being referenceable — which
+ * is the point: un-publishing must actually un-publish.
+ */
+export const cleanProjectSlug = async (v?: string | null) => {
+  if (!v) return null;
+  const published = await getPublishedSlugSet();
+  return published.has(v) ? v : null;
+};
+
+export const cleanSourcePath = async (v?: string | null) => {
+  if (!v) return null;
+  if (CANONICAL_PATHS.has(v)) return v;
+  // Project routes left the static inventory when they became database-backed.
+  return (await isPublishedProjectPath(v)) ? v : null;
+};
 
 /**
  * Coarse on purpose. Three buckets are all the admin panel will ever act on,

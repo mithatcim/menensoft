@@ -50,18 +50,33 @@ export interface SiteConfig {
  */
 const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
 
-// Vercel sets VERCEL=1 for every build/runtime on its platform; it is never set
-// by a local build. Non-NEXT_PUBLIC_* vars are not inlined into client bundles,
-// so this is a server/build-time check and cannot throw in the browser.
-if (process.env.VERCEL && !rawSiteUrl) {
+/**
+ * Is this a build the outside world will see?
+ *
+ * Vercel sets VERCEL=1 on its platform. SITE_ENV=production is the switch for
+ * ANYWHERE ELSE, and it exists because the old guard only knew about Vercel —
+ * which meant a production build on a VPS or in Docker would happily publish
+ * `http://localhost:3000` as its own address, in every canonical, every sitemap
+ * URL and every JSON-LD @id, with a green build and no warning.
+ *
+ * NODE_ENV cannot be used for this: a local `pnpm build` is also
+ * NODE_ENV=production. Non-NEXT_PUBLIC_* vars are never inlined into client
+ * bundles, so this stays a server/build-time check and cannot throw in a browser.
+ */
+const isPublicDeployment =
+  Boolean(process.env.VERCEL) || process.env.SITE_ENV === "production";
+
+if (isPublicDeployment && !rawSiteUrl) {
   throw new Error(
-    "NEXT_PUBLIC_SITE_URL is not set. A Vercel deploy must set it to the " +
+    "NEXT_PUBLIC_SITE_URL is not set. A production build must set it to the " +
       "primary production origin — scheme included, no path, no trailing " +
       "slash (e.g. https://domain.com). Without it, canonical URLs, og:url, " +
-      "hreflang, all 58 sitemap entries, robots.txt and every JSON-LD @id " +
-      "would publish as http://localhost:3000. Set it in Vercel → Settings → " +
-      "Environment Variables (Production), then redeploy without build cache " +
-      "— NEXT_PUBLIC_* values are inlined at build time.",
+      "hreflang, all 60 sitemap entries, robots.txt and every JSON-LD @id " +
+      "would publish as http://localhost:3000.\n\n" +
+      "On Vercel: Settings → Environment Variables (Production), then redeploy " +
+      "WITHOUT build cache — NEXT_PUBLIC_* values are inlined at build time.\n" +
+      "Anywhere else: export NEXT_PUBLIC_SITE_URL before `pnpm build`.\n\n" +
+      "(This guard fires because VERCEL or SITE_ENV=production is set.)",
   );
 }
 

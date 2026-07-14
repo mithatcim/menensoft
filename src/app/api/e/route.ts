@@ -10,6 +10,7 @@ import {
   visitorKey,
 } from "@/lib/analytics/visitor";
 import { getPool } from "@/lib/db/postgres";
+import { isPublishedProjectPath } from "@/lib/projects/public";
 import { allCanonicalRoutes } from "@/lib/routes";
 
 /**
@@ -66,10 +67,13 @@ const skip = (reason: string) =>
 
 /** Paths are matched against real routes; anything else is recorded as "other"
  *  rather than trusted, so a crafted path cannot fill the table with junk. */
-function cleanPath(p: string): string | null {
+async function cleanPath(p: string): Promise<string | null> {
   if (CANONICAL.has(p)) return p;
+  // 38C: project routes are database-backed and no longer in the static
+  // inventory. Without this check every project pageview — the pages the whole
+  // funnel points at — would be recorded with a null path.
+  if (await isPublishedProjectPath(p)) return p;
   // Dynamic-looking but unknown: keep the shape, drop the specifics.
-  if (/^\/[a-z0-9/-]{0,80}$/i.test(p)) return null;
   return null;
 }
 
@@ -118,7 +122,7 @@ export async function POST(req: Request) {
     const pool = getPool();
     if (!pool) return skip("no_database");
 
-    const path = cleanPath(e.path);
+    const path = await cleanPath(e.path);
     const device = deviceType(ua);
     const country = req.headers.get("x-vercel-ip-country") || null;
     const refHost = referrerHost(e.ref);

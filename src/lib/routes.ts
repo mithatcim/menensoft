@@ -1,4 +1,3 @@
-import { projects } from "@/content/projects";
 import { sectors } from "@/content/sectors";
 import { systems } from "@/content/systems";
 import { enPathFor } from "@/lib/locale";
@@ -35,15 +34,20 @@ export const staticRoutes = [
   "/gizlilik",
 ] as const;
 
-/** İçerikten türetilen detay rotaları. */
-export const projectRoutes = projects.map((p) => `/projeler/${p.slug}`);
+/**
+ * İçerikten türetilen detay rotaları.
+ *
+ * PROJE ROTALARI ARTIK BURADA DEĞİL (Phase 38C). Yayındaki projeler
+ * veritabanından gelir ve bu dosya senkron/istemci-güvenli kalmalıdır; sitemap
+ * onları doğrudan src/lib/projects/public.ts üzerinden okur. Sektör ve sistem
+ * rotaları hâlâ typed içeriktendir — onların CMS'i bu fazın kapsamında değil.
+ */
 export const sectorRoutes = sectors.map((s) => `/sektorler/${s.slug}`);
 export const systemRoutes = systems.map((s) => `/sistemler/${s.slug}`);
 
 /** Türkçe kanonik rotalar, normalize edilmiş ("" yerine "/"). */
 export const trCanonicalRoutes: string[] = [
   ...staticRoutes.map((r) => r || "/"),
-  ...projectRoutes,
   ...sectorRoutes,
   ...systemRoutes,
 ];
