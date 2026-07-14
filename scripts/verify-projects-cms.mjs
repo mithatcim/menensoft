@@ -314,7 +314,8 @@ if (failures === 0) {
   console.log(
     "\n==================== PARITY PROVEN ====================\n" +
       "The database reproduces the typed project content exactly.\n" +
-      "Public routes still read the files. Nothing was flipped.\n",
+      "Since 38C the public site reads the DATABASE; the typed files are the\n" +
+      "seed source and the rollback path. This proves they still agree.\n",
   );
 } else {
   console.log(`\n==================== ${failures} FAILURE(S) ====================\n`);
