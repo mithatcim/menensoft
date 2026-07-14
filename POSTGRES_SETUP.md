@@ -332,7 +332,38 @@ Admin paneli **aynı `leads` tablosunu** okuyacak. Yeni tablo gerekmez; admin
 kimliği veritabanında değil ortam değişkeninde durur (tek kullanıcı için bir
 kimlik tablosu gereksizdir).
 
-## 8. Yayın öncesi kontrol listesi
+## 9. Proje CMS tabloları (Phase 38A — yalnızca hazırlık)
+
+`projects`, `project_translations`, `project_slug_redirects` tabloları artık
+şemada var. **Herkese açık proje sayfaları bunları HENÜZ okumuyor.**
+
+`/projeler`, `/projeler/[slug]`, `/en/projects`, `/en/projects/[slug]` hâlâ
+`src/content/projects.ts` ve `src/content/en/projects.ts` dosyalarından okur ve
+38C'ye kadar öyle kalacak. Bu fazın tek amacı, veritabanı içeriğinin **yayına
+çıkmadan önce** dosyalarla birebir aynı olduğunun kanıtlanabilmesidir.
+
+**Typed dosyaları silmeyin.** Onlar hâlâ tek gerçek kaynak ve aynı zamanda geri
+dönüş yolu.
+
+```bash
+pnpm cms:seed      # typed dosyaları veritabanına birebir kopyalar (idempotent)
+pnpm cms:verify    # veritabanı ↔ dosya eşitliğini alan alan kanıtlar
+```
+
+Seed hiçbir metni düzeltmez, çevirmez, "iyileştirmez": bunu yapsaydı kanıt daha
+çalıştırılamadan yok olurdu. Tekrar çalıştırmak güvenlidir — satır çoğaltmaz,
+`published_at` damgasını yeniden basmaz ve bozulmuş bir satırı dosyadaki hâline
+geri getirir.
+
+`cms:verify` **render girdisini** karşılaştırır, HTML'i değil: proje sayfaları
+`Project` nesnesinin saf birer fonksiyonudur, dolayısıyla nesne birebir aynıysa
+sayfa da birebir aynıdır. Alan kaybını (`statusNote` yok olmuş), alan uydurmayı
+ve dizi sırası değişimini yakalar — bilerek bozulmuş bir satırla test edilmiştir:
+kanıt, başarısız **olabildiği** için bir kanıttır.
+
+Bu scriptler Node 24 ister (yerleşik TypeScript tip soyma + `--env-file`).
+
+## 10. Yayın öncesi kontrol listesi
 
 - [ ] `db/schema.sql` çalıştırıldı; `leads` ve `lead_rate_limits` var
 - [ ] `information_schema` sorgusu `leads` üzerinde **ip sütunu bulmuyor**
