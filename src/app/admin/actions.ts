@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import {
   endSession,
@@ -11,11 +11,20 @@ import {
   startSession,
   verifyPassword,
 } from "@/lib/admin/auth";
-import { isLeadStatus, setLeadStatus } from "@/lib/admin/leads";
+import {
+  addNote,
+  isLeadStatus,
+  isNoteType,
+  isPriority,
+  markContacted,
+  setFollowUp,
+  setLeadStatus,
+  setPriority,
+} from "@/lib/admin/leads";
 import { clearRateLimit, clientHash, hitRateLimit } from "@/lib/db/rate-limit";
 
 /**
- * Admin Server Actions (Phase 33D).
+ * Admin Server Actions (Phase 33D, extended to the CRM in 36A).
  *
  * EVERY mutating action re-checks the session itself. Guarding the layout is not
  * enough and it is worth being blunt about why: a Server Action is its own POST
@@ -27,6 +36,14 @@ import { clearRateLimit, clientHash, hitRateLimit } from "@/lib/db/rate-limit";
 /** 5 failed attempts per 10 minutes per sender. */
 const LOGIN_MAX = 5;
 const LOGIN_WINDOW = "10 minutes";
+
+/** Throws the caller out unless they are the owner. Returns the identity that
+ *  gets written into the timeline, so a note always says who wrote it. */
+async function requireAdmin(): Promise<string> {
+  const session = await getAdminSession();
+  if (!session) redirect("/admin/login");
+  return session;
+}
 
 export type LoginState = { error?: string };
 
@@ -73,8 +90,6 @@ export async function loginAction(
     return { error: "E-posta ya da parola hatalı." };
   }
 
-  // A few fat-fingered attempts before a correct one shouldn't leave the owner
-  // sitting out the window.
   await clearRateLimit("adminLogin", hash);
   await startSession(config.email, config);
   redirect("/admin");
@@ -85,18 +100,62 @@ export async function logoutAction() {
   redirect("/admin/login");
 }
 
+/* --------------------------------- CRM ----------------------------------- */
+
+function refresh(id: string) {
+  revalidatePath(`/admin/leads/${id}`);
+  revalidatePath("/admin/leads");
+  revalidatePath("/admin");
+}
+
 export async function updateLeadStatusAction(formData: FormData) {
-  // The check that actually matters — inside the action, not on the page.
-  const session = await getAdminSession();
-  if (!session) redirect("/admin/login");
+  const by = await requireAdmin();
 
   const id = String(formData.get("id") ?? "");
   const status = String(formData.get("status") ?? "");
-
   if (!isLeadStatus(status)) return; // closed set; anything else is ignored
-  await setLeadStatus(id, status);
 
-  revalidatePath("/admin/leads");
-  revalidatePath(`/admin/leads/${id}`);
-  revalidatePath("/admin");
+  await setLeadStatus(id, status, by);
+  refresh(id);
+}
+
+export async function addNoteAction(formData: FormData) {
+  const by = await requireAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const note = String(formData.get("note") ?? "");
+  const type = String(formData.get("note_type") ?? "note");
+
+  if (!note.trim()) return; // an empty note is not an event
+  await addNote(id, note, isNoteType(type) ? type : "note", by);
+  refresh(id);
+}
+
+export async function markContactedAction(formData: FormData) {
+  const by = await requireAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const channel = String(formData.get("channel") ?? "call");
+  if (channel !== "call" && channel !== "whatsapp" && channel !== "email") return;
+
+  await markContacted(id, channel, by);
+  refresh(id);
+}
+
+export async function setFollowUpAction(formData: FormData) {
+  const by = await requireAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const raw = String(formData.get("follow_up_at") ?? "").trim();
+  await setFollowUp(id, raw || null, by);
+  refresh(id);
+}
+
+export async function setPriorityAction(formData: FormData) {
+  await requireAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const raw = String(formData.get("priority") ?? "");
+  await setPriority(id, isPriority(raw) ? raw : null);
+  refresh(id);
 }

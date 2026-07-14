@@ -1,20 +1,20 @@
-import { ArrowUpRight, Search } from "lucide-react";
+import { ArrowUpRight, CalendarClock, Download, Search } from "lucide-react";
 import Link from "next/link";
 
 import { StatusBadge } from "@/components/admin/status-badge";
 import { inputClass } from "@/components/leads/field";
 import { buttonVariants } from "@/components/ui/button";
-import { LEAD_STATUSES, PAGE_SIZE, listLeads } from "@/lib/admin/leads";
+import {
+  LEAD_STATUSES,
+  PAGE_SIZE,
+  PRIORITIES,
+  PRIORITY_LABEL,
+  STATUS_LABEL,
+  listLeads,
+} from "@/lib/admin/leads";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_LABEL: Record<string, string> = {
-  new: "Yeni",
-  read: "Okundu",
-  contacted: "İletişim kuruldu",
-  archived: "Arşiv",
-};
 
 const FIT_IDS = [
   "e-ticaret",
@@ -25,6 +25,16 @@ const FIT_IDS = [
   "operasyon",
   "emin-degilim",
 ];
+
+const SORTS: { id: string; label: string }[] = [
+  { id: "newest", label: "En yeni" },
+  { id: "waiting", label: "En uzun bekleyen" },
+  { id: "followup", label: "Hatırlatma tarihi" },
+  { id: "oldest", label: "En eski" },
+];
+
+const day = (d: Date | null) =>
+  d ? d.toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit" }) : "—";
 
 /**
  * Filters live in the query string (a GET form) rather than in component state:
@@ -47,7 +57,10 @@ export default async function AdminLeadsPage({
     status: one("status"),
     language: one("language"),
     fit: one("fit"),
+    priority: one("priority"),
+    followUp: one("followUp"),
     q: one("q"),
+    sort: one("sort"),
     page: Number(one("page") ?? 1) || 1,
   };
 
@@ -74,20 +87,32 @@ export default async function AdminLeadsPage({
     return s ? `/admin/leads?${s}` : "/admin/leads";
   };
 
+  const now = new Date();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h1 className="text-xl font-semibold tracking-tight">Talepler</h1>
-        <p className="font-mono text-xs text-muted-foreground">
-          {total} kayıt
-          {pages > 1 && ` · sayfa ${page}/${pages}`}
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="font-mono text-xs text-muted-foreground">
+            {total} kayıt
+            {pages > 1 && ` · sayfa ${page}/${pages}`}
+          </p>
+          {/* Insurance. Your leads should never be trapped behind a psql prompt. */}
+          <a
+            href="/admin/leads.csv"
+            className={cn(buttonVariants({ variant: "outline" }), "h-9 px-3 text-xs")}
+          >
+            <Download className="size-3.5" />
+            CSV
+          </a>
+        </div>
       </div>
 
       {/* GET form: the URL is the state. */}
       <form
         method="get"
-        className="grid gap-3 rounded-xl border border-border bg-card/60 p-4 sm:grid-cols-2 lg:grid-cols-5"
+        className="grid gap-3 rounded-xl border border-border bg-card/60 p-4 sm:grid-cols-2 lg:grid-cols-6"
       >
         <div className="lg:col-span-2">
           <label htmlFor="q" className="sr-only">
@@ -112,9 +137,49 @@ export default async function AdminLeadsPage({
           className={inputClass}
         >
           <option value="">Tüm durumlar</option>
+          <option value="open">Açık (kapanmamış)</option>
           {LEAD_STATUSES.map((s) => (
             <option key={s} value={s}>
               {STATUS_LABEL[s]}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="followUp"
+          defaultValue={filters.followUp ?? ""}
+          aria-label="Hatırlatma"
+          className={inputClass}
+        >
+          <option value="">Hatırlatma: hepsi</option>
+          <option value="due">Bugün / gecikmiş</option>
+          <option value="overdue">Yalnızca gecikmiş</option>
+          <option value="none">Hatırlatması yok</option>
+        </select>
+
+        <select
+          name="priority"
+          defaultValue={filters.priority ?? ""}
+          aria-label="Öncelik"
+          className={inputClass}
+        >
+          <option value="">Tüm öncelikler</option>
+          {PRIORITIES.map((p) => (
+            <option key={p} value={p}>
+              {PRIORITY_LABEL[p]}
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="sort"
+          defaultValue={filters.sort ?? "newest"}
+          aria-label="Sıralama"
+          className={inputClass}
+        >
+          {SORTS.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.label}
             </option>
           ))}
         </select>
@@ -146,10 +211,7 @@ export default async function AdminLeadsPage({
           </select>
           <button
             type="submit"
-            className={cn(
-              buttonVariants({ variant: "cta" }),
-              "h-11 shrink-0 px-4",
-            )}
+            className={cn(buttonVariants({ variant: "cta" }), "h-11 shrink-0 px-4")}
           >
             Filtrele
           </button>
@@ -163,54 +225,86 @@ export default async function AdminLeadsPage({
       ) : (
         <div className="overflow-hidden rounded-xl border border-border">
           <ul>
-            {leads.map((lead) => (
-              <li
-                key={lead.id}
-                className="border-b border-border/60 last:border-0"
-              >
-                <Link
-                  href={`/admin/leads/${lead.id}`}
-                  className="group flex flex-col gap-3 bg-card px-5 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+            {leads.map((lead) => {
+              const overdue =
+                lead.follow_up_at &&
+                lead.follow_up_at < now &&
+                !["won", "lost", "archived"].includes(lead.status);
+              return (
+                <li
+                  key={lead.id}
+                  className="border-b border-border/60 last:border-0"
                 >
-                  <span className="flex min-w-0 items-start gap-3">
-                    <StatusBadge status={lead.status} />
-                    <span className="min-w-0">
-                      <span className="flex flex-wrap items-baseline gap-x-2">
-                        <span className="text-sm font-medium">{lead.name}</span>
-                        <span className="font-mono text-xs text-muted-foreground">
-                          {lead.email ?? lead.phone ?? "—"}
+                  <Link
+                    href={`/admin/leads/${lead.id}`}
+                    className={cn(
+                      "group flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between",
+                      overdue ? "bg-accent/5" : "bg-card",
+                    )}
+                  >
+                    <span className="flex min-w-0 items-start gap-3">
+                      <StatusBadge status={lead.status} />
+                      <span className="min-w-0">
+                        <span className="flex flex-wrap items-baseline gap-x-2">
+                          <span className="text-sm font-medium">{lead.name}</span>
+                          <span className="font-mono text-xs text-muted-foreground">
+                            {lead.email ?? lead.phone ?? "—"}
+                          </span>
+                          {lead.priority === "high" && (
+                            <span className="rounded border border-border px-1 font-mono text-[10px] text-muted-foreground">
+                              {PRIORITY_LABEL.high}
+                            </span>
+                          )}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                          {lead.message.split("\n").find((l) => l.trim()) ?? ""}
+                        </span>
+                        {/* Mobile carries the dates inline — a table at 390px is
+                            a table nobody reads. */}
+                        <span className="mt-1 flex flex-wrap items-center gap-x-3 font-mono text-[11px] text-muted-foreground/70 sm:hidden">
+                          {lead.selected_fit_id && <span>{lead.selected_fit_id}</span>}
+                          <span>{day(lead.created_at)}</span>
+                          {lead.follow_up_at && (
+                            <span className={cn(overdue && "text-accent")}>
+                              ⏰ {day(lead.follow_up_at)}
+                            </span>
+                          )}
                         </span>
                       </span>
-                      <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-                        {lead.message.split("\n").find((l) => l.trim()) ?? ""}
-                      </span>
                     </span>
-                  </span>
 
-                  <span className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-muted-foreground">
-                    {lead.selected_fit_id && (
-                      <span className="rounded border border-border px-1.5 py-0.5">
-                        {lead.selected_fit_id}
+                    <span className="hidden shrink-0 flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-muted-foreground sm:flex">
+                      {lead.follow_up_at && (
+                        <span
+                          className={cn(
+                            "flex items-center gap-1",
+                            overdue && "text-accent",
+                          )}
+                          title="Hatırlatma"
+                        >
+                          <CalendarClock className="size-3.5" />
+                          {day(lead.follow_up_at)}
+                        </span>
+                      )}
+                      {lead.selected_fit_id && (
+                        <span className="rounded border border-border px-1.5 py-0.5">
+                          {lead.selected_fit_id}
+                        </span>
+                      )}
+                      <span className="uppercase">{lead.language}</span>
+                      <span
+                        className="hidden lg:inline"
+                        title="Son iletişim"
+                      >
+                        {day(lead.last_contacted_at)}
                       </span>
-                    )}
-                    <span className="uppercase">{lead.language}</span>
-                    <span className="hidden sm:inline">
-                      {lead.source_path ?? "—"}
+                      <span>{day(lead.created_at)}</span>
+                      <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
                     </span>
-                    <span>
-                      {lead.created_at.toLocaleString("tr-TR", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                    <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
-                  </span>
-                </Link>
-              </li>
-            ))}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -230,8 +324,7 @@ export default async function AdminLeadsPage({
             <span />
           )}
           <p className="font-mono text-xs text-muted-foreground">
-            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} /{" "}
-            {total}
+            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} / {total}
           </p>
           {page < pages ? (
             <Link
