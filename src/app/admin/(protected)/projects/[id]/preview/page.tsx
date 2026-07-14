@@ -2,13 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { CaseStudyHero } from "@/components/projects/case-study-hero";
-import {
-  DossierConstraints,
-  DossierModules,
-} from "@/components/projects/system-dossier";
-import { CapabilityMatrix } from "@/components/projects/system-map";
-import { FlowPanel } from "@/components/shared/flow-panel";
+import { ProjectCaseStudy } from "@/components/projects/case-study";
 import { getAdminProject, STATUS_LABEL } from "@/lib/projects-cms/admin";
 import { toProject, type Locale } from "@/lib/projects-cms";
 
@@ -115,62 +109,17 @@ export default async function ProjectPreviewPage({
         </p>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-background">
-          {(() => {
-            const preview = toProject(project, translation);
-            return (
-              <>
-                <CaseStudyHero project={preview} locale={locale} />
-
-                <div className="space-y-10 px-5 py-10 sm:px-8">
-                  <DossierConstraints project={preview} locale={locale} />
-
-                  {preview.flow && preview.flow.length > 0 && (
-                    <FlowPanel
-                      label={locale === "en" ? "System flow" : "Sistem akışı"}
-                      nodes={preview.flow}
-                    />
-                  )}
-
-                  {preview.built.length > 0 && (
-                    <section>
-                      <h2 className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-                        {locale === "en" ? "What was built" : "Neler kuruldu"}
-                      </h2>
-                      <ul className="mt-3 space-y-1.5">
-                        {preview.built.map((item) => (
-                          <li
-                            key={item}
-                            className="flex gap-2.5 text-sm text-foreground/90"
-                          >
-                            <span
-                              aria-hidden
-                              className="mt-2 size-1.5 shrink-0 rounded-full bg-accent/70"
-                            />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  )}
-
-                  <DossierModules project={preview} />
-
-                  <CapabilityMatrix slug={preview.slug} locale={locale} />
-
-                  {preview.statusNote && (
-                    <section>
-                      <h2 className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
-                        {locale === "en" ? "Current status" : "Güncel durum"}
-                      </h2>
-                      <p className="mt-2 text-sm leading-relaxed text-foreground/85">
-                        {preview.statusNote}
-                      </p>
-                    </section>
-                  )}
-                </div>
-              </>
-            );
-          })()}
+          {/* 38D: the ACTUAL public case study, with draft data. Before this,
+              preview hand-composed a similar-looking page, which meant it could
+              drift from the real one — and a preview that lies is worse than no
+              preview, because the owner trusts it. */}
+          <ProjectCaseStudy
+            project={{
+              ...toProject(project, translation),
+              ...(project.fit_id ? { fitId: project.fit_id } : {}),
+            }}
+            locale={locale}
+          />
         </div>
       )}
     </div>
