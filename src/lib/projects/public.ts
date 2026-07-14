@@ -299,3 +299,21 @@ export async function resolveProjectRedirect(
   // from a visitor.
   return target && target !== oldSlug ? target : null;
 }
+
+/**
+ * Just enough for a proof chip and the hero status card: slug, name, label.
+ *
+ * This is what crosses into the browser via the client-side project index, and
+ * it is small on purpose — the index rides in the RSC payload of every page. See
+ * src/components/projects/project-index.tsx.
+ */
+export async function getPublishedProjectSummaries(
+  locale: Locale,
+): Promise<{ slug: string; name: string; statusLabel: string }[]> {
+  const projects = await getPublishedProjects(locale);
+  return projects.map(({ slug, name, statusLabel }) => ({
+    slug,
+    name,
+    statusLabel,
+  }));
+}

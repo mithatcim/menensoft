@@ -7,7 +7,7 @@ import { Header } from "@/components/layout/header";
 import { AmbientBackground } from "@/components/shared/ambient-background";
 import { JsonLd } from "@/components/shared/json-ld";
 import { ProjectIndexProvider } from "@/components/projects/project-index";
-import { getPublishedProjects } from "@/lib/projects/public";
+import { getPublishedProjectSummaries } from "@/lib/projects/public";
 import { Analytics } from "@/components/analytics/analytics";
 import { LanguageHint } from "@/components/shared/language-hint";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
@@ -70,7 +70,7 @@ export default async function EnRootLayout({
   // Fetched once per render and handed to client components through context.
   // They need to look projects up by slug for proof chips and cannot query the
   // database themselves — and must not.
-  const projects = await getPublishedProjects("en");
+  const projects = await getPublishedProjectSummaries("en");
 
   return (
     <html
