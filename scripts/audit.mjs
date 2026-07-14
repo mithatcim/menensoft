@@ -27,9 +27,67 @@
 
 const BASE = (process.env.BASE || "http://localhost:3000").replace(/\/+$/, "");
 
-const EXPECTED_CANONICAL_COUNT = 60; // 30 Türkçe + 30 İngilizce (/en)
-// 33F: 58 -> 60. Gizlilik sayfaları (/gizlilik, /en/privacy) eklendi.
-// Bu bilinçli ve onaylı bir artış; drift değil.
+/**
+ * Statik rotalar (typed içerik): 13 static + 6 sektör + 6 sistem = 25 → 50 URL.
+ * PROJE rotaları 38C'den beri VERİTABANINDAN gelir, dosyadan değil.
+ */
+const STATIC_CANONICAL_COUNT = 50;
+
+/** 38C öncesi sabit: 50 + 5 proje × 2 dil = 60. Artık türetiliyor. */
+const FALLBACK_CANONICAL_COUNT = 60;
+
+/**
+ * Beklenen sitemap sayısı artık YAYINDAKİ proje sayısından türetilir.
+ *
+ * Sabit 60 iyi bir kilitti ama 38C onu bir yalana çevirdi: sahibi panelden bir
+ * proje yayınlarsa sitemap 62 olur ve denetim, doğru bir siteyi "bozuk" diye
+ * raporlar — bir süre sonra da kimse ona bakmaz. Bir yandan da proje rotaları
+ * SESSİZCE düşerse (boş envanter) bunu yakalamak tam olarak bu denetimin işidir.
+ *
+ * Bu yüzden sayı DB'den türetilir, ve DB yoksa eski sabite düşülür — ama
+ * SITE_ENV=production'da DB'siz denetim bir hatadır, tahmin değil.
+ */
+async function expectedCanonicalCount() {
+  const url = process.env.DATABASE_URL;
+  const production = Boolean(process.env.VERCEL) || process.env.SITE_ENV === "production";
+
+  if (!url) {
+    if (production) {
+      fail(
+        "DATABASE_URL yok: üretim modunda proje envanteri doğrulanamaz. " +
+          "Sitemap'in proje rotalarını sessizce kaybetmediğini kanıtlayamayız.",
+      );
+      return FALLBACK_CANONICAL_COUNT;
+    }
+    console.log(
+      `  not: DATABASE_URL yok — proje sayısı doğrulanmadı, ${FALLBACK_CANONICAL_COUNT} varsayıldı`,
+    );
+    return FALLBACK_CANONICAL_COUNT;
+  }
+
+  const { default: pg } = await import("pg");
+  const pool = new pg.Pool({
+    connectionString: url,
+    ssl: /localhost|127.0.0.1/.test(url) ? false : { rejectUnauthorized: true },
+  });
+
+  try {
+    const { rows } = await pool.query(
+      "select count(*)::int as n from projects where status = 'published'",
+    );
+    const published = rows[0].n;
+
+    if (published === 0) {
+      fail(
+        "veritabanında YAYINDA HİÇ PROJE YOK — /projeler boş, sitemap 10 URL eksik olur",
+      );
+    }
+    console.log(`  yayındaki proje: ${published} (sitemap'e ${published * 2} URL)`);
+    return STATIC_CANONICAL_COUNT + published * 2;
+  } finally {
+    await pool.end();
+  }
+}
 
 /** FAQPage şemasının izinli olduğu sayfalar (görünür SSS içeren). */
 const FAQ_ROUTES = ["/sss", "/en/faq"];
@@ -94,9 +152,17 @@ async function main() {
     (m) => new URL(m[1]).pathname,
   );
 
-  if (paths.length !== EXPECTED_CANONICAL_COUNT)
+  const expected = await expectedCanonicalCount();
+  if (paths.length !== expected)
+    fail(`sitemap ${paths.length} URL içeriyor, beklenen ${expected}`);
+
+  // Taslak/arşiv bir proje rotası sitemap'e ASLA giremez.
+  const projectPaths = paths.filter((p) =>
+    /^\/(projeler|en\/projects)\//.test(p),
+  );
+  if (projectPaths.length !== expected - STATIC_CANONICAL_COUNT)
     fail(
-      `sitemap ${paths.length} URL içeriyor, beklenen ${EXPECTED_CANONICAL_COUNT}`,
+      `sitemap'te ${projectPaths.length} proje rotası var, beklenen ${expected - STATIC_CANONICAL_COUNT}`,
     );
   const dupes = paths.filter((p, i) => paths.indexOf(p) !== i);
   if (dupes.length) fail(`sitemap mükerrer: ${dupes.join(", ")}`);

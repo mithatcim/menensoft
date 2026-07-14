@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "audit:site": "node scripts/audit.mjs",
+    "audit:site": "node --env-file-if-exists=.env.local scripts/audit.mjs",
     "audit:browser": "node scripts/audit-browser.mjs",
     "cms:seed": "node --env-file=.env.local --import ./scripts/ts-alias-hook.mjs scripts/seed-projects-cms.mjs",
     "cms:verify": "node --env-file=.env.local --import ./scripts/ts-alias-hook.mjs scripts/verify-projects-cms.mjs"

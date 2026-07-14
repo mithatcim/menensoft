@@ -47,19 +47,38 @@ function resolvePlaywright() {
   process.exit(1);
 }
 
+/**
+ * Find whatever Chromium Playwright has cached — do NOT pin a build number.
+ *
+ * This used to hardcode `chromium-1217`. Playwright rolled its cache to 1228 and
+ * the browser audit stopped running: not with a wrong answer, but with no answer,
+ * which is the failure mode that gets shrugged off. The audit that guards 60
+ * routes across 5 viewports must not be one Playwright release away from being
+ * quietly skipped.
+ */
 function resolveChrome() {
-  const candidates = [
-    process.env.CHROME_PATH,
+  if (process.env.CHROME_PATH && fs.existsSync(process.env.CHROME_PATH)) {
+    return process.env.CHROME_PATH;
+  }
+
+  const cache =
     process.env.LOCALAPPDATA &&
-      path.join(
-        process.env.LOCALAPPDATA,
-        "ms-playwright",
-        "chromium-1217",
-        "chrome-win64",
-        "chrome.exe",
-      ),
-  ].filter(Boolean);
-  for (const c of candidates) if (fs.existsSync(c)) return c;
+    path.join(process.env.LOCALAPPDATA, "ms-playwright");
+
+  if (cache && fs.existsSync(cache)) {
+    const builds = fs
+      .readdirSync(cache)
+      .filter((d) => /^chromium-\d+$/.test(d))
+      // newest build wins
+      .sort((a, b) => Number(b.split("-")[1]) - Number(a.split("-")[1]));
+
+    for (const build of builds) {
+      for (const dir of ["chrome-win64", "chrome-win"]) {
+        const exe = path.join(cache, build, dir, "chrome.exe");
+        if (fs.existsSync(exe)) return exe;
+      }
+    }
+  }
   console.error("Chromium bulunamadı. CHROME_PATH ayarlayın.");
   process.exit(1);
 }

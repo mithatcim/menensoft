@@ -144,10 +144,10 @@ export function isPublicDeployment(): boolean {
   return Boolean(process.env.VERCEL) || process.env.SITE_ENV === "production";
 }
 
-class EmptyProjectInventoryError extends Error {
+class ProjectInventoryError extends Error {
   constructor(reason: string) {
     super(
-      `Project inventory is empty (${reason}).\n\n` +
+      `Project inventory unusable (${reason}).\n\n` +
         `Since Phase 38C the public project pages read PostgreSQL, so a build in ` +
         `this state would publish an EMPTY /projeler, drop the sitemap from 60 ` +
         `URLs to 50, and break every hreflang pair for projects — quietly, with a ` +
@@ -160,17 +160,24 @@ class EmptyProjectInventoryError extends Error {
         `If you are intentionally building with no projects, you do not have a ` +
         `site to build.`,
     );
-    this.name = "EmptyProjectInventoryError";
+    this.name = "ProjectInventoryError";
   }
 }
 
 /**
  * Every published project for a locale, in running order.
  *
- * THROWS when the inventory comes back empty on a public deployment. That is the
- * whole point: an empty projects page is worse than a failed build, because a
- * failed build is loud and an empty page is not. Locally (no VERCEL, no
- * SITE_ENV) it returns [] so a fresh clone with no database can still run.
+ * THROWS when the inventory is unusable on a public deployment. That is the whole
+ * point: an empty projects page is worse than a failed build, because a failed
+ * build is loud and an empty page is not. With no DATABASE_URL at all and no
+ * production signal, it returns [] so a fresh clone still runs.
+ *
+ * A CONFIGURED-BUT-UNREACHABLE database throws EVERYWHERE, including locally.
+ * Setting DATABASE_URL is a statement that there is a database; if that turns out
+ * to be false, silently rendering a site with no projects is the one outcome
+ * nobody wants. This was found the hard way, when Docker stopped mid-phase and
+ * the build died with a raw ECONNREFUSED AggregateError that said nothing about
+ * projects at all.
  */
 export const getPublishedProjects = cache(async function getPublishedProjects(
   locale: Locale,
@@ -178,17 +185,25 @@ export const getPublishedProjects = cache(async function getPublishedProjects(
   const pool = getPool();
 
   if (!pool) {
-    if (isPublicDeployment()) throw new EmptyProjectInventoryError("no DATABASE_URL");
+    if (isPublicDeployment()) throw new ProjectInventoryError("no DATABASE_URL");
     return [];
   }
 
-  const { rows } = await pool.query<Row>(
-    `select ${COLUMNS} ${FROM} order by p.sort_order, p.slug`,
-    [locale],
-  );
+  let rows: Row[];
+  try {
+    ({ rows } = await pool.query<Row>(
+      `select ${COLUMNS} ${FROM} order by p.sort_order, p.slug`,
+      [locale],
+    ));
+  } catch (cause) {
+    const detail = cause instanceof Error ? cause.message : String(cause);
+    throw new ProjectInventoryError(
+      `DATABASE_URL is set but the database could not be read — ${detail}`,
+    );
+  }
 
   if (rows.length === 0 && isPublicDeployment()) {
-    throw new EmptyProjectInventoryError("zero published projects in the database");
+    throw new ProjectInventoryError("zero published projects in the database");
   }
 
   return rows.map(toPublicProject);
