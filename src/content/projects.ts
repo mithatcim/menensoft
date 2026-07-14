@@ -1,4 +1,20 @@
 /**
+ * ⚠️  SEED / ROLLBACK FIXTURE — NOT LIVE CONTENT.
+ *
+ * Since Phase 38C the public site reads project content from the PostgreSQL
+ * Project CMS. Nothing under src/app or src/components imports this file's data,
+ * and nothing should: editing it changes NOTHING a visitor sees.
+ *
+ * It survives for exactly three jobs:
+ *   1. `pnpm cms:seed`    — the source the database is seeded FROM
+ *   2. `pnpm cms:verify`  — the reference the database is proved AGAINST
+ *   3. rollback            — if the CMS ever has to be undone, this is the state
+ *                            to go back to
+ *
+ * To change what the site shows, use /admin/projects.
+ */
+
+/**
  * Proje içerikleri.
  *
  * Phase 9 (2026-07-10): site sahibinin talimatıyla Türkçeye çevrildi ve
@@ -10,11 +26,6 @@
 
 import type { Project } from "@/lib/projects/types";
 
-/**
- * Phase 38C: the SHAPE now lives in src/lib/projects/types.ts, because the
- * CONTENT now lives in PostgreSQL. This file is the rollback reference and the
- * seed source for `pnpm cms:seed` — the public site no longer reads it.
- */
 export type { Project, ProjectTier } from "@/lib/projects/types";
 export { projectImage } from "@/lib/projects/types";
 

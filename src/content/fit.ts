@@ -112,6 +112,14 @@ export const fitNeeds: { id: string; label: string }[] = [
 ];
 
 /** Proje sayfalarından sihirbaza önseçim köprüsü (?tur=...). */
+/**
+ * SEED FIXTURE ONLY (Phase 38D). The live project → system mapping is the
+ * `fit_id` COLUMN on each project row; the public components read that and
+ * nothing else. This map exists so `pnpm cms:seed` knows what to put in that
+ * column for the original five, and so `pnpm cms:verify` can prove it landed.
+ *
+ * Adding a project here changes nothing. Set its system type in /admin/projects.
+ */
 export const projectToFitType: Record<string, string> = {
   "ecommerce-cms": "e-ticaret",
   "restaurant-qr-system": "operasyon",
