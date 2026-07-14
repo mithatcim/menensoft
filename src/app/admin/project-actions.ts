@@ -22,9 +22,9 @@ import { parseProjectForm, publishBlockers } from "@/lib/projects-cms/validate";
  * an action id can call it without ever loading a page. The layout protects what
  * you can SEE; only this protects what you can DO.
  *
- * Nothing here revalidates a PUBLIC path, and that is deliberate: no public page
- * reads this data yet. Wiring revalidatePath("/projeler") now would be a lie
- * that looks like diligence.
+ * Since Phase 38C these actions DO revalidate public paths — the public site now
+ * reads these rows, so an edit that is not revalidated is an edit nobody will
+ * ever see.
  */
 
 async function requireAdmin(): Promise<void> {
@@ -44,6 +44,34 @@ function refreshAdmin(id?: string) {
   if (id) {
     revalidatePath(`/admin/projects/${id}`);
     revalidatePath(`/admin/projects/${id}/preview`);
+  }
+}
+
+/**
+ * Phase 38C: the public site reads these rows now, so an edit that is not
+ * revalidated is an edit the owner made and nobody will ever see.
+ *
+ * Every page that renders project data is refreshed, not just the project's own:
+ * the homepage carries featured projects, /cozumler and /en/solutions carry proof
+ * chips, the hub and sector/system pages carry related-project rows, and the
+ * sitemap carries the route itself. Under-revalidating here produces the worst
+ * possible bug — a site that is *partly* updated, where the owner sees the new
+ * name on one page and the old one on another and has no idea which is real.
+ *
+ * The layouts fetch the project index too, so revalidating a layout path covers
+ * every page beneath it.
+ */
+function refreshPublic(slugs: string[]) {
+  // The two root layouts feed the client-side project index (proof chips).
+  revalidatePath("/", "layout");
+  revalidatePath("/en", "layout");
+
+  // Sitemap + robots are their own routes.
+  revalidatePath("/sitemap.xml");
+
+  for (const slug of slugs.filter(Boolean)) {
+    revalidatePath(`/projeler/${slug}`);
+    revalidatePath(`/en/projects/${slug}`);
   }
 }
 
@@ -73,6 +101,7 @@ export async function createProjectAction(
   }
 
   refreshAdmin(id);
+  refreshPublic([input.slug]);
   redirect(`/admin/projects/${id}?created=1`);
 }
 
@@ -103,6 +132,10 @@ export async function saveProjectAction(
       return { message: "Durum değiştirilemedi." };
     }
     refreshAdmin(id);
+    // Archiving must take the project OFF the public site and out of the
+    // sitemap immediately — that is the whole meaning of the button.
+    const archived = await getAdminProject(id);
+    refreshPublic(archived ? [archived.project.slug] : []);
     return {
       message:
         intent === "archive"
@@ -122,6 +155,11 @@ export async function saveProjectAction(
     };
   }
 
+  // Captured BEFORE the update: if the slug moved, the OLD route is the one
+  // holding a stale page, and it is the one nobody would think to refresh.
+  const before = await getAdminProject(id);
+  const previousSlug = before?.project.slug;
+
   try {
     await updateProject(id, input);
   } catch (err) {
@@ -139,6 +177,7 @@ export async function saveProjectAction(
     const blockers = publishBlockers(input);
     if (blockers.length > 0) {
       refreshAdmin(id);
+      refreshPublic([input.slug, previousSlug ?? ""]);
       return {
         blockers,
         message:
@@ -153,14 +192,15 @@ export async function saveProjectAction(
       return { message: "Kaydedildi ama yayınlanamadı." };
     }
     refreshAdmin(id);
+    refreshPublic([input.slug, previousSlug ?? ""]);
     return {
-      message:
-        "Yayınlandı. (Herkese açık sayfalar 38C'ye kadar hâlâ typed dosyaları okuyor.)",
+      message: "Yayınlandı. Herkese açık sayfalar ve sitemap güncellendi.",
       savedAt: Date.now(),
     };
   }
 
   refreshAdmin(id);
+  refreshPublic([input.slug, previousSlug ?? ""]);
   return { message: "Kaydedildi.", savedAt: Date.now() };
 }
 
@@ -177,4 +217,5 @@ export async function quickStatusAction(form: FormData): Promise<void> {
 
   await setProjectStatus(id, next);
   refreshAdmin(id);
+  refreshPublic([existing.project.slug]);
 }
