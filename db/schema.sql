@@ -346,6 +346,156 @@ create index if not exists vs_visitor_key_idx on visitor_sessions (visitor_key, 
 --   delete from visitor_sessions  where last_seen_at < now() - interval '12 months';
 -- (leads bir iş kaydıdır; o silinmez.)
 
+-- ===========================================================================
+-- PROJE CMS (Phase 38A)
+-- ===========================================================================
+--
+-- Bu tablolar HAZIRLIKTIR. Herkese açık proje sayfaları 38A boyunca hâlâ
+-- src/content/projects.ts ve src/content/en/projects.ts dosyalarını okur.
+-- Veritabanına geçiş 38C'de yapılacak. Tabloların şimdi var olması, içeriğin
+-- yayına çıkmadan önce doğrulanabilmesi içindir.
+--
+-- Model: kimlik/yönlendirme/yayın durumu `projects` içinde (indekslenebilir,
+-- kısıtlanabilir); çevrilen metin `project_translations` içinde. Sıralı listeler
+-- (built/flow/constraints/modules) JSONB'dir: bunlar bağımsız kimliği olmayan
+-- sıralı dizilerdir, ayrı tabloya normalize etmek yalnızca join ve yönetim
+-- arayüzü karmaşıklığı üretirdi.
+
+create table if not exists projects (
+  id             uuid primary key default gen_random_uuid(),
+  slug           text not null unique,
+  status         text not null default 'draft',
+  tier           text not null,
+  featured       boolean not null default false,
+  sort_order     integer not null default 0,
+  -- fit.ts'teki projectToFitType haritasının yerini alır: eşleme veriye taşınır.
+  fit_id         text,
+  -- stack iki dilde birebir aynı ("Next.js", "TypeScript") — çeviri değil.
+  stack          jsonb not null default '[]'::jsonb,
+  year           text,
+  live_url       text,
+  repo_url       text,
+  image          text,
+  image_alt      text,
+  internal_notes text,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now(),
+  published_at   timestamptz,
+  archived_at    timestamptz,
+
+  -- Slug bir ROTA'dır. Serbest metin olarak bırakılırsa yol geçişi (../) ya da
+  -- rota enjeksiyonu için bir yüzey olur. Kısıt burada, veritabanında durur:
+  -- uygulama katmanı unutabilir, tablo unutmaz.
+  constraint projects_slug_safe check (slug ~ '^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$'),
+  constraint projects_status check (status in ('draft', 'published', 'archived')),
+  constraint projects_tier check (tier in ('delivered', 'internal')),
+  constraint projects_stack_is_array check (jsonb_typeof(stack) = 'array'),
+  constraint projects_url_shape check (
+    (live_url is null or live_url ~ '^https?://')
+    and (repo_url is null or repo_url ~ '^https?://')
+  )
+);
+
+create unique index if not exists projects_slug_idx on projects (slug);
+create index if not exists projects_status_order_idx on projects (status, sort_order);
+create index if not exists projects_featured_idx on projects (featured) where featured;
+create index if not exists projects_fit_idx on projects (fit_id) where fit_id is not null;
+
+create table if not exists project_translations (
+  id               uuid primary key default gen_random_uuid(),
+  project_id       uuid not null references projects(id) on delete cascade,
+  locale           text not null,
+  name             text not null,
+  one_liner        text not null,
+  problem          text not null,
+  status_label     text not null,
+  status_note      text,
+  similar_cta      text,
+  role             text,
+  dossier_summary  text,
+  -- SEO alanları BUGÜN yok: meta başlık name'den, açıklama one_liner'dan
+  -- türetiliyor. Null bırakılırsa davranış bugünküyle birebir aynı kalır;
+  -- dolu bırakılırsa override olur. Seed bunları bilerek boş bırakır.
+  meta_title       text,
+  meta_description text,
+  og_title         text,
+  og_description   text,
+  built            jsonb not null default '[]'::jsonb,
+  flow             jsonb not null default '[]'::jsonb,
+  -- `constraints` PostgreSQL'de fazlasıyla yüklü bir kelime; ayrıca ORM'siz
+  -- ham SQL'de okurken "hangi constraint?" diye durup düşündürür. _list soneki
+  -- bu duraksamayı ortadan kaldırır.
+  constraints_list jsonb not null default '[]'::jsonb,
+  modules          jsonb not null default '[]'::jsonb,
+  created_at       timestamptz not null default now(),
+  updated_at       timestamptz not null default now(),
+
+  constraint project_translations_locale check (locale in ('tr', 'en')),
+  constraint project_translations_unique unique (project_id, locale),
+  constraint project_translations_arrays check (
+    jsonb_typeof(built) = 'array'
+    and jsonb_typeof(flow) = 'array'
+    and jsonb_typeof(constraints_list) = 'array'
+    and jsonb_typeof(modules) = 'array'
+  ),
+  constraint project_translations_lengths check (
+    length(name) between 1 and 120
+    and length(one_liner) between 1 and 300
+    and length(problem) between 1 and 2000
+    and length(status_label) between 1 and 80
+    and (meta_title is null or length(meta_title) <= 120)
+    and (meta_description is null or length(meta_description) <= 320)
+  )
+);
+
+create index if not exists project_translations_project_idx
+  on project_translations (project_id, locale);
+
+-- Slug değişirse eski bağlantı ölmemeli. Eski slug burada yaşar; [slug] sayfası
+-- 38C'de bir ıskalamada buraya bakıp 308 verecek. next.config.ts'e yazmak yerine
+-- tabloda tutulur: yeni bir yönlendirme kod değişikliği ve yeniden derleme
+-- gerektirmemelidir.
+create table if not exists project_slug_redirects (
+  id         uuid primary key default gen_random_uuid(),
+  old_slug   text not null unique,
+  project_id uuid not null references projects(id) on delete cascade,
+  created_at timestamptz not null default now(),
+
+  constraint project_slug_redirects_safe check (
+    old_slug ~ '^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$'
+  )
+);
+
+create unique index if not exists project_slug_redirects_old_idx
+  on project_slug_redirects (old_slug);
+
+-- Bir slug hem canlı bir projeye hem de eski bir yönlendirmeye ait olamaz:
+-- olursa yönlendirme kendi hedefini gölgeler ve sayfa sonsuz döngüye girer.
+-- Bunu bir CHECK ile ifade etmek mümkün değil (tablolar arası), bu yüzden
+-- tetikleyici ile kapatılır.
+create or replace function project_slug_redirect_guard() returns trigger as $$
+begin
+  if exists (select 1 from projects where slug = new.old_slug) then
+    raise exception
+      'old_slug "%" is a live project slug; a redirect would shadow its own target',
+      new.old_slug;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists project_slug_redirects_guard on project_slug_redirects;
+create trigger project_slug_redirects_guard
+  before insert or update on project_slug_redirects
+  for each row execute function project_slug_redirect_guard();
+
+comment on table projects is
+  'Proje CMS kimlik/yönlendirme/yayın katmanı. 38A: yalnızca hazırlık — herkese açık sayfalar hâlâ typed dosyaları okur.';
+comment on table project_translations is
+  'Dile bağlı proje metni. Bugün EN ve TR aynı slug''ı paylaşır; çevrilmiş slug YOK.';
+comment on table project_slug_redirects is
+  'Slug değişince eski bağlantıyı yaşatır. 38C''de [slug] sayfası burada arayıp 308 verecek.';
+
 -- ---------------------------------------------------------------------------
 -- Doğrulama
 -- ---------------------------------------------------------------------------
@@ -353,3 +503,5 @@ create index if not exists vs_visitor_key_idx on visitor_sessions (visitor_key, 
 -- select count(*) from leads;
 -- select column_name from information_schema.columns
 --   where table_name = 'leads' and column_name in ('ip', 'ip_address');  -- 0 satır
+-- select slug, status, sort_order from projects order by sort_order;      -- 5 satır
+-- select locale, count(*) from project_translations group by locale;      -- tr 5, en 5
