@@ -162,7 +162,12 @@ function PreviewBody({ project, copy }: { project: PublicProject; copy: DeckCopy
         </div>
       </div>
 
-      <CapabilityMatrix slug={project.slug} quiet={quiet} className="mt-5" locale={copy.locale} />
+      <CapabilityMatrix
+        capabilities={project.capabilities}
+        quiet={quiet}
+        className="mt-5"
+        locale={copy.locale}
+      />
 
       <div className="mt-5 flex flex-wrap gap-2 border-t border-border/60 pt-4">
         {project.stack.map((tech) => (

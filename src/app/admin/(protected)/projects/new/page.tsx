@@ -32,6 +32,7 @@ const EMPTY: FormValues = {
   status: "draft",
   tier: "delivered",
   fit_id: "",
+  capabilities: [],
   featured: false,
   sort_order: 0,
   stack: "",

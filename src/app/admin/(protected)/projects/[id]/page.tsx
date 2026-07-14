@@ -71,6 +71,7 @@ export default async function EditProjectPage({
     status: project.status,
     tier: project.tier,
     fit_id: project.fit_id ?? "",
+    capabilities: project.capabilities ?? [],
     featured: project.featured,
     sort_order: project.sort_order,
     stack: (project.stack ?? []).join("\n"),

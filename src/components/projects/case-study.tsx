@@ -18,6 +18,7 @@ import {
 import { FlowPanel } from "@/components/shared/flow-panel";
 import { Reveal } from "@/components/shared/reveal";
 import { type Locale } from "@/lib/locale";
+import { hasCapabilities } from "@/lib/projects/capabilities";
 import { projectImage, type PublicProject } from "@/lib/projects/types";
 
 /**
@@ -215,13 +216,20 @@ export function ProjectCaseStudy({
                   >
                     <StageChip num="04" label={copy.scopeChip} />
                     <StageHeading>{copy.scopeHeading}</StageHeading>
-                    <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
-                      <CapabilityMatrix
-                        slug={project.slug}
-                        quiet={isCompactDossier(project)}
-                        locale={locale}
-                      />
-                    </div>
+                    {/* The wrapper is conditional too. 38D made the matrix return
+                        null for an unmapped project but left this bordered box
+                        around it — so a panel-created project rendered an empty
+                        framed rectangle. A box with nothing in it still says
+                        something. */}
+                    {hasCapabilities(project) && (
+                      <div className="mt-4 rounded-xl border border-border bg-background/40 p-4">
+                        <CapabilityMatrix
+                          capabilities={project.capabilities}
+                          quiet={isCompactDossier(project)}
+                          locale={locale}
+                        />
+                      </div>
+                    )}
                     <div className="mt-4 rounded-xl border border-border bg-card p-6">
                       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                         <span

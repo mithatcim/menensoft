@@ -117,6 +117,11 @@ export default async function ProjectPreviewPage({
             project={{
               ...toProject(project, translation),
               ...(project.fit_id ? { fitId: project.fit_id } : {}),
+              // 38E: the matrix is on the row, so the preview shows exactly what
+              // the owner just ticked — before it is published anywhere.
+              ...(project.capabilities?.length
+                ? { capabilities: project.capabilities }
+                : {}),
             }}
             locale={locale}
           />

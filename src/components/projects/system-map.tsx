@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
+import { capabilityLabels } from "@/lib/projects/capabilities";
+
 import { type Locale } from "@/lib/locale";
 import { EASE_OUT } from "@/lib/motion";
 
@@ -128,81 +130,31 @@ export function SystemMap({
 
 /* ---------------------------- capability matrix --------------------------- */
 
-const CATEGORIES_EN = [
-  { id: "interface", label: "Interface" },
-  { id: "admin", label: "Admin / dashboard" },
-  { id: "data", label: "Data model" },
-  { id: "automation", label: "Automation" },
-  { id: "operations", label: "Operations" },
-  { id: "security", label: "Security / logs" },
-  { id: "content", label: "Content management" },
-  { id: "ordering", label: "Orders / workflow" },
-  { id: "membership", label: "Membership / publishing" },
-] as const;
-
-const CATEGORIES = [
-  { id: "interface", label: "Arayüz" },
-  { id: "admin", label: "Yönetim / dashboard" },
-  { id: "data", label: "Veri modeli" },
-  { id: "automation", label: "Otomasyon" },
-  { id: "operations", label: "Operasyon" },
-  { id: "security", label: "Güvenlik / log" },
-  { id: "content", label: "İçerik yönetimi" },
-  { id: "ordering", label: "Sipariş / iş akışı" },
-  { id: "membership", label: "Üyelik / yayınlama" },
-] as const;
-
 /**
- * Lit categories per project, derived strictly from each published
- * built-list (see src/content/projects.ts):
- * - ecommerce-cms: storefront (interface), admin dashboard, product/category
- *   management (data), visual page-building (content).
- * - restaurant-qr-system: QR menu (interface + ordering), waiter/kitchen/
- *   cashier screens (admin + operations), order routing across roles
- *   (automation), full-stack (data).
- * - orva-psychology: public website (interface), admin panel (admin),
- *   content management (content), stored content (data).
- * - log-management-platform: log collection/storage (data + security),
- *   review interface (admin), review workflow (operations).
- * - cendovar: membership accounts (data + membership), publishing signal
- *   records to members (automation + membership).
+ * The capability matrix. Phase 38E: the lit set comes from the project row
+ * (`capabilities`), not from a static map keyed by slug — so a project created in
+ * the panel has a matrix, and the owner can change one without a deploy.
+ *
+ * No capabilities means NO MATRIX, not an empty one. Nine dimmed cells under a
+ * "0 / 9" heading is not a blank; it is a claim that the project demonstrates
+ * nothing. Callers must also drop any wrapper they put around it — see
+ * `hasCapabilities` in @/lib/projects/capabilities.
  */
-const LIT: Record<string, string[]> = {
-  "ecommerce-cms": ["interface", "admin", "data", "content"],
-  "restaurant-qr-system": [
-    "interface",
-    "admin",
-    "data",
-    "automation",
-    "operations",
-    "ordering",
-  ],
-  "orva-psychology": ["interface", "admin", "data", "content"],
-  "log-management-platform": ["data", "admin", "operations", "security"],
-  cendovar: ["data", "automation", "membership"],
-};
-
 export function CapabilityMatrix({
-  slug,
+  capabilities,
   quiet,
   className,
   locale = "tr",
 }: {
-  slug: string;
+  capabilities?: string[];
   quiet?: boolean;
   className?: string;
   locale?: Locale;
 }) {
-  const cats = locale === "en" ? CATEGORIES_EN : CATEGORIES;
+  const cats = capabilityLabels(locale);
   const reduceMotion = useReducedMotion();
-  const capabilities = LIT[slug];
 
-  // A project the panel created is not in this map — the mapping is editorial
-  // judgement about what each system demonstrates, and there is no column for
-  // it. Rendering anyway would print "0 / 9" over nine dimmed cells, telling a
-  // visitor the project demonstrates nothing. Showing no matrix is honest;
-  // showing an empty one is a claim.
-  if (!capabilities) return null;
+  if (!capabilities || capabilities.length === 0) return null;
 
   const lit = new Set(capabilities);
 

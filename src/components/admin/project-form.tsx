@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useState } from "react";
 
 import type { ProjectFormState } from "@/app/admin/project-actions";
+import { capabilityLabels } from "@/lib/projects/capabilities";
 import { cn } from "@/lib/utils";
 
 /**
@@ -25,6 +26,7 @@ export interface FormValues {
   status: string;
   tier: string;
   fit_id: string;
+  capabilities: string[];
   featured: boolean;
   sort_order: number;
   stack: string;
@@ -408,6 +410,42 @@ export function ProjectForm({
         <Field label="Stack" hint="Her satır bir teknoloji." error={errors.stack}>
           <Area name="stack" defaultValue={values.stack} rows={4} />
         </Field>
+
+        {/* Yetkinlik matrisi — proje detay sayfasındaki dokuz kutucuk. */}
+        <fieldset>
+          <legend className="text-sm font-medium text-foreground/90">
+            Yetkinlik matrisi
+          </legend>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+            Proje detay sayfasındaki dokuz kutucuğu kontrol eder: bu sistem neyi
+            gösteriyor? Hiçbiri seçilmezse <strong>bölüm hiç görünmez</strong> —
+            boş bir matris “0 / 9” yazardı, ki bu bir iddiadır.
+          </p>
+
+          <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+            {capabilityLabels("tr").map((cap) => (
+              <label
+                key={cap.id}
+                className="flex items-center gap-2.5 rounded-lg border border-border bg-background px-3 py-2 text-sm transition-colors hover:border-foreground/25"
+              >
+                <input
+                  type="checkbox"
+                  name="capabilities"
+                  value={cap.id}
+                  defaultChecked={values.capabilities.includes(cap.id)}
+                  className="size-4 rounded border-border bg-background"
+                />
+                <span className="min-w-0 truncate">{cap.label}</span>
+              </label>
+            ))}
+          </div>
+
+          {errors.capabilities && (
+            <span role="alert" className="mt-1 block text-xs text-red-400">
+              {errors.capabilities}
+            </span>
+          )}
+        </fieldset>
 
         <Field
           label="İç notlar"
