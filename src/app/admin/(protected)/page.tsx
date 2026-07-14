@@ -27,6 +27,13 @@ const FIT_LABELS: Record<string, string> = {
 const days = (d: Date) =>
   Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
 
+// "0 gündür bekliyor" is true and reads like a bug. A lead that landed this
+// morning is the one you most want to answer — say so in words a human uses.
+const waited = (d: Date) => {
+  const n = days(d);
+  return n === 0 ? "Bugün geldi" : `${n} gündür bekliyor`;
+};
+
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-xl border border-border bg-card/60 p-5">
@@ -190,7 +197,8 @@ export default async function AdminDashboard() {
           icon={Inbox}
           leads={s.needsReply}
           accent
-          meta={(l) => `${days(l.created_at)} gündür bekliyor · ${l.source_path ?? "—"}`}
+          // no source path -> no dangling "· —"
+          meta={(l) => [waited(l.created_at), l.source_path].filter(Boolean).join(" · ")}
         />
         <Queue
           title="Hatırlatma"
@@ -227,7 +235,10 @@ export default async function AdminDashboard() {
               href={`/admin/leads?status=${st}`}
               className="group rounded-xl border border-border bg-card/60 p-4 transition-colors hover:border-accent/40"
             >
-              <p className="truncate font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+              {/* No truncate: a stage the owner cannot read ("TEKLİF GÖNDERİ…")
+                  is a stage they stop trusting. Grid rows stretch, so letting
+                  the long labels wrap costs nothing but a second line. */}
+              <p className="font-mono text-[11px] leading-snug tracking-wider text-balance text-muted-foreground/70 uppercase">
                 {STATUS_LABEL[st]}
               </p>
               <p className="mt-1.5 text-2xl font-semibold tracking-tight tabular-nums">
@@ -273,7 +284,12 @@ export default async function AdminDashboard() {
 
       {/* ---- activity + breakdowns ----------------------------------------- */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card/60 p-5">
+        {/* min-w-0: a grid item defaults to min-width:auto, so it can never be
+            narrower than its content — and a note is arbitrary owner text with
+            `truncate` (white-space:nowrap) on it, which reports its FULL width as
+            min-content. Without this the longest note silently widens the mobile
+            track and the whole dashboard scrolls sideways. */}
+        <div className="min-w-0 rounded-xl border border-border bg-card/60 p-5">
           <h2 className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
             Son hareketler
           </h2>

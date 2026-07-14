@@ -83,6 +83,24 @@ export const privacyPage = {
     },
 
     {
+      title: "Form ile site oturumunun eşleştirilmesi",
+      body: [
+        "Bir form gönderdiğinizde, o gönderim aynı günkü anonim site oturumunuzla eşleştirilebilir. Yani yönetim paneli, formu göndermeden önce hangi sayfalara baktığınızı gönderdiğiniz mesajla birlikte görebilir.",
+        "Bu eşleştirme tamamen sunucuda yapılır. Tarayıcınıza hiçbir kimlik verilmez; tarayıcınız zaten bir kimlik taşımaz ve göndermek istese de gönderemez. Eşleştirme, yukarıda anlatılan aynı günlük özet (hash) yeniden hesaplanarak yapılır.",
+        "Açık olalım: bu, önceki durumdan bir adım ileridir. Daha önce 'bu iki kayıt hiçbir zaman birleştirilmez' diyorduk; artık birleştiriliyor. Bunu sonradan sessizce değiştirmek yerine burada yazıyoruz.",
+      ],
+      items: [
+        "Hâlâ ham IP adresi saklanmaz.",
+        "Hâlâ çerez kullanılmaz.",
+        "Hâlâ localStorage'a analitik kimliği yazılmaz.",
+        "Hâlâ günler arası takip yapılmaz — eşleşme yalnızca aynı gün içinde mümkündür, çünkü gizli değer her gün değişir.",
+        "Tarayıcınız hiçbir analitik kimliği almaz.",
+        "Eşleşme bulunamazsa (analitik kapalıysa, DNT/GPC kullanıyorsanız ya da oturum penceresi kapandıysa) lead yine kaydedilir; sadece oturum bağlantısı boş kalır.",
+      ],
+      note: "Neden yapıyoruz: hangi sayfaların gerçekten iş getirdiğini görebilmek için. Ziyaretçi sayısı değil, hangi içeriğin işe yaradığı önemli.",
+    },
+
+    {
       title: "Bu veriyi kim görüyor",
       body: [
         "Gönderdiğiniz mesajlar ve analitik özetleri yalnızca site sahibinin parola korumalı yönetim panelinde görünür. Panel arama motorlarına kapalıdır ve sitede hiçbir yerden bağlantı verilmez.",

@@ -70,6 +70,24 @@ export const privacyPageEn = {
     },
 
     {
+      title: "Connecting a form to a site session",
+      body: [
+        "When you submit a form, that submission may be matched to your anonymous site session from the same day. In other words, the admin panel can see which pages you looked at before you wrote in, alongside the message you sent.",
+        "The matching happens entirely on the server. Your browser is given no identifier; it does not carry one, and it could not send one even if it tried. The match is made by recomputing the same daily digest described above.",
+        "To be direct: this is a step further than before. We used to say these two records were never joined. Now they are. We would rather write that here than change it quietly later.",
+      ],
+      items: [
+        "Your raw IP address is still not stored.",
+        "There are still no cookies.",
+        "No analytics identifier is still written to localStorage.",
+        "There is still no cross-day tracking — a match is only possible within the same day, because the secret rotates daily.",
+        "Your browser still receives no analytics identifier of any kind.",
+        "If no match is found (analytics off, DNT/GPC enabled, or the session window closed), the message is still saved — the session link is simply left empty.",
+      ],
+      note: "Why we do it: to see which pages actually bring in work. Not how many visitors there are — which content is worth writing.",
+    },
+
+    {
       title: "Who can see this data",
       body: [
         "Submitted messages and analytics summaries are visible only in the owner's password-protected admin panel. The panel is closed to search engines and is not linked from anywhere on the site.",

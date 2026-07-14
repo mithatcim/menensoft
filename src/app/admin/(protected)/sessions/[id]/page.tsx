@@ -1,8 +1,8 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getSession } from "@/lib/admin/analytics";
+import { getSession, getSessionLeads } from "@/lib/admin/analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -64,6 +64,7 @@ export default async function SessionDetailPage({
   if (!data) notFound();
 
   const { session: s, events } = data;
+  const leads = await getSessionLeads(id);
 
   return (
     <div className="space-y-6">
@@ -119,18 +120,44 @@ export default async function SessionDetailPage({
         </dl>
       </section>
 
-      {/* No lead is linked here, and none is invented. Leads carry no session_id
-          yet — connecting them would need the session id on the client, which
-          would mean giving the browser an identifier, which is the one thing this
-          design refuses to do. Left honestly absent. */}
-      <section className="rounded-xl border border-dashed border-border bg-card/30 p-5">
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Bu oturuma bağlı bir talep gösterilmiyor: lead kayıtları oturum
-          kimliği taşımıyor. Bağlamak için tarayıcıya bir kimlik vermek
-          gerekirdi — bu tasarımın tam olarak reddettiği şey. Uydurulmuş bir
-          eşleşme göstermektense boş bırakıldı.
-        </p>
-      </section>
+      {/* Since Phase 36A a lead can be linked to its session — matched SERVER-side
+          from the same daily key, never from a browser identifier. If nothing
+          matched we say so; a fabricated match would be worse than none. */}
+      {leads.length > 0 ? (
+        <section className="rounded-xl border border-accent/30 bg-accent/5 p-5">
+          <h2 className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">
+            Bu oturumdan gelen talep
+          </h2>
+          <ul className="mt-3 space-y-1">
+            {leads.map((l) => (
+              <li key={l.id}>
+                <Link
+                  href={`/admin/leads/${l.id}`}
+                  className="group flex items-center justify-between gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-muted/40"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-medium">
+                      {l.name}
+                    </span>
+                    <span className="block truncate font-mono text-xs text-muted-foreground">
+                      {l.email ?? l.phone ?? "—"} · {l.source_path ?? "—"}
+                    </span>
+                  </span>
+                  <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <section className="rounded-xl border border-dashed border-border bg-card/30 p-5">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Bu oturumdan form gönderimi yok. (Ziyaretçi yalnızca gezinmiş, ya da
+            e-posta/WhatsApp ile yazmış olabilir — o kanallar oturumla
+            eşleştirilmez.)
+          </p>
+        </section>
+      )}
 
       <section className="rounded-xl border border-border bg-card/60 p-5">
         <h2 className="font-mono text-xs tracking-widest text-muted-foreground/70 uppercase">

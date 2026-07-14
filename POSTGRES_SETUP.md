@@ -241,6 +241,24 @@ Dil banner'ı **hiçbir yönlendirme yapmaz**: middleware yok, IP/ülke tespiti 
 Tek sinyal `navigator.languages`. Sebep: ABD IP'lerinden tarayan Googlebot
 "/" → "/en" yönlendirmesi görürse Türkçe ana sayfa Türkçe dizinden düşebilir.
 
+### Lead ↔ oturum eşleştirmesi (Phase 36A)
+
+Bir form gönderildiğinde sunucu, **aynı günlük visitor_key'i yeniden hesaplayarak**
+o ziyaretçinin canlı oturumunu bulur ve `leads.session_id` alanına yazar. Böylece
+"hangi sayfalar gerçekten iş getiriyor?" sorusu yanıtlanabilir.
+
+Tarayıcı bu işin hiçbir yerinde değildir ve olamaz: bir kimliği yoktur, hiç
+olmadı, istese de gönderemez. Çerez yok, localStorage yok, ham IP yok — adres
+yalnızca tek bir hash süresince bellektedir. Tuz her gün döndüğü için eşleşme
+**yalnızca aynı gün** mümkündür.
+
+Eşleşme bulunamazsa (analitik kapalı, DNT/GPC, oturum penceresi kapanmış) lead
+yine kaydedilir; `session_id` boş kalır. **Eşleştirme hatası asla bir lead'e mal
+olmaz.**
+
+Bu, gizlilik açısından bir adım ileridir ve /gizlilik + /en/privacy sayfaları bunu
+**açıkça** yazar. Sessizce yapılmadı.
+
 ### DNT / Sec-GPC
 
 `DNT: 1` ya da `Sec-GPC: 1` gönderen ziyaretçiler **kaydedilmez**. Botlar da

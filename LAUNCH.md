@@ -174,3 +174,17 @@ Ek elle kontroller:
 - Banner kapatma/seçim tercihi tarayıcıda tek bir işlevsel anahtarda tutulur
   (`menensoft_language_hint`). Kimlik değildir, sunucuya gönderilmez, analitikle
   ilgisi yoktur. Analitik hâlâ çerezsizdir; çerez onay penceresi gerekmez.
+
+## 10. Phase 36A — CRM ve lead/oturum eşleştirmesi
+
+- **Şema yayından ÖNCE uygulanmalıdır** (`db/schema.sql`). Yakalanmayan veri geri
+  getirilemez: bir lead geldiği anda damgalanmayan zaman bilgisi sonradan
+  uydurulamaz, ve tuz döndükten sonra oturum eşleşmesi bir daha kurulamaz.
+- Lead'ler artık aynı günkü anonim site oturumuyla **sunucu tarafında** eşleştirilir.
+  Tarayıcıya kimlik verilmez; çerez, localStorage, ham IP yok. Gizlilik sayfaları
+  bunu açıkça yazar.
+- Satış hattı 8 durumlu; aşamalar atlanabilir. Dönüşüm yalnızca Kazanıldı/Kaybedildi
+  üzerinden hesaplanır.
+- `/admin/leads.csv` yalnızca giriş yapmış sahibe açıktır.
+- Bildirim (e-posta/Telegram) **bu fazda yok** — bilinçli olarak ertelendi. Yayına
+  çıkıldığında bir form lead'i yalnızca panel açıldığında görülür.

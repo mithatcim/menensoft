@@ -207,3 +207,29 @@ export async function getSession(id: string): Promise<
     return undefined;
   }
 }
+
+/**
+ * Leads that came FROM this session (Phase 36A). Matched server-side at insert
+ * time from the same daily visitor key — never from a browser identifier.
+ */
+export async function getSessionLeads(sessionId: string) {
+  const pool = getPool();
+  if (!pool) return [];
+  if (!/^[0-9a-f-]{36}$/i.test(sessionId)) return [];
+  try {
+    const { rows } = await pool.query<{
+      id: string;
+      name: string;
+      email: string | null;
+      phone: string | null;
+      source_path: string | null;
+    }>(
+      `select id, name, email, phone, source_path from leads
+        where session_id = $1 order by created_at desc`,
+      [sessionId],
+    );
+    return rows;
+  } catch {
+    return [];
+  }
+}

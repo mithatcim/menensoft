@@ -115,7 +115,42 @@ Başarılı bir giriş sayacı sıfırlar; birkaç yanlış deneme sizi kilitlem
 - Tüm sorgular parametrelidir; filtre/arama kutusuna yazılan hiçbir şey SQL'e
   metin olarak girmez.
 
-## 9. Sonraki faz
+## 9. CRM akışı (Phase 36A)
+
+Panel bir gelen kutusu değil, çalışma aracıdır.
+
+**Satış hattı (8 durum):** Yeni → Okundu → İletişime geçildi → Nitelikli →
+Teklif gönderildi → Kazanıldı / Kaybedildi. Arşiv bir satış aşaması değil,
+depolamadır.
+
+> Aşamalar **atlanabilir**. Bir lead'i zorla "Nitelikli" ve "Teklif gönderildi"
+> aşamalarından geçirmek, tam olarak o aşamaların güncellenmeyi bırakmasına yol
+> açar — ve güncellenmeyen bir aşama boş değil, **YANLIŞ**tır. Üstüne kurulan her
+> dönüşüm sayısı da yanlış olur. Bu yüzden dönüşüm hesapları yalnızca
+> Kazanıldı/Kaybedildi üzerinden yapılır.
+
+**Otomatik olan her şey otomatiktir:**
+
+- Lead'i açmak onu okundu yapar (`read_at` damgalanır). Ayrı bir "okundu işaretle"
+  düğmesi, kimsenin basmadığı bir düğme olurdu — ve o zaman `read_at` yalan söylerdi.
+- Durum değişikliği ima ettiği tarihleri damgalar ve zaman çizelgesine kendini yazar.
+- "Telefon yapıldı" tek tıklamadır: tarihi damgalar, aşamayı ilerletir, kaydı düşer.
+- Kazanıldı/Kaybedildi/Arşiv hatırlatmayı **temizler** — kapanmış bir lead'de duran
+  hatırlatma gürültüdür, ve gürültü bir hatırlatma listesinin güvenilmez olma yoludur.
+
+**Bugün ne yapmalı (dashboard):** üç kuyruk — yanıt bekleyenler, hatırlatması
+bugün/gecikmiş olanlar, iletişim kurulup 5+ gündür sessiz kalanlar.
+
+**Zaman çizelgesi:** eklemeli. Not, telefon, WhatsApp, e-posta, durum değişimi,
+hatırlatma. Görüşmeden sonra buraya yazın; aklınızda tutmayın.
+
+**CSV dışa aktarma:** `/admin/leads` sağ üstteki CSV düğmesi. Yalnızca giriş
+yapmış sahibe açıktır (yetkisiz istek **404** alır, 401 değil — yabancı bir şey
+öğrenmez). Formül enjeksiyonuna karşı kaçışlanır (`=`, `+`, `-`, `@` ile başlayan
+bir isim Excel'de çalıştırılamaz) ve UTF-8 BOM taşır (yoksa Excel Türkçe
+karakterleri bozar). Oturum yolu ve user-agent **dışa aktarılmaz**.
+
+## 10. Sonraki faz
 
 33E ziyaretçi analitiğini (çerezsiz) ekleyecek. Panelde şu an **hiçbir trafik
 verisi yoktur** ve dashboard bunu açıkça söyler: tüm sayılar form
