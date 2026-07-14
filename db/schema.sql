@@ -438,18 +438,42 @@ create table if not exists project_translations (
     and jsonb_typeof(constraints_list) = 'array'
     and jsonb_typeof(modules) = 'array'
   ),
+  -- Ceilings only, no floors. 38A assumed every row was publishable; drafts are
+  -- not. A half-written English translation is a legitimate state — the owner
+  -- types a name, saves, and comes back tomorrow — and a NOT-EMPTY check here
+  -- would reject that save and throw the work away. Completeness is a PUBLISH
+  -- rule, enforced server-side in the publish action, not a storage rule.
   constraint project_translations_lengths check (
-    length(name) between 1 and 120
-    and length(one_liner) between 1 and 300
-    and length(problem) between 1 and 2000
-    and length(status_label) between 1 and 80
+    length(name) <= 120
+    and length(one_liner) <= 300
+    and length(problem) <= 2000
+    and length(status_label) <= 80
     and (meta_title is null or length(meta_title) <= 120)
     and (meta_description is null or length(meta_description) <= 320)
+    and (og_title is null or length(og_title) <= 120)
+    and (og_description is null or length(og_description) <= 320)
   )
 );
 
 create index if not exists project_translations_project_idx
   on project_translations (project_id, locale);
+
+-- 38B: a database seeded under 38A still carries the old floors (length >= 1),
+-- which would reject a legitimately incomplete draft. `create table if not
+-- exists` does not touch an existing table, so the constraint is re-stated here.
+alter table project_translations
+  drop constraint if exists project_translations_lengths;
+alter table project_translations
+  add  constraint project_translations_lengths check (
+    length(name) <= 120
+    and length(one_liner) <= 300
+    and length(problem) <= 2000
+    and length(status_label) <= 80
+    and (meta_title is null or length(meta_title) <= 120)
+    and (meta_description is null or length(meta_description) <= 320)
+    and (og_title is null or length(og_title) <= 120)
+    and (og_description is null or length(og_description) <= 320)
+  );
 
 -- Slug değişirse eski bağlantı ölmemeli. Eski slug burada yaşar; [slug] sayfası
 -- 38C'de bir ıskalamada buraya bakıp 308 verecek. next.config.ts'e yazmak yerine
