@@ -22,6 +22,7 @@ import pg from "pg";
 import { projects } from "../src/content/projects.ts";
 import { projectsEn } from "../src/content/en/projects.ts";
 import { projectToFitType } from "../src/content/fit.ts";
+import { projectCapabilities } from "../src/content/project-capabilities.ts";
 
 // Env comes from node --env-file=.env.local — no dotenv dependency, and no
 // variable expansion, which is what corrupted the admin hash once already.
@@ -91,8 +92,9 @@ const enBySlug = new Map(projectsEn.map((p) => [p.slug, p]));
       const { rows } = await client.query(
         `insert into projects
            (slug, status, tier, featured, sort_order, fit_id, stack, year,
-            live_url, repo_url, image, image_alt, published_at)
-         values ($1, 'published', $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, now())
+            live_url, repo_url, image, image_alt, capabilities, published_at)
+         values ($1, 'published', $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11,
+                 $12::jsonb, now())
          on conflict (slug) do update set
            status       = 'published',
            tier         = excluded.tier,
@@ -105,6 +107,7 @@ const enBySlug = new Map(projectsEn.map((p) => [p.slug, p]));
            repo_url     = excluded.repo_url,
            image        = excluded.image,
            image_alt    = excluded.image_alt,
+           capabilities = excluded.capabilities,
            updated_at   = now(),
            archived_at  = null,
            -- never re-stamp a publish date that already exists
@@ -122,6 +125,9 @@ const enBySlug = new Map(projectsEn.map((p) => [p.slug, p]));
           tr.repoUrl ?? null,
           tr.image ?? null,
           tr.imageAlt ?? null,
+          // Carried over VERBATIM. Re-scoring a project during a migration would
+          // be inventing editorial content nobody reviewed.
+          JSON.stringify(projectCapabilities[tr.slug] ?? []),
         ],
       );
 

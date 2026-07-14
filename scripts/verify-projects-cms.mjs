@@ -35,6 +35,7 @@ import {
 import { projects } from "../src/content/projects.ts";
 import { projectsEn } from "../src/content/en/projects.ts";
 import { projectToFitType } from "../src/content/fit.ts";
+import { projectCapabilities } from "../src/content/project-capabilities.ts";
 
 let failures = 0;
 
@@ -284,6 +285,28 @@ check(
   `all ${referencedSlugs.length} projectSlug references across the fit module resolve ` +
     `(${referencedSlugs.join(", ")})`,
   `fit content points at missing projects: ${orphanReferences.join(", ")}`,
+);
+
+/* ------------------------------------------------- capability matrix (38E) --- */
+
+// The matrix moved from a static map in a component into the capabilities column.
+// The five originals must land byte-for-byte: a migration that quietly re-scored
+// a project would be inventing editorial content.
+const capabilityMismatch = all.filter((entry) => {
+  const expected = projectCapabilities[entry.project.slug] ?? [];
+  const actual = entry.project.capabilities ?? [];
+  return !eq([...expected].sort(), [...actual].sort());
+});
+check(
+  capabilityMismatch.length === 0,
+  `all ${all.length} projects carry their capability matrix in the database ` +
+    `(${all.map((e) => `${e.project.slug}:${(e.project.capabilities ?? []).length}`).join(", ")})`,
+  `capability matrix drifted: ${capabilityMismatch
+    .map(
+      (e) =>
+        `${e.project.slug} db=[${(e.project.capabilities ?? []).join(",")}] fixture=[${(projectCapabilities[e.project.slug] ?? []).join(",")}]`,
+    )
+    .join(" | ")}`,
 );
 
 /* ------------------------------------------------------ ?proje= + sitemap --- */

@@ -51,6 +51,12 @@ const eslintConfig = defineConfig([
                 "Project content lives in the CMS database since 38C. Use @/lib/projects/public (server components) or the project index context (client components). @/content/en/projects is a seed/rollback fixture.",
             },
             {
+              name: "@/content/project-capabilities",
+              importNames: ["projectCapabilities"],
+              message:
+                "The capability matrix is the `capabilities` column on the project row since 38E — read project.capabilities. This map is a seed fixture for the original five and knows nothing about projects created in the panel.",
+            },
+            {
               name: "@/content/fit",
               importNames: ["projectToFitType"],
               message:
