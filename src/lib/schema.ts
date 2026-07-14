@@ -195,3 +195,97 @@ export function projectSchema(
 export function graph(...schemas: object[]) {
   return { "@context": "https://schema.org", "@graph": schemas.flat() };
 }
+
+/* --------------------------- Phase 40 — SEO/GEO --------------------------- */
+
+/**
+ * İletişim sayfası. ContactPoint gerçek kanallardan üretilir — uydurma telefon,
+ * uydurma adres, uydurma çalışma saati yok. Olmayan bir alanı doldurmak, arama
+ * motoruna yalan söylemektir ve düzeltmesi zordur.
+ */
+export function contactPageSchema({
+  name,
+  description,
+  path,
+  inLanguage = "tr",
+}: {
+  name: string;
+  description: string;
+  path: string;
+  inLanguage?: string;
+}) {
+  return {
+    "@type": "ContactPage",
+    name,
+    description,
+    url: `${siteUrl}${path}`,
+    inLanguage,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "Organization",
+      "@id": ORG_ID,
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: site.email,
+        availableLanguage: ["tr", "en"],
+        areaServed: "TR",
+      },
+    },
+  };
+}
+
+/**
+ * Süreç sayfası (/surec, /en/process). HowTo yalnızca sayfada GÖRÜNEN adımlardan
+ * üretilir — görünmeyen adımı iddia eden bir şema, zengin sonuçtan düşmenin en
+ * hızlı yoludur.
+ */
+export function howToSchema({
+  name,
+  description,
+  path,
+  steps,
+  inLanguage = "tr",
+}: {
+  name: string;
+  description: string;
+  path: string;
+  steps: { name: string; text: string }[];
+  inLanguage?: string;
+}) {
+  return {
+    "@type": "HowTo",
+    name,
+    description,
+    url: `${siteUrl}${path}`,
+    inLanguage,
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
+/** Genel sayfa şeması — kendi özel tipi olmayan içerik sayfaları için. */
+export function webPageSchema({
+  name,
+  description,
+  path,
+  inLanguage = "tr",
+}: {
+  name: string;
+  description: string;
+  path: string;
+  inLanguage?: string;
+}) {
+  return {
+    "@type": "WebPage",
+    name,
+    description,
+    url: `${siteUrl}${path}`,
+    inLanguage,
+    isPartOf: { "@id": WEBSITE_ID },
+  };
+}

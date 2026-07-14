@@ -19,6 +19,7 @@ import { graph, serviceSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
+import { landingPagesEn } from "@/content/en/landing";
 
 export const metadata = pageMeta({
   title: "Solutions",
@@ -256,6 +257,43 @@ export default async function EnSolutionsPage() {
               </div>
             </Reveal>
           </div>
+        </Container>
+      </section>
+
+      {/* Phase 40 — landing pages are linked from here. Adding seven more links
+          to the footer would be footer spam; this hub is already in the main nav
+          and the context is right. */}
+      <section className="pb-16 md:pb-24">
+        <Container>
+          <Reveal>
+            <h2 className="text-xl font-semibold tracking-tight">
+              What are you looking for?
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Commonly searched topics — each one links to a system that was
+              actually built.
+            </p>
+            <ul className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {landingPagesEn.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/en/${p.slug}`}
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card/60 px-4 py-3 transition-colors hover:border-accent/40"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium">
+                        {p.title}
+                      </span>
+                      <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                        {p.eyebrow}
+                      </span>
+                    </span>
+                    <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </Container>
       </section>
       <ContactCTA locale="en" />

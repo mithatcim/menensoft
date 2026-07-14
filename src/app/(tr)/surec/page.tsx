@@ -11,6 +11,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { workflow } from "@/content/services";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { JsonLd } from "@/components/shared/json-ld";
+import { graph, howToSchema } from "@/lib/schema";
 
 export const metadata = pageMeta({
   title: "Süreç",
@@ -37,6 +39,21 @@ const WE_DELIVER = [
 export default function ProcessPage() {
   return (
     <>
+      <JsonLd
+        data={graph(
+          howToSchema({
+            name: "Bir proje görüşmesi nasıl çalışan bir sisteme dönüşür",
+            description:
+              "Kapsamdan devire, altı aşamalı çalışma akışı. Kapsam yazılı olarak netleşmeden geliştirme başlamaz.",
+            path: "/surec",
+            // Yalnızca sayfada GÖRÜNEN adımlar.
+            steps: workflow.map((w) => ({
+              name: w.title,
+              text: w.description,
+            })),
+          }),
+        )}
+      />
       <section className="pt-16 pb-6 md:pt-24 md:pb-8">
         <Container>
           <Reveal>

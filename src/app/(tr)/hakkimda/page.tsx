@@ -10,6 +10,8 @@ import { TechTag } from "@/components/shared/tech-tag";
 import { workflow } from "@/content/services";
 import { about, site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
+import { JsonLd } from "@/components/shared/json-ld";
+import { graph, personSchema, webPageSchema } from "@/lib/schema";
 
 export const metadata = pageMeta({
   title: "Hakkında",
@@ -20,6 +22,17 @@ export const metadata = pageMeta({
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={graph(
+          webPageSchema({
+            name: "Hakkımda",
+            description:
+              "Menensoft'u kuran ve geliştiren kişi: nasıl çalışır, neye söz verir, neye vermez.",
+            path: "/hakkimda",
+          }),
+          personSchema(),
+        )}
+      />
       <section className="py-16 md:py-24">
         <Container>
           <Reveal>

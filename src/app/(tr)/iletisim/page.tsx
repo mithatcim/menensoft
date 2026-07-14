@@ -11,6 +11,8 @@ import { ContactForm } from "@/components/leads/contact-form";
 import { ContactLink } from "@/components/shared/contact-link";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { JsonLd } from "@/components/shared/json-ld";
+import { contactPageSchema, graph } from "@/lib/schema";
 
 export const metadata = pageMeta({
   title: "İletişim",
@@ -21,7 +23,19 @@ export const metadata = pageMeta({
 
 export default function ContactPage() {
   return (
-    <section className="py-16 md:py-24">
+    <>
+      <JsonLd
+        data={graph(
+          contactPageSchema({
+            name: "İletişim",
+            description:
+              "Menensoft ile iletişime geçin: e-posta, WhatsApp ya da proje formu.",
+            path: "/iletisim",
+          }),
+        )}
+      />
+
+      <section className="py-16 md:py-24">
       <Container>
         <Reveal>
           {/* Bu sayfa Phase 33B'den beri navigasyonun birincil hedefi: artık
@@ -227,6 +241,7 @@ export default function ContactPage() {
           </div>
         </div>
       </Container>
-    </section>
+      </section>
+    </>
   );
 }

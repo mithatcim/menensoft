@@ -19,6 +19,7 @@ import { graph, servicesSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 import { inquiryHref } from "@/lib/inquiry";
 import { cn } from "@/lib/utils";
+import { landingPages } from "@/content/landing";
 
 export const metadata = pageMeta({
   title: "Çözümler",
@@ -250,6 +251,39 @@ export default async function SolutionsPage() {
               </div>
             </Reveal>
           </div>
+        </Container>
+      </section>
+
+      {/* Phase 40 — arama sayfaları buradan bağlanır: footer'a 7 link daha
+          eklemek "footer spam" olurdu; bu hub zaten ana menüde ve bağlam doğru. */}
+      <section className="pb-16 md:pb-24">
+        <Container>
+          <Reveal>
+            <h2 className="text-xl font-semibold tracking-tight">Aradığınız sistem</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Sık aranan başlıklar — her biri gerçekten kurulmuş bir işe bağlanır.
+            </p>
+            <ul className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {landingPages.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/${p.slug}`}
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card/60 px-4 py-3 transition-colors hover:border-accent/40"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium">
+                        {p.title}
+                      </span>
+                      <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                        {p.eyebrow}
+                      </span>
+                    </span>
+                    <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </Container>
       </section>
       <ContactCTA />

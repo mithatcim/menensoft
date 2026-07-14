@@ -28,13 +28,14 @@
 const BASE = (process.env.BASE || "http://localhost:3000").replace(/\/+$/, "");
 
 /**
- * Statik rotalar (typed içerik): 13 static + 6 sektör + 6 sistem = 25 → 50 URL.
+ * Statik rotalar (typed içerik):
+ *   13 static + 7 arama sayfası (Phase 40) + 6 sektör + 6 sistem = 32 → 64 URL.
  * PROJE rotaları 38C'den beri VERİTABANINDAN gelir, dosyadan değil.
  */
-const STATIC_CANONICAL_COUNT = 50;
+const STATIC_CANONICAL_COUNT = 64;
 
-/** 38C öncesi sabit: 50 + 5 proje × 2 dil = 60. Artık türetiliyor. */
-const FALLBACK_CANONICAL_COUNT = 60;
+/** Phase 40 sonrası: 64 + 5 proje × 2 dil = 74. DB yoksa bu sabite düşülür. */
+const FALLBACK_CANONICAL_COUNT = 74;
 
 /**
  * Beklenen sitemap sayısı artık YAYINDAKİ proje sayısından türetilir.
@@ -89,8 +90,40 @@ async function expectedCanonicalCount() {
   }
 }
 
-/** FAQPage şemasının izinli olduğu sayfalar (görünür SSS içeren). */
-const FAQ_ROUTES = ["/sss", "/en/faq"];
+/**
+ * FAQPage şemasının izinli olduğu sayfalar — kural "GÖRÜNÜR SSS içeren"dir.
+ *
+ * Bu allowlist bir güvenlik kemeridir: görünmeyen soruları iddia eden FAQPage
+ * şeması, Google'ın manuel işlem uyguladığı ihlaldir. Buraya bir rota eklemeden
+ * önce sayfada gerçekten görünen bir SSS bloğu olduğundan emin olun.
+ *
+ * Phase 40: arama sayfalarının her birinde görünür SSS bloğu var (dördü de
+ * ekranda render ediliyor), bu yüzden şemayı taşımaya hakları var.
+ */
+const LANDING_SLUGS_TR = [
+  "/e-ticaret-sitesi",
+  "/admin-panelli-web-sitesi",
+  "/qr-menu-sistemi",
+  "/restoran-siparis-sistemi",
+  "/psikolog-web-sitesi",
+  "/ozel-yazilim-gelistirme",
+  "/isletmeler-icin-web-sistemi",
+];
+const LANDING_SLUGS_EN = [
+  "/en/ecommerce-website",
+  "/en/website-with-admin-panel",
+  "/en/qr-menu-system",
+  "/en/restaurant-ordering-system",
+  "/en/psychologist-website",
+  "/en/custom-software-development",
+  "/en/web-systems-for-business",
+];
+const FAQ_ROUTES = [
+  "/sss",
+  "/en/faq",
+  ...LANDING_SLUGS_TR,
+  ...LANDING_SLUGS_EN,
+];
 
 // İngilizce kelimeli eski yollar → İngilizce kanonik hedefler.
 // src/lib/routes.ts (compatRedirects) + next.config.ts ile birlikte güncelle.

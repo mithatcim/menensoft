@@ -6,6 +6,8 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { getPublishedProjects } from "@/lib/projects/public";
 import type { ProjectTier, PublicProject } from "@/lib/projects/types";
 import { pageMeta } from "@/lib/seo";
+import { JsonLd } from "@/components/shared/json-ld";
+import { collectionPageSchema, graph } from "@/lib/schema";
 
 export const metadata = pageMeta({
   title: "Projeler",
@@ -44,6 +46,20 @@ export default async function ProjectsPage() {
 
   return (
     <>
+      <JsonLd
+        data={graph(
+          collectionPageSchema({
+            name: "Projeler",
+            description:
+              "Uçtan uca tasarlanıp geliştirilen sistemler: ürün altyapıları, operasyon sistemleri ve iç altyapı çalışmaları.",
+            path: "/projeler",
+            items: projects.map((p) => ({
+              name: p.name,
+              path: `/projeler/${p.slug}`,
+            })),
+          }),
+        )}
+      />
       <section className="py-16 md:py-24">
         <Container>
           <Reveal>

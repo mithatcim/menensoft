@@ -24,6 +24,16 @@ export const staticRoutePairs: Record<string, string> = {
   "/neden-menensoft": "/en/why-menensoft",
   "/hazir-site-mi-ozel-sistem-mi": "/en/custom-system-vs-template",
   "/gizlilik": "/en/privacy",
+
+  // Phase 40 — yüksek niyetli arama sayfaları. Her TR rotasının EN eşi ZORUNLU:
+  // sitemap çiftler, ve eşi olmayan bir rota sitemap'e 404 veren URL koyar.
+  "/e-ticaret-sitesi": "/en/ecommerce-website",
+  "/admin-panelli-web-sitesi": "/en/website-with-admin-panel",
+  "/qr-menu-sistemi": "/en/qr-menu-system",
+  "/restoran-siparis-sistemi": "/en/restaurant-ordering-system",
+  "/psikolog-web-sitesi": "/en/psychologist-website",
+  "/ozel-yazilim-gelistirme": "/en/custom-software-development",
+  "/isletmeler-icin-web-sistemi": "/en/web-systems-for-business",
 };
 
 /** Sektör slug eşlemesi: TR → EN. */

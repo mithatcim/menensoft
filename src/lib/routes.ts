@@ -32,6 +32,15 @@ export const staticRoutes = [
   "/neden-menensoft",
   "/hazir-site-mi-ozel-sistem-mi",
   "/gizlilik",
+
+  // Phase 40 — arama sayfaları.
+  "/e-ticaret-sitesi",
+  "/admin-panelli-web-sitesi",
+  "/qr-menu-sistemi",
+  "/restoran-siparis-sistemi",
+  "/psikolog-web-sitesi",
+  "/ozel-yazilim-gelistirme",
+  "/isletmeler-icin-web-sistemi",
 ] as const;
 
 /**
