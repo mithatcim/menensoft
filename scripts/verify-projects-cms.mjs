@@ -119,11 +119,25 @@ const LOCKED_SLUGS = [
 
 console.log("\n===== PHASE 38A — PROJECT CMS PARITY PROOF =====\n");
 
-const all = await listAllCmsProjects();
+let all = await listAllCmsProjects();
 if (all === null) {
   console.log("  !!   DATABASE_URL not set — nothing to verify.");
   process.exit(1);
 }
+
+// Since 38B the owner can CREATE projects in the admin panel, so the database is
+// legitimately a superset of the typed files. The question this proof answers is
+// "did the files survive the move?" — not "is the database frozen?". Anything
+// admin-created is reported and set aside; it is not a failure.
+const fileSlugSet = new Set(projects.map((p) => p.slug));
+const adminCreated = all.filter((e) => !fileSlugSet.has(e.project.slug));
+if (adminCreated.length > 0) {
+  console.log(
+    `  --   ${adminCreated.length} admin-created project(s), not in the typed files, ` +
+      `ignored by this proof: ${adminCreated.map((e) => e.project.slug).join(", ")}\n`,
+  );
+}
+all = all.filter((e) => fileSlugSet.has(e.project.slug));
 
 /* --------------------------------------------------------------- counts --- */
 
@@ -176,14 +190,19 @@ for (const [locale, typed] of [
   ["tr", projects],
   ["en", projectsEn],
 ]) {
-  const mapped = await listPublishedProjects(locale);
+  const published = await listPublishedProjects(locale);
 
-  if (!mapped) {
+  if (!published) {
     bad(`${locale}: listPublishedProjects returned null`);
     continue;
   }
+
+  // Same scoping as above: an admin-created project that is genuinely published
+  // belongs in that list and must not be mistaken for the files drifting.
+  const mapped = published.filter((p) => fileSlugSet.has(p.slug));
+
   if (mapped.length !== typed.length) {
-    bad(`${locale}: ${mapped.length} projects from db, ${typed.length} in file`);
+    bad(`${locale}: ${mapped.length} of the file's projects are published, ${typed.length} in file`);
     continue;
   }
 
