@@ -111,6 +111,98 @@ create index if not exists leads_source_path_idx
   where source_path is not null;
 
 -- ---------------------------------------------------------------------------
+-- CRM alanları (Phase 36A) — tamamen eklemeli
+-- ---------------------------------------------------------------------------
+-- Panel bir gelen kutusundan çalışma aracına dönüşüyor. Buradaki her şey
+-- eklemeli: hiçbir satır silinmez, hiçbir sütun düşürülmez, mevcut durumlar
+-- olduğu gibi geçerli kalır.
+--
+-- NOT: Bu sütunlar YAYINDAN ÖNCE eklenmelidir. Yakalanmayan veri geri
+-- getirilemez — bir lead geldiği anda damgalanmayan zaman bilgisi sonradan
+-- uydurulamaz.
+
+alter table leads add column if not exists updated_at        timestamptz not null default now();
+alter table leads add column if not exists read_at           timestamptz;
+alter table leads add column if not exists last_contacted_at timestamptz;
+alter table leads add column if not exists follow_up_at      timestamptz;
+alter table leads add column if not exists won_at            timestamptz;
+alter table leads add column if not exists lost_at           timestamptz;
+alter table leads add column if not exists lost_reason       text;
+alter table leads add column if not exists priority          text;
+
+comment on column leads.updated_at is
+  'Son değişiklik. "En uzun bekleyen" sıralaması bunun üzerinden çalışır.';
+comment on column leads.follow_up_at is
+  'Sahibin kendine koyduğu hatırlatma. Geçmişte kaldıysa panelde "gecikmiş" görünür.';
+
+-- Satış hattı: 4 durumdan 8 duruma. Kısıtı düşürüp yeniden kurmak idempotenttir
+-- ve VERİYE DOKUNMAZ — eski dört durum yeni kümenin alt kümesidir, yani mevcut
+-- satırlar olduğu gibi geçerli kalır.
+--
+-- Dürüst uyarı, koda gömülü olsun: ara aşamalar (nitelikli, teklif gönderildi)
+-- güncellenmeyi UNUTULAN ilk aşamalardır. Güncellenmeyen bir aşama boş değildir,
+-- YANLIŞTIR — ve üstüne kurulan her dönüşüm sayısı da yanlış olur. Bu yüzden
+-- dönüşüm hesapları yalnızca won/lost üzerinden yapılır; aşamalar atlanabilir.
+alter table leads drop constraint if exists leads_status;
+alter table leads add  constraint leads_status check (
+  status in (
+    'new', 'read', 'contacted', 'qualified',
+    'proposal_sent', 'won', 'lost', 'archived'
+  )
+);
+
+alter table leads drop constraint if exists leads_priority;
+alter table leads add  constraint leads_priority check (
+  priority is null or priority in ('low', 'normal', 'high')
+);
+
+alter table leads drop constraint if exists leads_lost_reason_len;
+alter table leads add  constraint leads_lost_reason_len check (
+  lost_reason is null or length(lost_reason) <= 300
+);
+
+create index if not exists leads_follow_up_idx
+  on leads (follow_up_at)
+  where follow_up_at is not null;
+create index if not exists leads_last_contacted_idx
+  on leads (last_contacted_at);
+create index if not exists leads_updated_at_idx
+  on leads (updated_at desc);
+
+-- ---------------------------------------------------------------------------
+-- lead_notes (Phase 36A)
+-- ---------------------------------------------------------------------------
+-- EKLEMELİ bir zaman çizelgesi, tek bir "notes" sütunu değil. Sebep basit: tek
+-- bir metin alanı üzerine yazılır ve ne zaman ne söylendiği kaybolur. Bir aramayı
+-- ya da bir durum değişimini geri izleyebilmek, notun kendisi kadar değerlidir.
+--
+-- Durum değişimleri buraya OTOMATİK düşer: "kim ne zaman neyi değiştirdi"
+-- sorusunun cevabı hatırlamaya bırakılmaz.
+create table if not exists lead_notes (
+  id         uuid primary key default gen_random_uuid(),
+  lead_id    uuid not null references leads(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  note       text not null,
+  note_type  text not null default 'note',
+  created_by text,
+  metadata   jsonb not null default '{}'::jsonb,
+
+  constraint lead_notes_type check (
+    note_type in (
+      'note', 'call', 'whatsapp', 'email',
+      'status_change', 'follow_up', 'system'
+    )
+  ),
+  constraint lead_notes_len check (length(note) between 1 and 2000)
+);
+
+comment on table lead_notes is
+  'Lead başına eklemeli zaman çizelgesi. Durum değişimleri otomatik düşer.';
+
+create index if not exists lead_notes_lead_idx
+  on lead_notes (lead_id, created_at desc);
+
+-- ---------------------------------------------------------------------------
 -- lead_rate_limits
 -- ---------------------------------------------------------------------------
 -- Serverless'ta bellek içi sayaç işe yaramaz: ardışık iki istek farklı bir
