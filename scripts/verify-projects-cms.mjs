@@ -297,11 +297,15 @@ check(
   "?proje= closed set and the database disagree",
 );
 
+// 38C: project routes LEFT src/lib/routes.ts — the sitemap reads them from the
+// database now. What still has to hold is that the file-derived slugs produce
+// exactly the routes the sitemap will emit.
+const fileRoutes = fileSlugs.map((slug) => `/projeler/${slug}`);
 const dbRoutes = dbSlugs.map((slug) => `/projeler/${slug}`);
 check(
-  eq(projectRoutes, dbRoutes),
-  `sitemap project routes identical (${dbRoutes.length} TR + ${dbRoutes.length} EN)`,
-  `route inventory differs:\n       file: ${projectRoutes.join(", ")}\n       db:   ${dbRoutes.join(", ")}`,
+  eq(fileRoutes, dbRoutes),
+  `project routes identical (${dbRoutes.length} TR + ${dbRoutes.length} EN)`,
+  `route inventory differs:\n       file: ${fileRoutes.join(", ")}\n       db:   ${dbRoutes.join(", ")}`,
 );
 
 /* -------------------------------------------------------------- verdict --- */

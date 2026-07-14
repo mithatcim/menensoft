@@ -152,10 +152,16 @@ karakterleri bozar). Oturum yolu ve user-agent **dışa aktarılmaz**.
 
 ## 10. Proje CMS (Phase 38B)
 
-`/admin/projects` — projeleri panelden yönetin. **Herkese açık proje sayfaları
-38C'ye kadar hâlâ `src/content/projects.ts` dosyalarını okur**, yani buradaki bir
-değişiklik siteyi bugün değiştirmez. Bu bilinçli: editör, hiçbir ziyaretçiyi
-etkilemeden tam olarak denenebilsin diye.
+`/admin/projects` — projeleri panelden yönetin. **Phase 38C'den beri buradaki
+her değişiklik herkese açık siteye çıkar.** Kaydettiğinizde ilgili sayfalar ve
+sitemap yeniden üretilir; ayrı bir deploy gerekmez.
+
+- **Yayınla** → sayfa canlıya çıkar, sitemap'e 2 URL eklenir (TR + EN).
+- **Arşivle** → sayfa 404 olur, sitemap'ten 2 URL düşer, proje artık `?proje=`
+  referansı olarak da kabul edilmez. İçerik durur; geri alınabilir.
+- **Slug değişirse** eski adres kalıcı olarak (**308**) yenisine gider — ama
+  yalnızca proje yayındayken. Arşivlenmiş bir projeye eski slug'ından
+  ulaşılamaz: yayından kaldırmak gerçekten kaldırmaktır.
 
 **Yayın kuralı: TR *ve* EN zorunlu alanları (başlık, tek cümle, problem, durum
 etiketi) dolu olmadan yayınlayamazsınız.** Tek dilli bir proje, sitemap'in söz
@@ -174,8 +180,8 @@ bir sorun için depolama sağlayıcısı seçmiyoruz. Alanlar yol/adres kabul ed
 HTML kabul edilmez — bu, XSS yüzeyini savunmak yerine ortadan kaldırır ve her
 alanın tasarlanmış bir bileşene render edilmesini garanti eder.
 
-**Slug değişirse** eski slug `project_slug_redirects` tablosuna yazılır. Kayıt
-bugün **tutulur ama tüketilmez**; 308 yönlendirmesi 38C'de devreye girer.
+**Slug değişirse** eski slug `project_slug_redirects` tablosuna yazılır ve
+herkese açık rota onu **308** ile tüketir.
 
 Önizleme: `/admin/projects/<id>/preview` — yalnızca giriş yapmış sahibe açıktır,
 paylaşılabilir bağlantı ya da token yoktur.

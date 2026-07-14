@@ -332,18 +332,24 @@ Admin paneli **aynı `leads` tablosunu** okuyacak. Yeni tablo gerekmez; admin
 kimliği veritabanında değil ortam değişkeninde durur (tek kullanıcı için bir
 kimlik tablosu gereksizdir).
 
-## 9. Proje CMS tabloları (Phase 38A — yalnızca hazırlık)
+## 9. Proje CMS tabloları
 
-`projects`, `project_translations`, `project_slug_redirects` tabloları artık
-şemada var. **Herkese açık proje sayfaları bunları HENÜZ okumuyor.**
+`projects`, `project_translations`, `project_slug_redirects`.
 
-`/projeler`, `/projeler/[slug]`, `/en/projects`, `/en/projects/[slug]` hâlâ
-`src/content/projects.ts` ve `src/content/en/projects.ts` dosyalarından okur ve
-38C'ye kadar öyle kalacak. Bu fazın tek amacı, veritabanı içeriğinin **yayına
-çıkmadan önce** dosyalarla birebir aynı olduğunun kanıtlanabilmesidir.
+**Phase 38C: herkese açık proje sayfaları artık BU TABLOLARI okuyor.**
+`/projeler`, `/projeler/[slug]`, `/en/projects`, `/en/projects/[slug]` ve
+projeye referans veren her yüzey (ana sayfa, /cozumler, /en/solutions, hub'lar,
+sihirbaz) yayındaki veritabanı satırlarından beslenir. Yalnızca
+`status='published'` olanlar. Taslak ve arşiv hiçbir yerde görünmez — ne
+sayfada, ne sitemap'te, ne de sayfa payload'ında.
 
-**Typed dosyaları silmeyin.** Onlar hâlâ tek gerçek kaynak ve aynı zamanda geri
-dönüş yolu.
+> **Şema, build'den ÖNCE uygulanmalıdır.** Artık veritabanı, herkese açık
+> sitenin **build-time bağımlılığıdır**. `DATABASE_URL` yoksa ya da yayında
+> hiç proje yoksa, üretim build'i **bilinçli olarak düşer** — boş bir
+> /projeler ve 50 URL'lik bir sitemap, düşen bir build'den çok daha pahalıdır.
+
+**Typed dosyaları silmeyin.** `src/content/projects.ts` artık herkese açık
+sitenin kaynağı değil; **seed kaynağı ve geri dönüş yolu**dur.
 
 ```bash
 pnpm cms:seed      # typed dosyaları veritabanına birebir kopyalar (idempotent)

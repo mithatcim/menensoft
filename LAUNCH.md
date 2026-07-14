@@ -188,3 +188,24 @@ Ek elle kontroller:
 - `/admin/leads.csv` yalnızca giriş yapmış sahibe açıktır.
 - Bildirim (e-posta/Telegram) **bu fazda yok** — bilinçli olarak ertelendi. Yayına
   çıkıldığında bir form lead'i yalnızca panel açıldığında görülür.
+
+## 11. Phase 38C — projeler artık veritabanından
+
+- **`db/schema.sql` + `pnpm cms:seed` build'den ÖNCE çalıştırılmalıdır.**
+  Herkese açık proje sayfaları artık PostgreSQL okur. Veritabanı erişilemezse ya
+  da yayında hiç proje yoksa **build bilinçli olarak düşer**: boş bir /projeler,
+  50 URL'lik bir sitemap ve kırık hreflang çiftleri — hepsi yeşil bir build'le —
+  düşen bir build'den kıyaslanamayacak kadar pahalıdır.
+
+- **Yeni ortam değişkeni: `SITE_ENV=production`.** Vercel dışında bir yere
+  deploy ediyorsanız bunu ayarlayın. Eski guard yalnızca Vercel'i tanıyordu;
+  VPS'te `NEXT_PUBLIC_SITE_URL` unutulursa site kendi adresini
+  `http://localhost:3000` olarak yayınlardı — sessizce. NODE_ENV işe yaramaz:
+  yerel `pnpm build` de NODE_ENV=production'dır.
+
+- Panelden yapılan her yayın/arşiv/düzenleme herkese açık sayfaları ve sitemap'i
+  günceller. Sitemap **60**, beş yayın projesiyle; yayınlanan her yeni proje +2,
+  arşivlenen her proje −2 URL.
+
+- `src/content/projects.ts` artık **seed kaynağı ve geri dönüş yolu**dur, canlı
+  içerik değil. Silmeyin.
