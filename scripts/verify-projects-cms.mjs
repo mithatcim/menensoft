@@ -35,7 +35,6 @@ import {
 import { projects } from "../src/content/projects.ts";
 import { projectsEn } from "../src/content/en/projects.ts";
 import { projectToFitType } from "../src/content/fit.ts";
-import { projectRoutes } from "../src/lib/routes.ts";
 
 let failures = 0;
 
