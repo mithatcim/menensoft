@@ -1,4 +1,10 @@
-import { BarChart3, Inbox, LayoutDashboard, LogOut } from "lucide-react";
+import {
+  BarChart3,
+  FolderKanban,
+  Inbox,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -61,6 +67,14 @@ export default async function ProtectedAdminLayout({
             >
               <Inbox className="size-4 shrink-0" />
               <span className="hidden sm:inline">Talepler</span>
+            </Link>
+            <Link
+              href="/admin/projects"
+              aria-label="Projeler"
+              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:px-2.5"
+            >
+              <FolderKanban className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Projeler</span>
             </Link>
             <Link
               href="/admin/analytics"
