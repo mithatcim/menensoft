@@ -8,42 +8,15 @@
  * kalır ("çalışır sistem", "teslim edilmiş çalışma").
  */
 
-export type ProjectTier = "delivered" | "internal";
+import type { Project } from "@/lib/projects/types";
 
-export interface Project {
-  slug: string;
-  name: string;
-  oneLiner: string;
-  problem: string;
-  built: string[];
-  stack: string[];
-  /** Görsel hiyerarşi: teslim edilmiş işler ve iç/önceki çalışmalar. */
-  tier: ProjectTier;
-  /** Ziyaretçiye görünen durum etiketi (proje bazında, Türkçe). */
-  statusLabel: string;
-  featured: boolean;
-  year?: string;
-  role?: string;
-  /** Projenin bugünkü durumu hakkında tek dürüst paragraf. */
-  statusNote?: string;
-  /**
-   * Proje detayının üst CTA metni — "bu yapıya benzerini istiyorum" niyetini
-   * projeye özel dille söyler. Hedef her zaman sihirbazdır ve fit id
-   * projectToFitType'tan türetilir; burada URL veya fit id tekrarlanmaz.
-   */
-  similarCta?: string;
-  /** Gerçekten geliştirilen yapıdan türetilmiş soyut sistem akışı. */
-  flow?: string[];
-  /** Sistem dosyası içerikleri (8C onaylı içeriğin Türkçe karşılığı). */
-  dossierSummary?: string;
-  constraints?: string[];
-  modules?: { name: string; note: string }[];
-  liveUrl?: string;
-  repoUrl?: string;
-  /** /public altındaki gerçek arayüz görseli; yoksa dürüst alan gösterilir. */
-  image?: string;
-  imageAlt?: string;
-}
+/**
+ * Phase 38C: the SHAPE now lives in src/lib/projects/types.ts, because the
+ * CONTENT now lives in PostgreSQL. This file is the rollback reference and the
+ * seed source for `pnpm cms:seed` — the public site no longer reads it.
+ */
+export type { Project, ProjectTier } from "@/lib/projects/types";
+export { projectImage } from "@/lib/projects/types";
 
 export const projects: Project[] = [
   {
@@ -265,11 +238,3 @@ export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
 
-/** Proje için gerçek arayüz görseli; yoksa undefined (dürüst alan gösterilir). */
-export function projectImage(project: Project) {
-  if (!project.image) return undefined;
-  return {
-    src: project.image,
-    alt: project.imageAlt ?? `${project.name} arayüzü`,
-  };
-}
