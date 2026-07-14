@@ -363,6 +363,18 @@ kanıt, başarısız **olabildiği** için bir kanıttır.
 
 Bu scriptler Node 24 ister (yerleşik TypeScript tip soyma + `--env-file`).
 
+**38B notu.** Panelden proje oluşturulabildiği için veritabanı artık typed
+dosyaların bir **üst kümesi** olabilir. `cms:verify` bunu bilir: panelden
+eklenen projeleri ayrı satırda bildirir ve dışarıda bırakır. Sorduğu soru
+"veritabanı donduruldu mu" değil, **"dosyalardaki içerik kayıpsız duruyor mu"**.
+
+`project_translations` uzunluk kısıtları 38B'de **tavan-only** hâline getirildi
+(`length(name) <= 120`, alt sınır yok). Sebep: taslak. Yarım yazılmış bir
+İngilizce çeviri meşru bir durumdur — sahibi bir başlık yazar, kaydeder, ertesi
+gün döner — ve alt sınırlı bir kısıt bu kaydı reddedip işi çöpe atardı.
+Tamlık bir **yayın** kuralıdır, depolama kuralı değil; publish action'ında
+sunucu tarafında zorlanır.
+
 ## 10. Yayın öncesi kontrol listesi
 
 - [ ] `db/schema.sql` çalıştırıldı; `leads` ve `lead_rate_limits` var
