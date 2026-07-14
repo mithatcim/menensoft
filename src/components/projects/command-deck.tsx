@@ -12,7 +12,6 @@ import {
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
-import { projectToFitType } from "@/content/fit";
 import { type Locale } from "@/lib/locale";
 import { projectImage, type PublicProject } from "@/lib/projects/types";
 import { EASE_OUT } from "@/lib/motion";
@@ -193,10 +192,12 @@ function PreviewBody({ project, copy }: { project: PublicProject; copy: DeckCopy
           </Link>
           <Link
             href={
-              // 38C: a project created in the panel carries its own fit id;
-              // the five originals still resolve through the old map.
-              project.fitId ?? projectToFitType[project.slug]
-                ? `${copy.quoteBase}?tur=${projectToFitType[project.slug]}`
+              // 38D: the fit id comes from the project row, full stop. The 38C
+              // version tested `fitId ?? map` but then built the URL from the
+              // MAP — so a project created in the panel passed the check and
+              // emitted ?tur=undefined.
+              project.fitId
+                ? `${copy.quoteBase}?tur=${project.fitId}`
                 : copy.quoteBase
             }
             className="group/similar inline-flex items-center gap-1.5 py-1 text-sm font-medium text-foreground/90 transition-colors hover:text-foreground"

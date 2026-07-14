@@ -1,6 +1,6 @@
 import { getPool } from "@/lib/db/postgres";
 
-import type { Project, ProjectTier } from "@/content/projects";
+import type { Project, ProjectTier } from "@/lib/projects/types";
 
 /**
  * Project CMS data access (Phase 38A).

@@ -6,8 +6,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { sectorsEn } from "@/content/en/sectors";
 import { systemsEn } from "@/content/en/systems";
-import { projectToFitType } from "@/content/fit";
-import type { Project } from "@/lib/projects/types";
+import type { PublicProject } from "@/lib/projects/types";
 import { sectors } from "@/content/sectors";
 import { systems } from "@/content/systems";
 import { type Locale } from "@/lib/locale";
@@ -47,11 +46,13 @@ export function SimilarSystemBand({
   project,
   locale = "tr",
 }: {
-  project: Project;
+  project: PublicProject;
   locale?: Locale;
 }) {
   const copy = BAND_COPY[locale];
-  const fitType = projectToFitType[project.slug];
+  // 38D: from the row. Before this it read the static map with no fallback,
+  // so a project created in the panel silently lost its whole band.
+  const fitType = project.fitId;
   // carries the project through to the inquiry page (see CaseStudyHero)
   const quoteHref = fitType
     ? `${copy.quoteBase}?tur=${fitType}&proje=${project.slug}`

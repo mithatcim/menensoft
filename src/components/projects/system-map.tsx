@@ -195,7 +195,16 @@ export function CapabilityMatrix({
 }) {
   const cats = locale === "en" ? CATEGORIES_EN : CATEGORIES;
   const reduceMotion = useReducedMotion();
-  const lit = new Set(LIT[slug] ?? []);
+  const capabilities = LIT[slug];
+
+  // A project the panel created is not in this map — the mapping is editorial
+  // judgement about what each system demonstrates, and there is no column for
+  // it. Rendering anyway would print "0 / 9" over nine dimmed cells, telling a
+  // visitor the project demonstrates nothing. Showing no matrix is honest;
+  // showing an empty one is a claim.
+  if (!capabilities) return null;
+
+  const lit = new Set(capabilities);
 
   return (
     <div className={className}>

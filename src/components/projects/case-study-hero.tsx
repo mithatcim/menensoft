@@ -6,7 +6,7 @@ import { SystemBlueprint } from "@/components/projects/system-blueprint";
 import { Reveal } from "@/components/shared/reveal";
 import { fitSystemsEn } from "@/content/en/fit";
 import { getSystemEn } from "@/content/en/systems";
-import { fitSystems, projectToFitType } from "@/content/fit";
+import { fitSystems } from "@/content/fit";
 import type { PublicProject } from "@/lib/projects/types";
 import { getSystem } from "@/content/systems";
 import { type Locale } from "@/lib/locale";
@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
  * how do I ask for one. The stack survives as a quiet supporting row — it no
  * longer leads.
  *
- * Nothing new is invented. The system type is derived (projectToFitType → the
+ * Nothing new is invented. The system type is derived (project.fitId → the
  * wizard's fit option → its systemSlug), the modules and status come straight
  * from the project record, and the CTA prefills the wizard with the same fit id
  * the rest of the site already uses.
@@ -68,9 +68,11 @@ export function CaseStudyHero({
   const internal = project.tier === "internal";
 
   // system type: derived, never duplicated into the project record
-  // 38C: prefer the fit id the database carries; fall back to the static map
-  // so the five original projects behave exactly as before.
-  const fitId = project.fitId ?? projectToFitType[project.slug];
+  // 38D: the fit id lives on the project row. The static map in fit.ts is a
+  // seed/parity fixture now, not live truth — keeping it as a fallback here
+  // would mean two sources for one fact, and the stale one would win whenever
+  // the owner changed a system type in the panel.
+  const fitId = project.fitId;
   const fitPool = locale === "en" ? fitSystemsEn : fitSystems;
   const lookupSystem = locale === "en" ? getSystemEn : getSystem;
   const fit = fitId ? fitPool.find((f) => f.id === fitId) : undefined;
