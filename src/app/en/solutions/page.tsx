@@ -48,6 +48,7 @@ export default async function EnSolutionsPage() {
 
   return (
     <>
+      <div className="surface-light">
       <JsonLd
         data={graph(
           solutionsEn.map((s) =>
@@ -296,6 +297,7 @@ export default async function EnSolutionsPage() {
           </Reveal>
         </Container>
       </section>
+      </div>
       <ContactCTA locale="en" />
     </>
   );

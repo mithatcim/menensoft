@@ -23,6 +23,7 @@ export const metadata = pageMeta({
 export default function EnSectorsPage() {
   return (
     <>
+      <div className="surface-light">
       <JsonLd
         data={graph(
           collectionPageSchema({
@@ -86,6 +87,7 @@ export default function EnSectorsPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA locale="en" />
     </>
   );

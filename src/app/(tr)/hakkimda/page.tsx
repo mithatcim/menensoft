@@ -22,6 +22,7 @@ export const metadata = pageMeta({
 export default function AboutPage() {
   return (
     <>
+      <div className="surface-light">
       <JsonLd
         data={graph(
           webPageSchema({
@@ -265,6 +266,7 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA />
     </>
   );

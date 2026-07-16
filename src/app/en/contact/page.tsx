@@ -21,7 +21,7 @@ export const metadata = pageMeta({
 
 export default function EnContactPage() {
   return (
-    <section className="py-16 md:py-24">
+    <section className="surface-light py-16 md:py-24">
       <Container>
         <Reveal>
           {/* Since Phase 33B this is the nav primary's destination: not just the

@@ -54,7 +54,9 @@ export default function ProcessPage() {
           }),
         )}
       />
-      <section className="pt-16 pb-6 md:pt-24 md:pb-8">
+      {/* Phase 41C: light heading → dark RequestScene (technical proof) → light
+          details. Exactly the rhythm the redesign aims for. */}
+      <section className="surface-light pt-16 pb-6 md:pt-24 md:pb-8">
         <Container>
           <Reveal>
             <SectionHeading
@@ -67,8 +69,10 @@ export default function ProcessPage() {
         </Container>
       </section>
 
-      {/* sinematik altı aşamalı akış */}
+      {/* sinematik altı aşamalı akış — bilinçli olarak dark teknik showcase */}
       <RequestScene />
+
+      <div className="surface-light">
 
       {/* Faz 30: ilk CTA 4428px'te (5.2 ekran) duruyordu. Ziyaretçi altı aşamayı
           gördükten sonra harekete geçebilmeli — sayfanın sonunu beklemeden.
@@ -199,6 +203,7 @@ export default function ProcessPage() {
           </Reveal>
         </Container>
       </section>
+      </div>
       <ContactCTA />
     </>
   );

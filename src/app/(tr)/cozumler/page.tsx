@@ -52,6 +52,10 @@ export default async function SolutionsPage() {
   return (
     <>
       <JsonLd data={graph(servicesSchema())} />
+      {/* Phase 41C: the whole explanatory body is a light band; the dark
+          ContactCTA below closes it. Cards keep their token border on light —
+          the ring-white sheen just fades, which is correct. */}
+      <div className="surface-light">
       <section className="pt-16 pb-10 md:pt-24 md:pb-12">
         <Container>
           <Reveal>
@@ -286,6 +290,7 @@ export default async function SolutionsPage() {
           </Reveal>
         </Container>
       </section>
+      </div>
       <ContactCTA />
     </>
   );

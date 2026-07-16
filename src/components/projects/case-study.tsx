@@ -116,6 +116,10 @@ export function ProjectCaseStudy({
     <>
       <CaseStudyHero project={project} locale={locale} />
 
+      {/* Phase 41C: dark case-study hero → light teardown + details. The flow,
+          modules and capability panels are token-based, so they read on the
+          light surface; only the hero stays dark. */}
+      <div className="surface-light">
       <section className="py-14 md:py-20">
         <Container>
           <article className="max-w-3xl xl:max-w-[62rem]">
@@ -252,6 +256,7 @@ export function ProjectCaseStudy({
       </section>
 
       <SimilarSystemBand project={project} locale={locale} />
+      </div>
     </>
   );
 }

@@ -58,7 +58,7 @@ const WORKFLOW_EN = [
 export default function EnProcessPage() {
   return (
     <>
-      <section className="pt-16 pb-6 md:pt-24 md:pb-8">
+      <section className="surface-light pt-16 pb-6 md:pt-24 md:pb-8">
         <Container>
           <Reveal>
             <SectionHeading
@@ -72,6 +72,8 @@ export default function EnProcessPage() {
       </section>
 
       <RequestScene locale="en" />
+
+      <div className="surface-light">
 
       {/* Phase 30: the first CTA sat at 4483px (5.2 screens). Once a visitor has
           seen the six stages they should be able to act, without waiting for the
@@ -202,6 +204,7 @@ export default function EnProcessPage() {
           </Reveal>
         </Container>
       </section>
+      </div>
       <ContactCTA locale="en" />
     </>
   );

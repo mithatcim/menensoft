@@ -96,7 +96,7 @@ const COPY = {
 export function BuyerBridge({ locale = "tr" }: { locale?: Locale }) {
   const copy = COPY[locale];
   return (
-    <section className="relative py-16 md:py-24">
+    <section className="surface-light relative border-y border-border py-16 md:py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_0%,rgba(139,140,248,0.05),transparent)]"

@@ -55,7 +55,7 @@ const HUBS = {
 
 export function ExploreHubs({ locale = "tr" }: { locale?: Locale }) {
   return (
-    <section className="py-16 md:py-24">
+    <section className="surface-light border-t border-border py-16 md:py-24">
       <Container>
         <div className="grid gap-6 md:grid-cols-3">
           {HUBS[locale].map((hub, i) => (

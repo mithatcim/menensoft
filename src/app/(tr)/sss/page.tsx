@@ -20,6 +20,7 @@ export const metadata = pageMeta({
 export default function FaqPage() {
   return (
     <>
+      <div className="surface-light">
       {/* FAQPage şeması yalnızca burada — soruların tamamı sayfada görünür */}
       <JsonLd data={graph(faqSchema())} />
       <section className="py-16 md:py-24">
@@ -72,6 +73,7 @@ export default function FaqPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA />
     </>
   );

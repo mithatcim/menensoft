@@ -20,6 +20,7 @@ export const metadata = pageMeta({
 export default function EnFaqPage() {
   return (
     <>
+      <div className="surface-light">
       {/* FAQPage schema mirrors the visible English FAQ below */}
       <JsonLd data={graph(faqSchema(faqEn))} />
       <section className="py-16 md:py-24">
@@ -72,6 +73,7 @@ export default function EnFaqPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA locale="en" />
     </>
   );

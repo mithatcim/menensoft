@@ -24,6 +24,7 @@ export const metadata = pageMeta({
 export default function ContactPage() {
   return (
     <>
+      <div className="surface-light">
       <JsonLd
         data={graph(
           contactPageSchema({
@@ -242,6 +243,7 @@ export default function ContactPage() {
         </div>
       </Container>
       </section>
+      </div>
     </>
   );
 }

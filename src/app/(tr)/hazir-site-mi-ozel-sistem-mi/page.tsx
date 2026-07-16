@@ -26,6 +26,7 @@ export const metadata = pageMeta({
 export default function ComparisonPage() {
   return (
     <>
+      <div className="surface-light">
       <section className="py-16 md:py-24">
         <Container>
           <Reveal>
@@ -179,6 +180,7 @@ export default function ComparisonPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA />
     </>
   );

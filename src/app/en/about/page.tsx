@@ -45,6 +45,7 @@ const WORKFLOW_EN = [
 export default function EnAboutPage() {
   return (
     <>
+      <div className="surface-light">
       <JsonLd data={graph(personSchema())} />
       <section className="py-16 md:py-24">
         <Container>
@@ -275,6 +276,7 @@ export default function EnAboutPage() {
           </div>
         </Container>
       </section>
+      </div>
       <ContactCTA locale="en" />
     </>
   );
