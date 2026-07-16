@@ -491,9 +491,12 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
             />
             {copy.eyebrow}
           </p>
-          <h1 className="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-balance md:text-5xl md:leading-[1.08] lg:text-6xl lg:leading-[1.06]">
+          {/* h2, not h1: Phase 41A moved the hero above this showcase, and the
+              hero now carries the page's single h1. The type scale is unchanged
+              so the visual hierarchy stays exactly as designed. */}
+          <h2 className="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-balance md:text-5xl md:leading-[1.08] lg:text-6xl lg:leading-[1.06]">
             {copy.title}
-          </h1>
+          </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">
             {copy.sub}
           </p>

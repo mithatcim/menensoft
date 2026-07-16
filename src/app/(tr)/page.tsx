@@ -13,8 +13,11 @@ import { TelemetryDivider } from "@/components/shared/telemetry-divider";
 export default function HomePage() {
   return (
     <>
-      <OpeningShowcase />
+      {/* Phase 41A: the clear offer leads. The hero states what Menensoft builds,
+          who for and what to do (and owns the page's h1); the problem showcase
+          now follows it as supporting context instead of being the first screen. */}
       <HeroSection />
+      <OpeningShowcase />
       <VisualGateway />
       <FlagshipStory />
       <TelemetryDivider code="SYS·01" label="ihtiyaçtan sisteme" />

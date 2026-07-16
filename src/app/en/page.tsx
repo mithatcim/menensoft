@@ -21,8 +21,9 @@ export const metadata = pageMeta({
 export default function EnHomePage() {
   return (
     <>
-      <OpeningShowcase locale="en" />
+      {/* Phase 41A: the clear offer leads. See the Turkish homepage. */}
       <HeroSection locale="en" />
+      <OpeningShowcase locale="en" />
       <VisualGateway locale="en" />
       <FlagshipStory locale="en" />
       <TelemetryDivider code="SYS·01" label="from need to system" />

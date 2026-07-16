@@ -16,28 +16,40 @@ import { cn } from "@/lib/utils";
 /**
  * Kahraman bölümünün dil sözlüğü — TR varsayılan, EN /en sayfalarından gelir.
  *
- * Phase 19B: the hero now follows the opening sales showcase, so it stops
- * acting as a second first-impression and becomes a brand reinforcement band.
- * `bridge` ties it back to the showcase above, and `intro` replaces the
- * displayed site.subheadline — which listed the same six system types the
- * showcase had just walked through. site.subheadline itself is untouched: it
- * still carries the page metadata description.
+ * Phase 41A: the hero is the FIRST section again and carries the page's single
+ * h1. A visitor must learn what Menensoft builds, who for, and what to do — in
+ * the first screen, before the problem showcase below. So the copy is a direct
+ * offer, not the Phase 19B "brand reinforcement" band that assumed the showcase
+ * had already spoken.
+ *
+ * `headline`/`sub` are LOCAL to the hero. site.headline and site.subheadline are
+ * left untouched — site.subheadline still feeds the page's metadata/OG/JSON-LD
+ * description, and changing the visible hero must not drift the SEO description.
+ *
+ * Service chips link to the Phase 40 landing pages (contextual, not footer spam).
+ * The credibility strip is honest: five real projects, nothing invented.
  */
 const HERO_COPY = {
   tr: {
     site,
-    bridge: "Bu sistemleri kuran marka",
-    intro:
-      "Vitrin, panel, veri modeli ve teslim tek elden ilerler. Menensoft'un arkasında, her katmanı uçtan uca tasarlayıp geliştiren kurucu geliştirici var: Mithat Yılmaz.",
-    primaryCta: "Proje görüşmesi başlat",
+    eyebrow: "Menensoft — işletmeler için web sistemleri",
+    headline: "İşletmeniz için çalışan web sistemleri kuruyoruz",
+    sub: "E-ticaret altyapıları, admin panelli siteler, QR menü/sipariş sistemleri ve özel yazılım. Broşür site değil; veri girilen, panelden yönetilen ve işi gerçekten taşıyan sistemler.",
+    chips: [
+      { label: "E-ticaret altyapısı", href: "/e-ticaret-sitesi" },
+      { label: "Admin panelli site", href: "/admin-panelli-web-sitesi" },
+      { label: "QR menü sistemi", href: "/qr-menu-sistemi" },
+      { label: "Özel yazılım", href: "/ozel-yazilim-gelistirme" },
+    ],
+    primaryCta: "Projemi anlatalım",
     primaryHref: "/teklif-al",
-    secondaryCta: "Projeleri incele",
-    secondaryHref: "/projeler",
-    undecided: "Hangi sistemi seçeceğinizden emin değil misiniz?",
-    undecidedLink: "İki soruluk kısa akış size gösterir",
-    // "Teknoloji", not "Teknoloji yığını": "yığın" is a literal calque of
-    // "stack" and reads translated. Also matches the project case-study hero.
-    stackLabel: "Teknoloji",
+    secondaryCta: "Sistemleri incele",
+    secondaryHref: "/cozumler",
+    credibility: [
+      "5 gerçek proje",
+      "uçtan uca geliştirme",
+      "devredilebilir kod",
+    ],
     cardTitle: "~/projeler — sistem durumu",
     cardFooter: (n: number) =>
       `${n} sistem — uçtan uca tasarlandı ve geliştirildi`,
@@ -45,16 +57,20 @@ const HERO_COPY = {
   },
   en: {
     site: siteEn,
-    bridge: "The brand behind these systems",
-    intro:
-      "Storefront, panel, data model and handoff move as one. Behind Menensoft is a founder-developer who designs and builds every layer end to end: Mithat Yılmaz.",
-    primaryCta: "Start a project conversation",
+    eyebrow: "Menensoft — web systems for business",
+    headline: "We build web systems that actually run your business",
+    sub: "E-commerce infrastructure, sites with an admin panel, QR menu/ordering systems and custom software. Not a brochure site — systems that take data in, are managed from a panel, and genuinely carry the work.",
+    chips: [
+      { label: "E-commerce infrastructure", href: "/en/ecommerce-website" },
+      { label: "Admin panel site", href: "/en/website-with-admin-panel" },
+      { label: "QR menu system", href: "/en/qr-menu-system" },
+      { label: "Custom software", href: "/en/custom-software-development" },
+    ],
+    primaryCta: "Tell me about your project",
     primaryHref: "/en/start-project",
-    secondaryCta: "View projects",
-    secondaryHref: "/en/projects",
-    undecided: "Not sure which system you need?",
-    undecidedLink: "A two-question flow will show you",
-    stackLabel: "Core stack",
+    secondaryCta: "Explore systems",
+    secondaryHref: "/en/solutions",
+    credibility: ["5 real projects", "end-to-end development", "handover-ready code"],
     cardTitle: "~/projects — system status",
     cardFooter: (n: number) => `${n} systems — designed and built end to end`,
     lower: (s: string) => s.toLowerCase(),
@@ -179,27 +195,23 @@ function BuildStatusCard({ locale }: { locale: Locale }) {
 
 export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
   const copy = HERO_COPY[locale];
-  const headline = copy.site.headline.replace(/\.$/, "");
 
   return (
     <section className="relative overflow-hidden border-b border-border/60">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(139,140,248,0.10),transparent)]" />
       </div>
-      {/* Compacted for slot 2 (Phase 19B): the showcase above carries the first
-          impression, so this band reinforces the brand instead of competing for
-          it. Every structural element is kept — pill, headline, both CTAs, the
-          undecided path, the stack line, the status card — only the scale and
-          rhythm come down. */}
-      <Container className="relative grid gap-12 pt-14 pb-16 md:pt-16 md:pb-20 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
+      {/* Phase 41A: the hero is the first section again, so it carries the h1 and
+          states the offer directly. The right-column status card is lg-only and
+          adds no mobile height; the left column stays tight so the H1, sub,
+          chips and both CTAs fit the first screen on a phone. */}
+      <Container className="relative grid gap-12 pt-14 pb-16 md:pt-20 md:pb-20 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center">
         <div>
           <Entrance delay={0}>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-              {/* copy bridge from the showcase: names what this band is for, so
-                  the hero reads as a continuation rather than a restart */}
               <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 <span aria-hidden className="h-px w-6 bg-accent/60" />
-                {copy.bridge}
+                {copy.eyebrow}
               </p>
               <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
                 <span
@@ -211,24 +223,38 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
             </div>
           </Entrance>
           <Entrance delay={0.06}>
-            {/* h2, not h1: the opening sales showcase now carries the page's
-                single h1. Its type scale stays below the showcase h1 so the
-                page's largest heading is also its first one. */}
-            <h2 className="mt-6 max-w-3xl text-3xl font-semibold tracking-tight text-balance md:text-4xl lg:text-5xl lg:leading-[1.05]">
-              {headline}
+            {/* h1: the hero is the first section again and owns the page's single
+                h1. The opening showcase below was demoted to h2. */}
+            <h1 className="mt-6 max-w-3xl text-3xl font-semibold tracking-tight text-balance md:text-5xl md:leading-[1.08] lg:text-6xl lg:leading-[1.06]">
+              {copy.headline}
               <span className="text-accent [text-shadow:0_0_24px_rgba(139,140,248,0.5)]">
                 .
               </span>
-            </h2>
+            </h1>
           </Entrance>
           <Entrance delay={0.12}>
-            {/* supports the showcase (who builds it, how) instead of repeating
-                its list of system types */}
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">
-              {copy.intro}
+              {copy.sub}
             </p>
           </Entrance>
-          <Entrance delay={0.18}>
+          <Entrance delay={0.16}>
+            {/* Service chips → Phase 40 landing pages. Contextual, not footer
+                spam, and they tell the visitor concretely what gets built. */}
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {copy.chips.map((chip) => (
+                <li key={chip.href}>
+                  <Link
+                    href={chip.href}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-sm text-foreground/90 backdrop-blur transition-colors hover:border-accent/50 hover:text-foreground"
+                  >
+                    {chip.label}
+                    <ArrowRight className="size-3.5 text-accent/70" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Entrance>
+          <Entrance delay={0.22}>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href={copy.primaryHref}
@@ -247,25 +273,20 @@ export function HeroSection({ locale = "tr" }: { locale?: Locale }) {
                 {copy.secondaryCta}
               </Link>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              {copy.undecided}{" "}
-              <Link
-                href={copy.primaryHref}
-                className="text-foreground/85 underline-offset-4 transition-colors hover:text-foreground hover:underline"
-              >
-                {copy.undecidedLink}
-              </Link>
-              .
-            </p>
           </Entrance>
-          <Entrance delay={0.24}>
-            <p className="mt-10 font-mono text-xs text-muted-foreground">
-              <span className="tracking-widest uppercase">{copy.stackLabel}</span>
-              <span aria-hidden className="mx-2">
-                —
-              </span>
-              {site.coreStack.join(" · ")}
-            </p>
+          <Entrance delay={0.28}>
+            {/* Honest credibility strip — five real projects, nothing invented. */}
+            <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
+              {copy.credibility.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-2 font-mono text-xs text-muted-foreground"
+                >
+                  <span aria-hidden className="size-1.5 rounded-full bg-accent/70" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </Entrance>
         </div>
         <div className="relative hidden lg:block">
