@@ -15,7 +15,7 @@ const buttonVariants = cva(
         // thins dark-on-light text on Windows). The indigo glow is pushed
         // fully below the button edge at low alpha so nothing ever washes
         // the label, and a crisp hairline ring defines the edge.
-        cta: "bg-white text-black font-semibold subpixel-antialiased ring-1 ring-white/25 shadow-[0_14px_34px_-16px_rgba(99,102,241,0.45)] hover:bg-neutral-100 hover:shadow-[0_16px_40px_-16px_rgba(99,102,241,0.55)]",
+        cta: "bg-foreground text-background font-semibold subpixel-antialiased ring-1 ring-foreground/15 shadow-[0_14px_34px_-16px_rgba(99,102,241,0.45)] hover:bg-foreground/90 hover:shadow-[0_16px_40px_-16px_rgba(99,102,241,0.55)]",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:

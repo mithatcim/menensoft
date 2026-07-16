@@ -138,7 +138,9 @@ export async function LandingPageView({
         )}
       />
 
-      <section className="py-16 md:py-24">
+      {/* Phase 41B: landing content is a light band (token-clean). The dark
+          ContactCTA below closes it — light content, dark call to action. */}
+      <section className="surface-light py-16 md:py-24">
         <Container>
           <Reveal>
             <SectionHeading

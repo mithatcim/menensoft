@@ -50,25 +50,41 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/**
+ * Phase 41B — hybrid theme.
+ *
+ * :root is the PUBLIC light surface: warm off-white paper, deep-navy ink, and
+ * the SAME violet/indigo accent family the dark theme uses (tuned darker so it
+ * reads on white). This is a premium light palette, not the shadcn grayscale
+ * default — no pure-white walls, no gray-on-white.
+ *
+ * .dark below is the technical/hero surface: a lifted, warmer navy-charcoal —
+ * NOT near-black — with real separation between background and card so sections
+ * stop reading as one continuous wall. The admin panel keeps forcing .dark on
+ * its own <html>, so it is unaffected by the public light default.
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: oklch(0.985 0.004 95);
+  --foreground: oklch(0.24 0.021 268);
+  --card: oklch(1 0.001 95);
+  --card-foreground: oklch(0.24 0.021 268);
+  --popover: oklch(1 0.001 95);
+  --popover-foreground: oklch(0.24 0.021 268);
+  --primary: oklch(0.24 0.021 268);
+  --primary-foreground: oklch(0.985 0.003 95);
+  --secondary: oklch(0.955 0.006 262);
+  --secondary-foreground: oklch(0.24 0.021 268);
+  --muted: oklch(0.955 0.006 262);
+  --muted-foreground: oklch(0.46 0.02 265);
+  /* Same accent family as dark, tuned for contrast on a light surface. */
+  --accent: #6366f1;
+  --accent-bright: #7c7ef5;
+  --accent-deep: #4f46e5;
+  --accent-foreground: oklch(0.99 0.002 95);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.905 0.008 265);
+  --input: oklch(0.9 0.008 265);
+  --ring: oklch(0.62 0.13 275);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -86,18 +102,20 @@
 }
 
 .dark {
-  --background: oklch(0.125 0.008 275);
+  /* Lifted from 0.125 and warmed: a deep navy-charcoal, not near-black. Card is
+     now ~5.5pp above background (was ~4pp) so cards and sections separate. */
+  --background: oklch(0.17 0.012 270);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.165 0.008 275);
+  --card: oklch(0.225 0.014 270);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.165 0.008 275);
+  --popover: oklch(0.225 0.014 270);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.25 0.008 275);
+  --secondary: oklch(0.29 0.014 270);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.25 0.008 275);
-  --muted-foreground: oklch(0.72 0 0);
+  --muted: oklch(0.29 0.014 270);
+  --muted-foreground: oklch(0.75 0.012 270);
   /* Signature accent: electric violet / indigo. Used for edges, markers,
      glows, scanlines, and focus states — never body text, never large
      solid fills. Hierarchy: accent (base) / accent-bright (peaks) /
@@ -107,7 +125,7 @@
   --accent-deep: #6366f1;
   --accent-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.68 0.13 285);
   --chart-1: oklch(0.87 0 0);
@@ -123,6 +141,45 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/**
+ * Phase 41B — opt-in LIGHT content band on a dark-default public page.
+ *
+ * The public <html> is still .dark, so everything keeps working. A section that
+ * opts into `.surface-light` re-declares the light tokens for its own subtree,
+ * so token-driven components inside it (bg-background, bg-card, text-foreground,
+ * text-muted-foreground, border-border, text-accent) render on the warm light
+ * surface. This is how the hybrid is introduced without a risky full flip: dark
+ * hero/technical sections stay as they are, prose/content bands become light.
+ *
+ * Only apply it to token-clean sections. A component with a hardcoded white
+ * overlay, a pure-black shadow or a white scanline still assumes dark and is
+ * migrated in Phase 41C, not force-lit here.
+ */
+.surface-light {
+  --background: oklch(0.985 0.004 95);
+  --foreground: oklch(0.24 0.021 268);
+  --card: oklch(1 0.001 95);
+  --card-foreground: oklch(0.24 0.021 268);
+  --popover: oklch(1 0.001 95);
+  --popover-foreground: oklch(0.24 0.021 268);
+  --primary: oklch(0.24 0.021 268);
+  --primary-foreground: oklch(0.985 0.003 95);
+  --secondary: oklch(0.955 0.006 262);
+  --secondary-foreground: oklch(0.24 0.021 268);
+  --muted: oklch(0.955 0.006 262);
+  --muted-foreground: oklch(0.46 0.02 265);
+  --accent: #6366f1;
+  --accent-bright: #7c7ef5;
+  --accent-deep: #4f46e5;
+  --accent-foreground: oklch(0.99 0.002 95);
+  --border: oklch(0.905 0.008 265);
+  --input: oklch(0.9 0.008 265);
+  --ring: oklch(0.62 0.13 275);
+  background-color: var(--background);
+  color: var(--foreground);
+  color-scheme: light;
 }
 
 @layer base {

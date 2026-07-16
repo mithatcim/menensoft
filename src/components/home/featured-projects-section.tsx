@@ -33,7 +33,7 @@ export async function FeaturedProjectsSection({ locale = "tr" }: { locale?: Loca
   // takes it off the homepage — it does not just stop being highlighted.
   const items = await getFeaturedProjects(locale);
   return (
-    <section className="py-16 md:py-24">
+    <section className="surface-light border-y border-border py-16 md:py-24">
       <Container>
         <Reveal>
           <div className="flex items-end justify-between gap-6">
