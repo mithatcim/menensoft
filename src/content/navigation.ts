@@ -8,7 +8,7 @@ export const mainNav: NavItem[] = [
   { label: "Çözümler", href: "/cozumler" },
   { label: "Projeler", href: "/projeler" },
   { label: "Süreç", href: "/surec" },
-  { label: "Hakkında", href: "/hakkimda" },
+  { label: "Hakkımızda", href: "/hakkimda" },
   { label: "SSS", href: "/sss" },
 ];
 
@@ -49,7 +49,7 @@ export const footerNav: NavItem[] = [
   { label: "Sektörler", href: "/sektorler" },
   { label: "Projeler", href: "/projeler" },
   { label: "Süreç", href: "/surec" },
-  { label: "Hakkında", href: "/hakkimda" },
+  { label: "Hakkımızda", href: "/hakkimda" },
   { label: "SSS", href: "/sss" },
   { label: "İletişim", href: "/iletisim" },
   inquiryItem,

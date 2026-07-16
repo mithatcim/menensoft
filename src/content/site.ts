@@ -120,9 +120,9 @@ export const about = {
   // the tooling line carry over from the owner-approved 8E content, now in
   // Turkish. No biography or claims are invented.
   intro: [
-    "Menensoft, işletmeler için çalışan web sistemleri geliştiren bir yazılım markasıdır. Markanın arkasında kurucu ve geliştirici olarak ben, Mithat Yılmaz varım: veri modelinden arayüze, sistemin her katmanını uçtan uca ben tasarlar ve geliştiririm.",
-    "Yakın dönem işlerin çoğu, operasyon tarafı olan sistemler: garson, mutfak ve kasa ekranlarıyla çalışan bir restoran sipariş sistemi; kendi yönetim paneline sahip bir psikoloji kliniği web sitesi; görsel sayfa kurucusuyla bir e-ticaret CMS altyapısı. Statik sayfa değil, çalışan sistem teslim etmeyi tercih ederim.",
-    "Kapsamı dürüst tutarım, küçük ve gözden geçirilebilir adımlarla ilerlerim, trend olan yerine güvenilir ve kanıtlanmış teknolojiyi seçerim.",
+    "Menensoft, işletmelere özel çalışan web sistemleri, masaüstü uygulamalar, entegrasyonlar ve iş akışı otomasyonları geliştiren, kurucusu Mithat Yılmaz liderliğindeki bir yazılım stüdyosudur. Broşür site değil; bir işletmenin sürecini fiilen taşıyan, panelden yönetilen sistemler kurarız.",
+    "Yakın dönem işlerimizin çoğu operasyon tarafı olan sistemler: garson, mutfak ve kasa ekranlarıyla çalışan bir restoran sipariş sistemi; kendi yönetim paneline sahip bir psikoloji kliniği web sitesi; görsel sayfa kurucusuyla bir e-ticaret CMS altyapısı. Statik sayfa değil, çalışan sistem teslim etmeyi tercih ederiz.",
+    "Kapsamı dürüst tutar, küçük ve gözden geçirilebilir adımlarla ilerler, trend olan yerine güvenilir ve kanıtlanmış teknolojiyi seçeriz. Kurucu Mithat Yılmaz, yazılım geliştirme ve iş süreçlerini ürüne dönüştürme yaklaşımını ekibin üretim disiplinine taşır.",
   ],
   skills: [
     {

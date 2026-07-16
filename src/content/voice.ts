@@ -7,7 +7,7 @@ export const voice = {
   ton: [
     "Premium ama gösterişsiz; teknik olarak ciddi, satış odaklı ama dürüst.",
     "Mission-control kimliği: sistem, akış, modül, panel dili — hacker/oyun estetiği değil.",
-    "Marka Menensoft konuşur; kurucu Mithat Yılmaz görünürdür, 'büyük ekip' imâsı yapılmaz.",
+    "Marka Menensoft 'biz' diliyle konuşur; kurucu Mithat Yılmaz görünürdür; kurucu liderliğinde bir yazılım stüdyosu/ekip olarak konumlanır — uydurma büyük ajans, çalışan sayısı veya departman imâsı yapılmaz.",
     "Alıcı sorusuna cevap veren kısa cümleler; çeviri kokan kalıplardan kaçın.",
   ],
 
@@ -24,7 +24,7 @@ export const voice = {
 
   kacinilan: [
     "garanti, kesin sonuç, en iyi, lider, dünya çapında",
-    "büyük ekip / ajans imâsı (yalnızca 'ne değiliz' bağlamında, olumsuzlayarak)",
+    "uydurma büyük ajans / çalışan sayısı / departman / ofis adresi imâsı (küçük, kurucu liderliğindeki ekip dürüstçe anlatılır)",
     "müşteri adı, gelir, kullanıcı sayısı, canlı URL, lansman iddiası, referans/testimonial",
     "dijital çözüm / dijital dönüşüm gibi boş kalıplar",
     "oltalama/phishing sözlüğü; aciliyet, geri sayım, kıtlık numaraları",

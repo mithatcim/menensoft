@@ -89,9 +89,9 @@ export const faq: FaqItem[] = [
   },
   {
     id: "tek-kisi-riski",
-    question: "Tek kişilik bir markayla çalışmak riskli değil mi?",
+    question: "Küçük bir ekiple çalışmak riskli değil mi?",
     answer:
-      "Menensoft'u tek kurucu-geliştirici yürütür ve bu gizlenmez; muhatabınız doğrudan sistemi kuran kişidir. Riski azaltan şey kalabalık ekip değil, yapıdır: kapsam yazılı netleşir, kod tabanı sürdürülebilir tutulur, dokümantasyon ve temiz devir standarttır. Teslim edilen sistem kişiye bağımlı bir kara kutu değildir; gerektiğinde başka bir geliştiricinin devralabileceği yapıda bırakılır. Karşılığında 7/24 kurumsal destek hattı vaadi de verilmez — bu da dürüstlüğün parçasıdır.",
+      "Menensoft, kurucu Mithat Yılmaz liderliğinde küçük bir ekip olarak yürür; muhatabınız işi kuran ekibin içinden olur, araya giren bir katman yoktur. Riski azaltan şey kalabalık organizasyon değil, yapıdır: kapsam yazılı netleşir, kod tabanı sürdürülebilir tutulur, dokümantasyon ve temiz devir standarttır. Teslim edilen sistem kişiye bağımlı bir kara kutu değildir; gerektiğinde başka bir geliştiricinin devralabileceği yapıda bırakılır. Karşılığında 7/24 kurumsal destek hattı vaadi de verilmez — bu da dürüstlüğün parçasıdır.",
     links: [{ label: "Çalışma ilkeleri", href: "/neden-menensoft" }],
   },
   {

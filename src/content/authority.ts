@@ -39,7 +39,7 @@ export const whyPillars: Pillar[] = [
 
 /** "Ne değiliz" — güveni abartıyla değil sınır çizerek kuran blok. */
 export const notWe = [
-  "Kalabalık bir ajans değil: markanın arkasında tek kurucu-geliştirici var ve muhatabınız doğrudan o.",
+  "Yüzü olmayan kalabalık bir ajans değil: kurucu Mithat Yılmaz liderliğindeki ekiple doğrudan çalışırsınız, araya giren bir katman yoktur.",
   "Şablon bayisi değil: hazır tema üstüne logo değiştiren bir iş modeli yok.",
   "Her işe evet diyen bir tedarikçi değil: kapsam işe uymuyorsa açıkça söylenir.",
   "Vaat makinesi değil: burada müşteri adı, uydurma rakam ya da sıralama vaadi bulamazsınız.",

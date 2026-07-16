@@ -37,7 +37,7 @@ export const whyPillarsEn: Pillar[] = [
 ];
 
 export const notWeEn = [
-  "Not a crowded agency: behind the brand is one founder-developer, and he is who you talk to.",
+  "Not a faceless agency: you work directly with the founder-led team behind the brand — led by Mithat Yılmaz — with no layer in between.",
   "Not a template reseller: there is no swap-the-logo-on-a-theme business model here.",
   "Not a vendor that says yes to everything: if the scope doesn't fit the work, that is said openly.",
   "Not a promise machine: you will find no client names, made-up numbers or ranking pledges here.",

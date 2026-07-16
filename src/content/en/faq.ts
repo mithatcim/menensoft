@@ -80,9 +80,9 @@ export const faqEn: FaqItem[] = [
   },
   {
     id: "single-founder-risk",
-    question: "Isn't working with a one-person brand risky?",
+    question: "Isn't working with a small team risky?",
     answer:
-      "Menensoft is run by a single founder-developer, and that is not hidden; the person you talk to is the person who builds the system. What reduces risk is structure, not headcount: scope agreed in writing, a maintainable codebase, documentation and clean handoff as standard. The delivered system is not a black box tied to one person — it is left in a shape another developer could take over. In return, no 24/7 support desk is promised — that is part of the honesty.",
+      "Menensoft runs as a small, founder-led team under Mithat Yılmaz; the people you talk to are part of the team that builds the system, with no layer in between. What reduces risk is structure, not headcount: scope agreed in writing, a maintainable codebase, documentation and clean handoff as standard. The delivered system is not a black box tied to one person — it is left in a shape another developer could take over. In return, no 24/7 support desk is promised — that is part of the honesty.",
     links: [{ label: "How Menensoft works", href: "/en/why-menensoft" }],
   },
   {

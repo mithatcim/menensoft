@@ -11,11 +11,16 @@ import { workflow } from "@/content/services";
 import { about, site } from "@/content/site";
 import { pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
-import { graph, personSchema, webPageSchema } from "@/lib/schema";
+import {
+  graph,
+  organizationSchema,
+  personSchema,
+  webPageSchema,
+} from "@/lib/schema";
 
 export const metadata = pageMeta({
-  title: "Hakkında",
-  description: `${site.positioning}. Kurucu: ${site.founder}. Yaklaşım, yetkinlikler ve çalışma şekli.`,
+  title: "Hakkımızda",
+  description: `${site.name}, kurucusu ${site.founder} liderliğinde işletmelere özel sistemler geliştiren bir yazılım stüdyosu. Yaklaşım, yetkinlikler ve çalışma şekli.`,
   path: "/hakkimda",
 });
 
@@ -26,11 +31,12 @@ export default function AboutPage() {
       <JsonLd
         data={graph(
           webPageSchema({
-            name: "Hakkımda",
+            name: "Hakkımızda",
             description:
-              "Menensoft'u kuran ve geliştiren kişi: nasıl çalışır, neye söz verir, neye vermez.",
+              "Menensoft: kurucu Mithat Yılmaz liderliğinde işletmelere özel sistemler geliştiren yazılım stüdyosu — nasıl çalışır, neye söz verir, neye vermez.",
             path: "/hakkimda",
           }),
+          organizationSchema(),
           personSchema(),
         )}
       />
@@ -39,7 +45,7 @@ export default function AboutPage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              eyebrow="Hakkında"
+              eyebrow="Hakkımızda"
               title={site.name}
               description={site.positioning}
             />

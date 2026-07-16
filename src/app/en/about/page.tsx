@@ -10,12 +10,12 @@ import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { TechTag } from "@/components/shared/tech-tag";
 import { aboutEn, siteEn } from "@/content/en/site";
 import { site } from "@/content/site";
-import { graph, personSchema } from "@/lib/schema";
+import { graph, organizationSchema, personSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
   title: "About",
-  description: `${siteEn.positioning}. Founder: ${site.founder}. Approach, skills and how the work runs.`,
+  description: `${site.name} is a founder-led software studio led by ${site.founder}, building custom systems for businesses. Approach, skills and how the work runs.`,
   path: "/en/about",
 });
 
@@ -46,7 +46,7 @@ export default function EnAboutPage() {
   return (
     <>
       <div className="surface-light">
-      <JsonLd data={graph(personSchema())} />
+      <JsonLd data={graph(organizationSchema(), personSchema())} />
       <section className="py-16 md:py-24">
         <Container>
           <Reveal>

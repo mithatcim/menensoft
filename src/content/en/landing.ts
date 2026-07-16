@@ -63,7 +63,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "e-ticaret",
     ctaTitle: "Let's talk about your e-commerce infrastructure",
     ctaText:
-      "Tell me what you sell and where it breaks today; we'll work out which structure you actually need.",
+      "Tell us what you sell and where it breaks today; we'll work out which structure you actually need.",
     seoTitle: "E-commerce website development — infrastructure with an admin panel",
     seoDescription:
       "E-commerce infrastructure where the panel that manages products also manages the pages that sell them. Visual page builder, product/category management, a working storefront.",
@@ -123,7 +123,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "yonetim-paneli",
     ctaTitle: "Let's talk about your panel",
     ctaText:
-      "Tell me which content you want to manage yourself; we'll work out what the panel needs to cover.",
+      "Tell us which content you want to manage yourself; we'll work out what the panel needs to cover.",
     seoTitle: "Website with an admin panel — manage your own content",
     seoDescription:
       "A website with an admin panel: update content yourself, work with a draft/publish split, stop waiting on a developer for every change. Structured fields, role-based access.",
@@ -182,7 +182,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "operasyon",
     ctaTitle: "Let's talk about your menu",
     ctaText:
-      "Tell me how often your menu changes and how orders flow today; I'll tell you where to start.",
+      "Tell us how often your menu changes and how orders flow today; we'll tell you where to start.",
     seoTitle: "QR menu system — a digital restaurant menu managed from a panel",
     seoDescription:
       "A QR menu with no printing: update items, prices and categories from the panel and publish instantly. Optionally connected to the order flow.",
@@ -242,7 +242,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "operasyon",
     ctaTitle: "Let's talk about your order flow",
     ctaText:
-      "Tell me how an order gets from the table to the kitchen today; we'll find where it breaks.",
+      "Tell us how an order gets from the table to the kitchen today; we'll find where it breaks.",
     seoTitle: "Restaurant ordering system — one flow from table to kitchen",
     seoDescription:
       "Order routing, kitchen and till screens, role-based access. Instead of paper tickets and shouted orders, a working operations system that carries a full service.",
@@ -301,7 +301,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "kurumsal-site",
     ctaTitle: "Let's talk about your clinic's site",
     ctaText:
-      "Tell me what you cannot update yourself today; we'll work out what the site needs to cover.",
+      "Tell us what you cannot update yourself today; we'll work out what the site needs to cover.",
     seoTitle: "Psychologist website — a clinic site managed from a panel",
     seoDescription:
       "A website with an admin panel for psychologists and clinics: update your own content, collect appointment and contact requests in one flow. Calm, fast, privacy-respecting.",
@@ -360,7 +360,7 @@ export const landingPagesEn: LandingPage[] = [
     fitId: "otomasyon",
     ctaTitle: "Let's talk about your process",
     ctaText:
-      "Tell me the gap you close by hand today; we'll find what actually belongs in software.",
+      "Tell us the gap you close by hand today; we'll find what actually belongs in software.",
     seoTitle: "Custom software development — a system built around your work",
     seoDescription:
       "Custom software for workflows that do not fit an off-the-shelf product: the data model, admin panel and interface are built around your process. Explainable, handover-ready.",
@@ -418,7 +418,7 @@ export const landingPagesEn: LandingPage[] = [
     relatedSectors: ["operasyon-dashboard-sistemi", "uyelik-platformu"],
     ctaTitle: "Let's talk about your work",
     ctaText:
-      "Tell me which work runs in which tool today; we'll find what belongs on the web.",
+      "Tell us which work runs in which tool today; we'll find what belongs on the web.",
     seoTitle: "Web systems for business — not a brochure site, a working system",
     seoDescription:
       "A web system that actually carries one of your processes: admin panel, role-based access, live status screens. Move the work out of spreadsheets and WhatsApp into one system.",

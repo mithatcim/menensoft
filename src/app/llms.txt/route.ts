@@ -28,13 +28,15 @@ export async function GET() {
 
   const body = `# Menensoft
 
-> İşletmeler için çalışan web sistemleri kuran tek kişilik yazılım stüdyosu.
-> Broşür site değil: bir işletmenin sürecini fiilen taşıyan — veri girilen, iş
-> akan, durum görünen — ve panelden yönetilen sistemler.
+> İşletmelere özel çalışan sistemler kuran, kurucu liderliğinde bir yazılım
+> stüdyosu: web panelleri, masaüstü uygulamalar, entegrasyonlar ve iş akışı
+> otomasyonları. Broşür site değil: bir işletmenin sürecini fiilen taşıyan —
+> veri girilen, iş akan, durum görünen — ve panelden yönetilen sistemler.
 
 Site: ${siteUrl}
 Dil: Türkçe (birincil) ve İngilizce (/en)
-Kurucu & geliştirici: Mithat Yılmaz
+Yapı: kurucu Mithat Yılmaz liderliğinde yazılım stüdyosu / ekip
+Kurucu: Mithat Yılmaz
 İletişim: mithat.menen@gmail.com
 
 ## Menensoft nedir?

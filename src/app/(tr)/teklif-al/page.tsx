@@ -59,7 +59,7 @@ const NEXT_STEPS = [
  */
 const OBJECTIONS = [
   {
-    q: "Tek kişiyle çalışmak riskli mi?",
+    q: "Küçük bir ekiple çalışmak riskli mi?",
     a: "Riski kalabalık değil yapı azaltır: yazılı kapsam, dokümantasyon, devredilebilir kod tabanı.",
     href: "/sss#tek-kisi-riski",
   },

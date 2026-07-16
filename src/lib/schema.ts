@@ -41,7 +41,7 @@ export function personSchema() {
     "@type": "Person",
     "@id": PERSON_ID,
     name: site.founder,
-    jobTitle: "Kurucu & geliştirici",
+    jobTitle: "Kurucu",
     worksFor: { "@id": ORG_ID },
     url: `${siteUrl}/hakkimda`,
     sameAs: [site.githubUrl].filter(Boolean),

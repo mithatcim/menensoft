@@ -18,9 +18,9 @@ export const siteEn = {
 
 export const aboutEn = {
   intro: [
-    "Menensoft is a software brand that builds working web systems for businesses. Behind the brand is one founder and developer — Mithat Yılmaz — who designs and builds every layer of a system end to end, from the data model to the interface.",
-    "Most recent work is systems with a real operations side: a restaurant ordering system with waiter, kitchen and cashier screens; a psychology clinic website with its own admin panel; an e-commerce CMS with a visual page builder. The preference is always the same — deliver a working system, not a static page.",
-    "Scope stays honest, work ships in small reviewable steps, and the stack favors reliable, well-understood technology over whatever is trending.",
+    "Menensoft is a founder-led software studio — led by its founder, Mithat Yılmaz — building working web systems, desktop applications, integrations, automations and custom workflow tools for businesses. Not a brochure site; we build panel-managed systems that actually carry a business's process.",
+    "Most of our recent work is systems with a real operations side: a restaurant ordering system with waiter, kitchen and cashier screens; a psychology clinic website with its own admin panel; an e-commerce CMS with a visual page builder. The preference is always the same — we deliver a working system, not a static page.",
+    "We keep scope honest, ship in small reviewable steps, and favor reliable, well-understood technology over whatever is trending. Founder Mithat Yılmaz brings a practical approach — turning software and business processes into products — into how the team builds.",
   ],
   skills: [
     {

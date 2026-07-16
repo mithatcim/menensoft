@@ -50,7 +50,7 @@ const NEXT_STEPS = [
  */
 const OBJECTIONS = [
   {
-    q: "Is a one-person brand risky?",
+    q: "Is working with a small team risky?",
     a: "Structure reduces the risk, not headcount: written scope, documentation, a transferable codebase.",
     href: "/en/faq#single-founder-risk",
   },
