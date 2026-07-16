@@ -122,6 +122,7 @@ export const privacyPageEn = {
         "Analytics: no cookie, no localStorage identifier.",
         "Language suggestion: if you dismiss the language hint or pick a language, that choice is stored in your browser — solely so you are not shown the same suggestion again. It is not an identifier and it is never sent to the server.",
         "Wizard draft: the message you type on /en/start-project is kept in your browser until you close the tab, so a stray back-navigation does not destroy it. It is not sent to the server.",
+        "Campaign panel: if you close the panel, a small marker is kept in your browser so it is not shown again during the same session. It is not an identity and is not sent to the server.",
         "Admin login: a secure session cookie is used only for the owner to sign in to the panel. Visitors never receive it.",
       ],
     },

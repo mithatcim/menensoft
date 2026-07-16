@@ -135,6 +135,7 @@ export const privacyPage = {
         "Analitik: çerez yok, localStorage kimliği yok.",
         "Dil önerisi: dil önerisini kapatırsanız ya da dil seçerseniz, bu tercih tarayıcınızda saklanır — yalnızca size aynı öneriyi tekrar tekrar göstermemek için. Bu bir kimlik değildir ve sunucuya gönderilmez.",
         "Sihirbaz taslağı: /teklif-al sayfasında yazdığınız mesaj, sekmeyi kapatana kadar tarayıcınızda tutulur — yanlışlıkla geri gidip yazdıklarınızı kaybetmeyin diye. Sunucuya gönderilmez.",
+        "Kampanya paneli: Paneli kapatırsanız, aynı oturumda tekrar göstermemek için tarayıcınızda küçük bir işaret tutulur. Bu bir kimlik değildir ve sunucuya gönderilmez.",
         "Yönetim girişi: yalnızca site sahibinin panele girmesi için güvenli bir oturum çerezi kullanılır. Ziyaretçiler bu çerezi hiç almaz.",
       ],
     },

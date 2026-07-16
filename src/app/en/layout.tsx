@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { ProjectIndexProvider } from "@/components/projects/project-index";
 import { getPublishedProjectSummaries } from "@/lib/projects/public";
 import { Analytics } from "@/components/analytics/analytics";
+import { CampaignModal } from "@/components/campaign/campaign-modal";
 import { LanguageHint } from "@/components/shared/language-hint";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
 import { siteEn } from "@/content/en/site";
@@ -93,6 +94,7 @@ export default async function EnRootLayout({
             <Footer locale="en" />
           </div>
         </ProjectIndexProvider>
+        <CampaignModal locale="en" />
       </body>
     </html>
   );
