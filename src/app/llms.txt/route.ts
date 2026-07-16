@@ -41,10 +41,10 @@ Kurucu: Mithat Yılmaz
 
 ## Menensoft nedir?
 
-Menensoft, işletmelerin gerçek iş süreçlerini taşıyan web sistemleri kurar:
-e-ticaret altyapıları, yönetim panelleri, operasyon sistemleri, dashboard'lar ve
-iş akışı otomasyonu. Hazır tema ya da eklenti yığını değil; veri modeli, panel ve
-arayüz işin kendisine göre tasarlanır.
+Menensoft, işletmelerin gerçek iş süreçlerini taşıyan yazılım sistemleri kurar:
+web tabanlı admin panelleri, masaüstü uygulamalar, entegrasyonlar, otomasyonlar,
+e-ticaret altyapıları, dashboard'lar ve özel iş akışı sistemleri. Hazır tema ya da
+eklenti yığını değil; veri modeli, panel ve arayüz işin kendisine göre tasarlanır.
 
 ## Kimin için?
 

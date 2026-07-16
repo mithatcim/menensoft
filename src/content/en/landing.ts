@@ -312,7 +312,7 @@ export const landingPagesEn: LandingPage[] = [
     eyebrow: "Custom software",
     title: "Custom software development",
     intro:
-      "For workflows that do not fit inside an off-the-shelf product: a system shaped around the work itself. Not a template — the data model, the panel and the interface are designed around your flow.",
+      "For workflows that do not fit inside an off-the-shelf product: software shaped around the work itself — web panels, desktop applications and integrations. Not a template — the data model, the panel and the interface are designed around your flow.",
     whoFor: [
       "Businesses whose work does not match the flow a product assumes",
       "Teams whose systems have become a pile of plugins and workarounds",

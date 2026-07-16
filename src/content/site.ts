@@ -94,13 +94,13 @@ export const siteUrl = rawSiteUrl || "http://localhost:3000";
 export const site: SiteConfig = {
   name: "Menensoft",
   founder: "Mithat Yılmaz",
-  role: "İşletmeler için çalışan web sistemleri",
-  positioning: "Menensoft — işletmeler için çalışan web sistemleri",
+  role: "İşletmeler için yazılım sistemleri",
+  positioning: "Menensoft — işletmeler için yazılım sistemleri",
 
   // Hero
-  headline: "İşletmeniz için çalışan web sistemleri.",
+  headline: "İşletmeniz için çalışan yazılım sistemleri.",
   subheadline:
-    "E-ticaret altyapıları, yönetim panelleri, dashboard'lar ve operasyon sistemleri: veritabanından arayüze, çalışır teslim edilen özel yazılım.",
+    "Web tabanlı admin panelleri, masaüstü uygulamalar, entegrasyonlar, otomasyonlar ve özel iş akışı sistemleri: veritabanından arayüze, çalışır teslim edilen özel yazılım.",
 
   availability: "Yeni projelere açık",
 

@@ -360,7 +360,7 @@ export const landingPages: LandingPage[] = [
     eyebrow: "Özel yazılım",
     title: "Özel yazılım geliştirme",
     intro:
-      "Hazır bir ürünün kısıtlarına sığmayan iş akışları için, işin kendisine göre kurulan sistem. Şablon değil: veri modeli, panel ve arayüz sizin akışınıza göre tasarlanır.",
+      "Hazır bir ürünün kısıtlarına sığmayan iş akışları için, işin kendisine göre kurulan yazılım: web tabanlı paneller, masaüstü uygulamalar ve entegrasyonlar. Şablon değil: veri modeli, panel ve arayüz sizin akışınıza göre tasarlanır.",
     whoFor: [
       "İşi hazır bir ürünün varsaydığı akışa uymayan işletmeler",
       "Eklenti ve geçici çözüm yığınına dönmüş sistemleri olanlar",

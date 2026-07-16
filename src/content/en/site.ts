@@ -8,11 +8,11 @@ import { site, type SkillGroup } from "@/content/site";
 
 export const siteEn = {
   ...site,
-  role: "Working web systems for businesses",
-  positioning: "Menensoft — working web systems for businesses",
-  headline: "Web systems that run your business.",
+  role: "Software systems for businesses",
+  positioning: "Menensoft — software systems for businesses",
+  headline: "Software systems that run your business.",
   subheadline:
-    "E-commerce infrastructure, admin panels, dashboards and operations systems: custom software delivered working, from the database to the interface.",
+    "Web admin panels, desktop applications, integrations, automations and custom workflow systems: custom software delivered working, from the database to the interface.",
   availability: "Open to new projects",
 };
 
