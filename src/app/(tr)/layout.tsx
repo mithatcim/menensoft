@@ -71,8 +71,8 @@ export default async function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full scroll-smooth antialiased`}
-      style={{ colorScheme: "dark" }}
+      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+      style={{ colorScheme: "light" }}
     >
       <body className="min-h-full">
         <JsonLd

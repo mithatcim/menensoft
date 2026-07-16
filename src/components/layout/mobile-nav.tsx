@@ -72,7 +72,7 @@ export function MobileNav({
               animate={{ opacity: 1, y: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
               transition={{ duration: reduceMotion ? 0 : 0.2, ease: "easeOut" }}
-              className="absolute inset-x-0 top-16 z-50 border-b border-border bg-background shadow-[0_24px_48px_-16px_rgba(0,0,0,0.7)]"
+              className="absolute inset-x-0 top-16 z-50 border-b border-border bg-background shadow-[0_24px_48px_-20px_rgba(30,27,75,0.25)]"
             >
               <ul className="divide-y divide-border/60 px-6 py-2">
                 {items.map((item) => {

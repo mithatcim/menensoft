@@ -75,8 +75,8 @@ export default async function EnRootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full scroll-smooth antialiased`}
-      style={{ colorScheme: "dark" }}
+      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+      style={{ colorScheme: "light" }}
     >
       <body className="min-h-full">
         <JsonLd
