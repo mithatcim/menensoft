@@ -121,7 +121,7 @@ export async function ServicesPreviewSection({ locale = "tr" }: { locale?: Local
   );
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="surface-light border-t border-border py-16 md:py-24">
       <Container>
         <Reveal>
           <div className="flex items-end justify-between gap-6">

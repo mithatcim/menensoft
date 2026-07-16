@@ -469,11 +469,16 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
     <section
       ref={sectionRef}
       onKeyDown={onKeyDown}
-      className="relative flex min-h-[85vh] flex-col justify-center overflow-hidden border-b border-border/60 py-12 md:py-14"
+      className="surface-light relative flex min-h-[85vh] flex-col justify-center overflow-hidden border-b border-border py-12 md:py-14"
     >
+      {/* Phase 41D: the problem showcase is explanatory (six real business
+          problems), so it moves onto the light surface. The ambient violet glow
+          is dropped to a faint tint that reads on both themes; the card glows and
+          the active-card shadow are softened below so the 3D stage looks premium
+          on light, not smudged. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-grid mask-radial-faded absolute inset-0 opacity-40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_0%,rgba(139,140,248,0.12),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_0%,rgba(139,140,248,0.06),transparent)]" />
       </div>
 
       {/* Announces only the active system, and only once the visitor has
@@ -549,14 +554,14 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
                     className={cn(
                       "stage-card relative flex h-full flex-col rounded-2xl border p-5 ring-1 transition-[border-color,box-shadow] duration-500 md:p-8",
                       isActive
-                        ? "border-accent/40 bg-card/90 ring-accent/20 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)]"
+                        ? "border-accent/40 bg-card ring-accent/20 shadow-[0_28px_64px_-32px_rgba(49,46,129,0.35)]"
                         : "border-border bg-card/70 ring-white/5",
                     )}
                   >
                     {isActive && (
                       <div
                         aria-hidden
-                        className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(139,140,248,0.10),transparent)]"
+                        className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(139,140,248,0.05),transparent)]"
                       />
                     )}
 
