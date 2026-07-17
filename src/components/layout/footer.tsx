@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -15,8 +16,18 @@ export function Footer({ locale = "tr" }: { locale?: Locale }) {
       <Container className="py-12 md:py-16">
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-start">
           <div>
-            <p className="text-sm font-semibold tracking-tight">{site.name}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
+            {/* Approved raster tagline logo (transparent PNG, dark-navy artwork)
+                — reads cleanly on the light footer; width/height carry the exact
+                ratio (no CLS), a fixed height with width auto avoids distortion. */}
+            <Image
+              src="/brand/menensoft-logo-horizontal-tagline.png"
+              alt="Menensoft — Systems. Automations. Integrations."
+              width={1200}
+              height={318}
+              sizes="260px"
+              className="h-12 w-auto md:h-14"
+            />
+            <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               {en ? siteEn.positioning : site.positioning}
             </p>
             <p className="mt-1 text-xs text-muted-foreground/70">

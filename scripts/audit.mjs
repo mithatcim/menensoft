@@ -139,8 +139,11 @@ const ENGLISH_PREFIXES = ["/projects", "/services", "/about", "/contact"];
 
 const METADATA_ROUTES = [
   "/favicon.ico",
-  "/icon",
-  "/apple-icon",
+  // Phase 44A: the icons became static PNG files (src/app/icon.png,
+  // apple-icon.png), so they serve at /icon.png and /apple-icon.png — the old
+  // dynamic (icon.tsx) routes /icon and /apple-icon no longer exist.
+  "/icon.png",
+  "/apple-icon.png",
   "/opengraph-image",
   "/twitter-image",
   "/robots.txt",

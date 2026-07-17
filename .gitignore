@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Phase 44A: raw logo staging (source zip/mockups) — not shipped
+/_incoming/

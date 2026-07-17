@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -73,9 +74,21 @@ export function Header({ locale = "tr" }: { locale?: Locale }) {
       <Container className="relative flex h-16 items-center justify-between">
         <Link
           href={locale === "en" ? "/en" : "/"}
-          className="inline-block py-1 text-sm font-semibold tracking-tight text-foreground"
+          className="inline-flex items-center py-1"
         >
-          {site.name}
+          {/* Approved raster logo (transparent PNG), dark-navy artwork that reads
+              cleanly on the Phase 41E light navbar. width/height carry the exact
+              aspect ratio so there is no CLS; a fixed height with width auto
+              sizes it without any distortion. */}
+          <Image
+            src="/brand/menensoft-logo-horizontal.png"
+            alt={site.name}
+            width={1200}
+            height={245}
+            priority
+            sizes="180px"
+            className="h-7 w-auto md:h-8"
+          />
         </Link>
 
         <nav
