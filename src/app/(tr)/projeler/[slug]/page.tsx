@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 
 import { ProjectCaseStudy } from "@/components/projects/case-study";
+import { ScreenshotGallery } from "@/components/projects/screenshot-gallery";
 import { ContactCTA } from "@/components/shared/contact-cta";
 import { JsonLd } from "@/components/shared/json-ld";
 import {
@@ -67,6 +68,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         data={graph(projectBreadcrumbSchema(project), projectSchema(project))}
       />
       <ProjectCaseStudy project={project} locale="tr" />
+      <ScreenshotGallery slug={project.slug} locale="tr" />
       <ContactCTA />
     </>
   );
