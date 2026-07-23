@@ -12,6 +12,7 @@ import {
 import { BrowserFrame, ScreenshotSlot } from "@/components/shared/browser-frame";
 import { TechTag } from "@/components/shared/tech-tag";
 import { buttonVariants } from "@/components/ui/button";
+import { galleryCover } from "@/content/project-gallery";
 import { type Locale } from "@/lib/locale";
 import { projectImage, type PublicProject } from "@/lib/projects/types";
 import { EASE_OUT } from "@/lib/motion";
@@ -155,7 +156,7 @@ function PreviewBody({ project, copy }: { project: PublicProject; copy: DeckCopy
         <div>
           <BrowserFrame
             title={`/${project.slug}`}
-            image={projectImage(project)}
+            image={projectImage(project) ?? galleryCover(project.slug, copy.locale)}
           >
             <ScreenshotSlot label={copy.slotLabel} />
           </BrowserFrame>

@@ -18,6 +18,24 @@ export interface GalleryItem {
   featured?: boolean;
 }
 
+/**
+ * Kapak görseli: galerisi olan bir proje için ilk öne çıkan kareyi BrowserFrame
+ * biçiminde döndürür. command-deck önizlemesi ve proje detay hero'su, DB'de
+ * image yoksa "alan ayrıldı" yerine bu gerçek kareyi gösterir.
+ */
+export function galleryCover(
+  slug: string,
+  locale: "tr" | "en" = "tr",
+): { src: string; alt: string } | undefined {
+  const items = projectGalleries[slug];
+  if (!items?.length) return undefined;
+  const cover = items.find((i) => i.featured) ?? items[0];
+  return {
+    src: `/projects/${slug}/${cover.file}.png`,
+    alt: locale === "en" ? cover.en : cover.tr,
+  };
+}
+
 export const projectGalleries: Record<string, GalleryItem[]> = {
   "ecommerce-cms": [
     { file: "site-kurucu-1", tr: "Görsel site kurucu — bölümler ve canlı önizleme", en: "Visual site builder — sections and live preview", featured: true },

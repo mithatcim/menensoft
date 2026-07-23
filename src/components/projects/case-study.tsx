@@ -19,6 +19,7 @@ import { FlowPanel } from "@/components/shared/flow-panel";
 import { Reveal } from "@/components/shared/reveal";
 import { type Locale } from "@/lib/locale";
 import { hasCapabilities } from "@/lib/projects/capabilities";
+import { galleryCover } from "@/content/project-gallery";
 import { projectImage, type PublicProject } from "@/lib/projects/types";
 
 /**
@@ -110,7 +111,7 @@ export function ProjectCaseStudy({
   locale?: Locale;
 }) {
   const copy = COPY[locale];
-  const capture = projectImage(project);
+  const capture = projectImage(project) ?? galleryCover(project.slug, locale);
 
   return (
     <>
