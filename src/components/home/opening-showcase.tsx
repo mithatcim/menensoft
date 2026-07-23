@@ -238,6 +238,90 @@ const COPY: Record<Locale, StageCopy> = {
  * (0.42) the neighbours were barely dimmed or angled and the whole thing still
  * looked like a flat row of equal cards.
  */
+/**
+ * Tiny before→after strip inside each problem card: scattered dots on the left
+ * (the mess), a bridge the data crosses, an ordered connected row on the right
+ * (the system). Pure CSS transitions keyed on the active card; the travelling
+ * pulse is DECOR_PULSES-gated. Decorative only — aria-hidden.
+ */
+const SCATTER_VARIANTS: { l: string; t: string }[][] = [
+  [
+    { l: "4%", t: "22%" },
+    { l: "22%", t: "62%" },
+    { l: "38%", t: "14%" },
+    { l: "54%", t: "58%" },
+    { l: "72%", t: "30%" },
+  ],
+  [
+    { l: "8%", t: "55%" },
+    { l: "26%", t: "18%" },
+    { l: "44%", t: "66%" },
+    { l: "60%", t: "26%" },
+    { l: "78%", t: "58%" },
+  ],
+  [
+    { l: "6%", t: "34%" },
+    { l: "20%", t: "70%" },
+    { l: "40%", t: "20%" },
+    { l: "58%", t: "62%" },
+    { l: "76%", t: "18%" },
+  ],
+];
+
+function ProblemMicroVisual({ active, seed }: { active: boolean; seed: number }) {
+  const scatter = SCATTER_VARIANTS[seed % SCATTER_VARIANTS.length];
+  return (
+    <div
+      aria-hidden
+      className="relative mt-4 flex h-9 items-center gap-3 md:mt-5"
+    >
+      {/* the mess */}
+      <div className="relative h-full flex-1">
+        {scatter.map((p, i) => (
+          <span
+            key={i}
+            style={{ left: p.l, top: p.t }}
+            className={cn(
+              "absolute size-1.5 rounded-full transition-all duration-700",
+              active
+                ? "bg-muted-foreground/60"
+                : "bg-muted-foreground/30",
+              active && i % 2 === 0 && "scale-125",
+            )}
+          />
+        ))}
+      </div>
+      {/* the bridge */}
+      <div className="relative h-px w-10 shrink-0 bg-gradient-to-r from-border via-accent/50 to-border">
+        {active && DECOR_PULSES && (
+          <span className="animate-flow-x absolute top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_6px_1px_rgba(99,102,241,0.55)]" />
+        )}
+      </div>
+      {/* the system */}
+      <div className="relative flex h-full flex-1 items-center">
+        <span
+          className={cn(
+            "absolute inset-x-1 top-1/2 h-px origin-left bg-accent/40 transition-transform duration-700",
+            active ? "scale-x-100" : "scale-x-0",
+          )}
+        />
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            style={{ left: `${12 + i * 34}%` }}
+            className={cn(
+              "absolute top-1/2 size-2 -translate-y-1/2 rounded-full border transition-all duration-500",
+              active
+                ? "border-accent bg-accent/80"
+                : "border-border bg-card",
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const TWEEN_FACTOR_BASE = 0.75;
 
 export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
@@ -611,6 +695,8 @@ export function OpeningShowcase({ locale = "tr" }: { locale?: Locale }) {
                     <p className="relative mt-2.5 text-sm leading-relaxed text-pretty text-muted-foreground md:mt-3 md:text-base">
                       {item.detail}
                     </p>
+
+                    <ProblemMicroVisual active={isActive} seed={index} />
 
                     <p className="relative mt-5 flex items-center gap-2 border-t border-border/60 pt-5 font-mono text-xs tracking-widest text-muted-foreground uppercase md:mt-6 md:pt-6">
                       <span aria-hidden className="size-1.5 bg-accent/90" />
