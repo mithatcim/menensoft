@@ -51,6 +51,11 @@ interface StoryCopy {
   inputWords: string[];
   logicNodes: [string, string, string, string];
   resultParts: [string, string, string];
+  /** Stage 03 mini panel: window title, sidebar nav, and [label, status] rows.
+      Generic illustrative labels only — never data, metrics or claims. */
+  dashboard: { title: string; nav: string[]; rows: [string, string][] };
+  /** Stage 04 closing caption under the assembled chain. */
+  resultDone: string;
   lower: (s: string) => string;
 }
 
@@ -127,6 +132,16 @@ const STORY_COPY: Record<"tr" | "en", StoryCopy> = {
     inputWords: ["talepler", "siparişler", "içerik", "kullanıcılar"],
     logicNodes: ["Veri modeli", "API", "Auth", "Yönlendirme"],
     resultParts: ["Veritabanı", "Backend", "Arayüz"],
+    dashboard: {
+      title: "~/panel — günlük görünüm",
+      nav: ["Siparişler", "Talepler", "İçerik", "Raporlar"],
+      rows: [
+        ["Yeni sipariş", "hazırlanıyor"],
+        ["Randevu talebi", "onaylandı"],
+        ["İçerik güncellemesi", "yayında"],
+      ],
+    },
+    resultDone: "çalışır teslim — devredilebilir yapı",
     lower: (s) => s.toLocaleLowerCase("tr-TR"),
   },
   en: {
@@ -137,6 +152,16 @@ const STORY_COPY: Record<"tr" | "en", StoryCopy> = {
     inputWords: ["requests", "orders", "content", "users"],
     logicNodes: ["Data model", "API", "Auth", "Routing"],
     resultParts: ["Database", "Backend", "Interface"],
+    dashboard: {
+      title: "~/panel — daily view",
+      nav: ["Orders", "Requests", "Content", "Reports"],
+      rows: [
+        ["New order", "in prep"],
+        ["Appointment request", "approved"],
+        ["Content update", "live"],
+      ],
+    },
+    resultDone: "delivered running — built for handoff",
     lower: (s) => s.toLowerCase(),
   },
 };
@@ -145,39 +170,61 @@ const STORY_COPY: Record<"tr" | "en", StoryCopy> = {
 /* Abstract, decorative skeletons only — never real data or captures. */
 
 function InputVisual({ words }: { words: string[] }) {
-  const scatter = [
-    { l: "10%", t: "18%", w: "w-16" },
-    { l: "34%", t: "62%", w: "w-20" },
-    { l: "58%", t: "26%", w: "w-14" },
-    { l: "74%", t: "58%", w: "w-16" },
-    { l: "22%", t: "76%", w: "w-12" },
-    { l: "66%", t: "80%", w: "w-14" },
-    { l: "44%", t: "10%", w: "w-12" },
+  // Scattered work fragments — chat-bubble notes, a stray spreadsheet strip and
+  // labelled pieces, slightly rotated so the mess reads as mess. Solid light
+  // cards with real borders: the dark-era muted-alpha skeletons vanished on the
+  // light theme, and an invisible problem convinces nobody.
+  const notes = [
+    { l: "5%", t: "10%", r: -5, w: "w-24" },
+    { l: "72%", t: "8%", r: 4, w: "w-20" },
+    { l: "10%", t: "66%", r: 3, w: "w-20" },
+    { l: "68%", t: "62%", r: -3, w: "w-24" },
   ];
   return (
     <div aria-hidden className="relative h-full w-full">
-      {scatter.map((s, i) => (
+      {notes.map((n, i) => (
         <motion.span
           key={i}
           variants={itemVariants}
-          style={{ left: s.l, top: s.t }}
+          style={{ left: n.l, top: n.t, rotate: `${n.r}deg` }}
           className={cn(
-            "absolute h-2.5 rounded-sm bg-muted/50",
-            s.w,
-            i % 2 ? "opacity-60" : "opacity-90",
+            "absolute flex h-8 items-center rounded-md border border-border bg-background px-2 shadow-sm",
+            n.w,
           )}
-        />
+        >
+          <span className="h-1.5 w-full rounded bg-foreground/15" />
+        </motion.span>
       ))}
       {words.map((w, i) => (
         <motion.span
           key={w}
           variants={itemVariants}
-          style={{ left: `${16 + i * 20}%`, top: `${38 + (i % 2) * 18}%` }}
-          className="absolute font-mono text-xs text-muted-foreground/70"
+          style={{
+            left: `${13 + i * 21}%`,
+            top: `${32 + (i % 2) * 22}%`,
+            rotate: `${i % 2 ? 2.5 : -2}deg`,
+          }}
+          className="absolute inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 font-mono text-xs text-foreground/85 shadow-sm"
         >
+          <span className="size-1.5 shrink-0 rounded-full bg-accent/70" />
           {w}
         </motion.span>
       ))}
+      {/* the stray spreadsheet of the story */}
+      <motion.span
+        variants={itemVariants}
+        style={{ left: "36%", top: "80%", rotate: "-1.5deg" }}
+        className="absolute flex w-44 overflow-hidden rounded-md border border-border bg-background shadow-sm"
+      >
+        {[0, 1, 2].map((c) => (
+          <span
+            key={c}
+            className="flex-1 border-r border-border/70 px-1.5 py-1.5 last:border-r-0"
+          >
+            <span className="block h-1.5 rounded bg-foreground/15" />
+          </span>
+        ))}
+      </motion.span>
     </div>
   );
 }
@@ -190,48 +237,75 @@ function LogicVisual({
   labels: [string, string, string, string];
 }) {
   const nodes = [
-    { x: 22, y: 84, label: labels[0] },
-    { x: 150, y: 24, label: labels[1] },
-    { x: 150, y: 144, label: labels[2] },
-    { x: 292, y: 84, label: labels[3] },
+    { x: 14, y: 84, label: labels[0] },
+    { x: 152, y: 24, label: labels[1] },
+    { x: 152, y: 144, label: labels[2] },
+    { x: 290, y: 84, label: labels[3] },
   ];
   const links = [
-    "M106 92 L150 40",
-    "M106 100 L150 152",
-    "M234 40 L292 88",
-    "M234 152 L292 100",
+    "M112 92 L152 40",
+    "M112 100 L152 152",
+    "M250 40 L290 88",
+    "M250 152 L290 100",
   ];
   return (
     <div aria-hidden className="flex h-full w-full items-center justify-center">
-      <svg viewBox="0 0 380 190" className="h-auto w-full max-w-[380px]">
+      <svg viewBox="0 0 392 190" className="h-auto w-full max-w-[392px]">
         {links.map((d, i) => (
           <motion.path
             key={d}
             d={d}
             fill="none"
             stroke="var(--accent)"
-            strokeOpacity={0.45}
-            strokeWidth={1.25}
+            strokeOpacity={0.65}
+            strokeWidth={1.5}
             initial={false}
             animate={{ pathLength: active ? 1 : 0 }}
             transition={{ duration: 0.7, delay: 0.25 + i * 0.12, ease: EASE_OUT }}
           />
         ))}
+        {/* data pulses travelling the drawn links while the stage is active */}
+        {active &&
+          DECOR_PULSES &&
+          links.map((d, i) => (
+            <motion.circle
+              key={`pulse-${i}`}
+              r={2.4}
+              fill="var(--accent)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 1.6,
+                repeat: Infinity,
+                delay: 1 + i * 0.4,
+                ease: "easeInOut",
+              }}
+            >
+              <animateMotion
+                dur="1.6s"
+                begin={`${1 + i * 0.4}s`}
+                repeatCount="indefinite"
+                path={d}
+              />
+            </motion.circle>
+          ))}
         {nodes.map((n) => (
           <motion.g key={n.label} variants={fadeVariants}>
             <rect
               x={n.x}
               y={n.y - 16}
-              width={84}
+              width={98}
               height={32}
               rx={7}
-              className="fill-card stroke-border"
+              strokeWidth={1.25}
+              className="fill-background stroke-accent/45 drop-shadow-sm"
             />
+            <circle cx={n.x + 11} cy={n.y} r={2} className="fill-accent" />
             <text
-              x={n.x + 42}
+              x={n.x + 55}
               y={n.y + 4}
               textAnchor="middle"
-              className="fill-foreground/80 font-mono text-xs"
+              className="fill-foreground font-mono text-[11px]"
             >
               {n.label}
             </text>
@@ -242,48 +316,71 @@ function LogicVisual({
   );
 }
 
-function DashboardVisual() {
+function DashboardVisual({ copy }: { copy: StoryCopy }) {
+  // A readable mini admin panel: named sidebar, status rows and a small chart.
+  // Illustrative labels from the locale dictionary — no data, no metrics, no
+  // claims. Solid surfaces; the old muted-alpha skeletons were unreadable on
+  // the light theme.
+  const { title, nav, rows } = copy.dashboard;
   return (
     <div
       aria-hidden
-      className="mx-auto flex h-full w-full max-w-[440px] items-center"
+      className="mx-auto flex h-full w-full max-w-[460px] items-center"
     >
-      <div className="w-full overflow-hidden rounded-lg border border-border/70 bg-background/40">
+      <div className="max-h-full w-full overflow-hidden rounded-lg border border-border bg-background shadow-sm">
         <motion.div
           variants={itemVariants}
-          className="flex items-center gap-2 border-b border-border/60 px-3 py-2"
+          className="flex items-center gap-2 border-b border-border px-3 py-2"
         >
-          <span className="size-1.5 rounded-full bg-accent/80" />
-          <span className="h-2 w-24 rounded bg-muted/50" />
+          <span aria-hidden className="flex gap-1">
+            <span className="size-1.5 rounded-full border border-border bg-muted" />
+            <span className="size-1.5 rounded-full border border-border bg-muted" />
+            <span className="size-1.5 rounded-full border border-border bg-muted" />
+          </span>
+          <span className="truncate font-mono text-[11px] text-muted-foreground">
+            {title}
+          </span>
+          <span className="ml-auto size-1.5 rounded-full bg-accent shadow-[0_0_6px_1px_rgba(99,102,241,0.45)]" />
         </motion.div>
         <div className="flex">
-          <motion.div
+          <motion.ul
             variants={itemVariants}
-            className="hidden w-16 shrink-0 flex-col gap-2 border-r border-border/60 p-3 sm:flex"
+            className="hidden w-24 shrink-0 flex-col gap-2 border-r border-border p-3 sm:flex"
           >
-            <span className="h-2 w-full rounded bg-muted/70" />
-            <span className="h-2 w-3/4 rounded bg-muted/50" />
-            <span className="h-2 w-full rounded bg-muted/40" />
-            <span className="h-2 w-2/3 rounded bg-muted/30" />
-          </motion.div>
-          <div className="flex-1 space-y-2.5 p-4">
-            <motion.div variants={itemVariants} className="flex gap-2">
-              <span className="h-10 flex-1 rounded bg-muted/40" />
-              <span className="h-10 flex-1 rounded bg-muted/30" />
-              <span className="h-10 flex-1 rounded bg-muted/25" />
-            </motion.div>
-            <motion.span
-              variants={itemVariants}
-              className="block h-2 w-full rounded bg-muted/50"
-            />
-            <motion.span
-              variants={itemVariants}
-              className="block h-2 w-5/6 rounded bg-muted/40"
-            />
-            <motion.span
-              variants={itemVariants}
-              className="block h-2 w-2/3 rounded bg-muted/30"
-            />
+            {nav.map((n, i) => (
+              <li
+                key={n}
+                className={cn(
+                  "flex items-center gap-1.5 font-mono text-[10px]",
+                  i === 0 ? "text-foreground" : "text-muted-foreground/80",
+                )}
+              >
+                <span
+                  className={cn(
+                    "size-1 shrink-0 rounded-full",
+                    i === 0 ? "bg-accent" : "bg-muted-foreground/40",
+                  )}
+                />
+                {n}
+              </li>
+            ))}
+          </motion.ul>
+          <div className="min-w-0 flex-1 space-y-1.5 p-2.5 sm:space-y-2 sm:p-3">
+            {rows.map(([label, status]) => (
+              <motion.div
+                key={label}
+                variants={itemVariants}
+                className="flex items-center gap-2 rounded-md border border-border/80 bg-card px-2.5 py-1 sm:py-1.5"
+              >
+                <span className="size-1.5 shrink-0 rounded-full bg-accent/80" />
+                <span className="truncate text-xs text-foreground/90">
+                  {label}
+                </span>
+                <span className="ml-auto shrink-0 rounded-full border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-accent">
+                  {status}
+                </span>
+              </motion.div>
+            ))}
             <motion.div
               variants={itemVariants}
               className="flex items-end gap-1.5 pt-1"
@@ -291,10 +388,10 @@ function DashboardVisual() {
               {[10, 16, 8, 20, 13, 18, 9].map((h, i) => (
                 <span
                   key={i}
-                  style={{ height: h * 2 }}
+                  style={{ height: h * 1.5 }}
                   className={cn(
                     "w-4 rounded-sm",
-                    i === 3 ? "bg-accent/50" : "bg-muted/40",
+                    i === 3 ? "bg-accent/80" : "bg-accent/25",
                   )}
                 />
               ))}
@@ -309,12 +406,17 @@ function DashboardVisual() {
 function ResultVisual({
   active,
   parts,
+  done,
 }: {
   active: boolean;
   parts: [string, string, string];
+  done: string;
 }) {
   return (
-    <div aria-hidden className="flex h-full w-full items-center justify-center">
+    <div
+      aria-hidden
+      className="flex h-full w-full flex-col items-center justify-center gap-5"
+    >
       <div className="flex w-full max-w-[430px] items-center gap-2">
         {parts.map((p, i) => (
           <div key={p} className="contents">
@@ -342,13 +444,33 @@ function ResultVisual({
             )}
             <motion.div
               variants={itemVariants}
-              className="rounded-lg border border-accent/25 bg-card px-4 py-3 text-center"
+              className="rounded-lg border border-accent/40 bg-background px-4 py-3 text-center shadow-sm"
             >
-              <p className="font-mono text-xs text-foreground/85">{p}</p>
+              <p className="font-mono text-xs font-medium text-foreground">
+                {p}
+              </p>
             </motion.div>
           </div>
         ))}
       </div>
+      {/* the payoff line: appears once the chain has assembled */}
+      <motion.p
+        variants={fadeVariants}
+        className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-xs text-accent"
+      >
+        <motion.span
+          aria-hidden
+          className="size-1.5 rounded-full bg-accent"
+          initial={false}
+          animate={active ? { scale: [1, 1.5, 1] } : { scale: 1 }}
+          transition={
+            active
+              ? { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+              : { duration: 0 }
+          }
+        />
+        {done}
+      </motion.p>
     </div>
   );
 }
@@ -368,9 +490,15 @@ function StageVisual({
     case 1:
       return <LogicVisual active={active} labels={copy.logicNodes} />;
     case 2:
-      return <DashboardVisual />;
+      return <DashboardVisual copy={copy} />;
     default:
-      return <ResultVisual active={active} parts={copy.resultParts} />;
+      return (
+        <ResultVisual
+          active={active}
+          parts={copy.resultParts}
+          done={copy.resultDone}
+        />
+      );
   }
 }
 
@@ -391,10 +519,9 @@ function StageFrame({ children }: { children: React.ReactNode }) {
       {/* offset deck layer for spatial depth */}
       <div
         aria-hidden
-        className="absolute inset-0 translate-x-3 translate-y-3 rounded-xl border border-border/50 bg-card/30"
+        className="absolute inset-0 translate-x-3 translate-y-3 rounded-xl border border-border/60 bg-card/60"
       />
-      <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border bg-card/50 ring-1 ring-white/5 backdrop-blur-sm">
-        <div aria-hidden className="scanlines absolute inset-0 opacity-60" />
+      <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border bg-card shadow-[0_24px_60px_-30px_rgba(30,27,75,0.35)]">
         <CornerBracket className="top-3 left-3 border-t border-l" />
         <CornerBracket className="top-3 right-3 border-t border-r" />
         <CornerBracket className="bottom-3 left-3 border-b border-l" />
@@ -464,10 +591,6 @@ function PinnedStory({ copy }: { copy: StoryCopy }) {
           initial={false}
           animate={{ opacity: 0.25 + stage * 0.12 }}
           transition={{ duration: 0.8, ease: EASE_OUT }}
-        />
-        <div
-          aria-hidden
-          className="scanlines pointer-events-none absolute inset-0 opacity-40"
         />
         <motion.div
           aria-hidden
@@ -645,7 +768,7 @@ function StackedStory({ copy }: { copy: StoryCopy }) {
       <div className="mt-10 space-y-6">
         {STAGES.map((s, i) => (
           <Reveal key={s.id} delay={0.04}>
-            <div className="overflow-hidden rounded-xl border border-border bg-card/60 ring-1 ring-white/5">
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_16px_40px_-28px_rgba(30,27,75,0.3)]">
               <div className="flex items-center justify-between border-b border-border/60 px-5 py-3">
                 <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                   <span className="text-accent">{s.id}</span> {s.title}
@@ -657,12 +780,11 @@ function StackedStory({ copy }: { copy: StoryCopy }) {
                 <span aria-hidden className="size-1.5 rounded-full bg-accent/80" />
               </div>
               <motion.div
-                className="relative h-44 border-b border-border/60 p-4"
+                className="relative h-52 border-b border-border/60 p-4"
                 initial={reduceMotion ? false : "future"}
                 whileInView={reduceMotion ? undefined : "active"}
                 viewport={{ once: true, margin: "-60px" }}
               >
-                <div aria-hidden className="scanlines absolute inset-0 opacity-50" />
                 <StageVisual index={i} active copy={copy} />
               </motion.div>
               <p className="px-5 py-4 text-sm leading-relaxed text-muted-foreground">
