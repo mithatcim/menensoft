@@ -55,6 +55,15 @@ export function Footer({ locale = "tr" }: { locale?: Locale }) {
             © {new Date().getFullYear()} {site.name}
           </p>
           <div className="flex flex-col gap-2 font-mono sm:flex-row sm:items-center sm:gap-6">
+            {/* Visitor-audit fix: pricing was the #1 question with no signposted
+                path — the honest answer sat unlabelled as FAQ item 13. This is
+                the signpost, not a price list. */}
+            <Link
+              href={en ? "/en/faq#pricing" : "/sss#fiyat"}
+              className="inline-block py-1 transition-colors hover:text-foreground"
+            >
+              {en ? "How pricing works" : "Fiyat nasıl belirlenir?"}
+            </Link>
             {/* Footer only, never the header nav: a privacy link belongs where
                 people look for it, not competing with the funnel. */}
             <Link

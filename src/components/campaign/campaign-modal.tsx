@@ -33,7 +33,13 @@ import { cn } from "@/lib/utils";
  */
 
 const SEEN_KEY = "menensoft_campaign_seen";
-const DELAY_MS = 1200;
+/** Visitor-audit fix: 1.2s fired before anyone had read the hero — the first
+ *  act on the site was closing a popup. 7s (or real scroll engagement,
+ *  whichever comes first) lets the hero land before the offer does. */
+const DELAY_MS = 7000;
+/** Scroll only counts as engagement once the visitor has actually moved into
+ *  the page — not the first wheel tick at the top. */
+const SCROLL_ENGAGE_PX = 480;
 
 /**
  * Deny-list. Everything NOT here is a marketing surface and gets the panel — so
@@ -92,17 +98,20 @@ export function CampaignModal({ locale = "tr" }: { locale?: Locale }) {
 
     const timer = window.setTimeout(openOnce, DELAY_MS);
     // Engagement signals only — deliberately NOT click/pointerdown, so opening
-    // the panel never hijacks a link the visitor is actually pressing.
+    // the panel never hijacks a link the visitor is actually pressing. Scroll
+    // counts only past the threshold: a wheel tick at the very top is not
+    // engagement, it is the visitor starting to read.
+    const onScroll = () => {
+      if (window.scrollY > SCROLL_ENGAGE_PX) openOnce();
+    };
     const opts = { passive: true } as const;
-    window.addEventListener("scroll", openOnce, opts);
+    window.addEventListener("scroll", onScroll, opts);
     window.addEventListener("keydown", openOnce, opts);
-    window.addEventListener("touchstart", openOnce, opts);
 
     function cleanup() {
       window.clearTimeout(timer);
-      window.removeEventListener("scroll", openOnce);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("keydown", openOnce);
-      window.removeEventListener("touchstart", openOnce);
     }
     return cleanup;
   }, [pathname]);

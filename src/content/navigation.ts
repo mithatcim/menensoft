@@ -6,6 +6,9 @@ export interface NavItem {
 /** Primary navigation shown in the header (the CTA renders separately). */
 export const mainNav: NavItem[] = [
   { label: "Çözümler", href: "/cozumler" },
+  // Ziyaretçi denetimi: teknik olmayan alıcı kendini en kolay sektöründen
+  // bulur; footer'da gömülüyken keşfedilmiyordu.
+  { label: "Sektörler", href: "/sektorler" },
   { label: "Projeler", href: "/projeler" },
   { label: "Süreç", href: "/surec" },
   { label: "Hakkımızda", href: "/hakkimda" },
@@ -59,6 +62,7 @@ export const footerNav: NavItem[] = [
 
 export const mainNavEn: NavItem[] = [
   { label: "Solutions", href: "/en/solutions" },
+  { label: "Sectors", href: "/en/sectors" },
   { label: "Projects", href: "/en/projects" },
   { label: "Process", href: "/en/process" },
   { label: "About", href: "/en/about" },
